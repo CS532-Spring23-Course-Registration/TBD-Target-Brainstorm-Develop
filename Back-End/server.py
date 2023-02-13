@@ -13,3 +13,7 @@ def put():
 @app.route('/', methods=['DELETE'])
 def delete():
     return "Delete complete"
+
+@app.route('/')
+def index():
+    return "Record not found", 400
