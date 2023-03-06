@@ -19,5 +19,3 @@ def convertJsonToObject(jsonString, schema):
     except:
         print("Error uh oh")
     return {}
-
-convertJsonToObject('{"queryString": "Select 1 from database"}', JsonSchema.QUERY)
