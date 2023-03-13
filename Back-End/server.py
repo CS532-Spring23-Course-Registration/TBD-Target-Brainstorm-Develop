@@ -1,6 +1,7 @@
-from flask import Flask, request, jsonify
+from flask import request, jsonify
+from .utils import create_app
 
-app = Flask(__name__)
+app = create_app()
 
 @app.route('/', methods=['GET'])
 def get():
@@ -17,3 +18,4 @@ def delete():
 @app.route('/')
 def index():
     return "Record not found", 400
+
