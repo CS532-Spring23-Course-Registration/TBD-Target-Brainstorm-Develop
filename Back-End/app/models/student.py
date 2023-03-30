@@ -1,11 +1,8 @@
 from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
+from flask_sqlalchemy import SQLAlchemy, model
 from datetime import datetime
 
-app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///students.db'
-# Init database
-db = SQLAlchemy(app)
+from app import db
 
 # Create db model
 class Student(db.Model):

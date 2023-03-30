@@ -1,5 +1,5 @@
 from flask import Blueprint
-from get_secrets import _get_db_secret
+from utils import _get_db_secret
 
 secrets = Blueprint('secrets', __name__)
 
