@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import { Button, Modal } from "@material-ui/core";
+import { Grid, Button, Modal } from "@material-ui/core";
 import Test from "./Test";
+import { Link } from "react-router-dom";
 
 function Home() {
   const [open, setOpen] = useState(false);
@@ -14,17 +15,24 @@ function Home() {
   };
   return (
     <div>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleOpen}
-        style={{
-          display: "block",
-          margin: "0 auto",
-        }}
+      <Grid
+        container
+        direction="column"
+        spacing={2}
+        justifyContent="center"
+        alignItems="center"
       >
-        Open Modal
-      </Button>
+        <Grid item>
+          <Button variant="contained" color="primary" onClick={handleOpen}>
+            Open Modal
+          </Button>
+        </Grid>
+        <Grid item>
+          <Button variant="contained" color="primary" component={Link} to="/">
+            Back
+          </Button>
+        </Grid>
+      </Grid>
       <Modal
         open={open}
         onClose={handleClose}
