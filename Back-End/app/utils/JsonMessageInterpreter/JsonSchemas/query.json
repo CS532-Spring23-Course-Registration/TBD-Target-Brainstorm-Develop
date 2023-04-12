@@ -1,0 +1,8 @@
+{
+  "title": "Query",
+  "description": "Validation schema for database queries",
+  "type": "object",
+  "properties": {
+    "queryString": {"type": "string"}
+  }
+}

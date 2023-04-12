@@ -1,0 +1,8 @@
+{
+  "title": "Query",
+  "description": "Validation schema for login submissions",
+  "properties": {
+    "username": {"type": "string"},
+    "password": {"type": "string"}
+  }
+}
