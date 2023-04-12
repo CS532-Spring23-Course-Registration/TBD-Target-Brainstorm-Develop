@@ -1,4 +1,12 @@
 .vscode/
+<<<<<<< HEAD
+<<<<<<< HEAD
+node_modules/
+=======
 node_modules
+>>>>>>> parent of 00e96d72 (added node_modules)
+=======
+node_modules
+>>>>>>> parent of 00e96d72 (added node_modules)
 .DS_Store
 .gitignore
