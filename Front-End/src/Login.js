@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { Button, TextField, Grid, Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -26,21 +25,28 @@ const useStyles = makeStyles((theme) => ({
 const LoginForm = () => {
   const classes = useStyles();
 
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    console.log("email:", email, "password:", password);
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const response = await fetch("/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username, password }),
+    });
+    if (response.ok) {
+      navigate("/");
+    }
   };
-
   return (
     <Grid
       container
       component="main"
       className={classes.root}
       direction="column"
-      justify="center"
+      justifyContent="center"
       alignItems="center"
     >
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
@@ -48,19 +54,19 @@ const LoginForm = () => {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} onSubmit={handleSubmit}>
+          <form method="POST" className={classes.form} onSubmit={handleLogin}>
             <TextField
               variant="outlined"
               margin="normal"
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Username"
               name="email"
               autoComplete="email"
               autoFocus
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
             />
             <TextField
               variant="outlined"
@@ -73,7 +79,7 @@ const LoginForm = () => {
               id="password"
               autoComplete="current-password"
               value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(e) => setPassword(e.target.value)}
             />
             <Button
               type="submit"
@@ -81,7 +87,6 @@ const LoginForm = () => {
               variant="contained"
               color="primary"
               className={classes.submit}
-              component={Link} to="/Home"
             >
               Sign In
             </Button>

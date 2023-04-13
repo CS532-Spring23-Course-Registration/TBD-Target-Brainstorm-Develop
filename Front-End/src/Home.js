@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { Grid, Button, Modal } from "@material-ui/core";
-import Test from "./Test";
+import { Grid, Button, Modal, Box } from "@material-ui/core";
+import PDF from "./PDF";
 import { Link } from "react-router-dom";
 
 function Home() {
@@ -28,7 +28,12 @@ function Home() {
           </Button>
         </Grid>
         <Grid item>
-          <Button variant="contained" color="primary" component={Link} to="/">
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="/signup"
+          >
             Back
           </Button>
         </Grid>
@@ -42,7 +47,18 @@ function Home() {
           justifyContent: "center",
         }}
       >
-        <Test></Test>
+        <Box
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "90vw",
+            height: "90vh",
+          }}
+        >
+          <PDF />
+        </Box>
       </Modal>
     </div>
   );
