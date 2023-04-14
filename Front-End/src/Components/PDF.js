@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 });
 
 // Create Document Component
-function Test() {
+function PDF() {
   const [width, setWidth] = useState(window.innerWidth);
   const [height, setHeight] = useState(window.innerHeight);
 
@@ -53,4 +53,4 @@ function Test() {
     </PDFViewer>
   );
 }
-export default Test;
+export default PDF;

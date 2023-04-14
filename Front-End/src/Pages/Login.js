@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Button, TextField, Grid, Paper, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,6 +88,8 @@ const LoginForm = () => {
               variant="contained"
               color="primary"
               className={classes.submit}
+              component={Link}
+              to="/home"
             >
               Sign In
             </Button>

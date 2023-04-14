@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Grid, Button, Modal, Box } from "@material-ui/core";
-import PDF from "./PDF";
+import PDF from "../Components/PDF";
 import { Link } from "react-router-dom";
 
 function Home() {
