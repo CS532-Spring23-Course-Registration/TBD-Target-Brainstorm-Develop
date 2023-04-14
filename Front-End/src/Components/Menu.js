@@ -27,24 +27,29 @@ function Menu() {
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
-          <Button variant="contained" color="primary" component={Link} to="/">
-            Menu1
+          <Button
+            variant="contained"
+            color="primary"
+            component={Link}
+            to="/reghome"
+          >
+            Register
           </Button>
           <Button
             variant="contained"
             color="primary"
             component={Link}
-            to="/Home"
+            to="/home"
           >
-            Menu2
+            Home
           </Button>
           <Button
             variant="contained"
             color="primary"
             component={Link}
-            to="/Home"
+            to="/search"
           >
-            Menu3
+            Search
           </Button>
         </Toolbar>
       </AppBar>
