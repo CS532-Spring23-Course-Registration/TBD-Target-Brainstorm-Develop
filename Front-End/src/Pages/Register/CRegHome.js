@@ -1,9 +1,10 @@
-import React from "react";
+import { React, useState } from "react";
 import { Link } from "react-router-dom";
-import { makeStyles } from "@material-ui/core/styles";
-import SearchIcon from "@material-ui/icons/Search";
-import BookIcon from "@material-ui/icons/Book";
-import CalendarTodayIcon from "@material-ui/icons/CalendarToday";
+import { makeStyles } from "@mui/styles";
+import SearchIcon from "@mui/icons-material/Search";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import { Card, CardContent, List, ListItem, Divider } from "@mui/material";
 
 const useStyles = makeStyles({
   root: {
@@ -13,7 +14,6 @@ const useStyles = makeStyles({
     height: "100%",
     position: "fixed",
     left: "0",
-    backgroundColor: "#f0f0f0",
     padding: "10px",
     boxSizing: "border-box",
   },
@@ -35,23 +35,43 @@ const useStyles = makeStyles({
   },
 });
 
+const options = ["Home", "Academics", "Student Records", "Contact"];
+
 function CRegHome() {
   const classes = useStyles();
+  const [selectedOption, setSelectedOption] = useState(null);
 
   return (
     <div className={classes.root}>
-      <Link to="/search" className={classes.link}>
-        <SearchIcon className={classes.icon} />
-        Search
-      </Link>
-      <Link to="/majorlist" className={classes.link}>
-        <BookIcon className={classes.icon} />
-        Major Courses
-      </Link>
-      <Link to="/mycourses" className={classes.link}>
-        <CalendarTodayIcon className={classes.icon} />
-        View Courses
-      </Link>
+      <Card>
+        <CardContent>
+          <List>
+            <ListItem>
+              <Link to="/search" className={classes.link}>
+                <SearchIcon className={classes.icon} />
+                Search
+              </Link>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              {" "}
+              <Link to="/majorlist" className={classes.link}>
+                <LibraryBooksIcon className={classes.icon} />
+                Major Courses
+              </Link>
+            </ListItem>
+            <Divider />
+            <ListItem>
+              {" "}
+              <Link to="/mycourses" className={classes.link}>
+                <CalendarMonthIcon className={classes.icon} />
+                View Courses
+              </Link>
+            </ListItem>
+            <Divider />
+          </List>
+        </CardContent>
+      </Card>
     </div>
   );
 }

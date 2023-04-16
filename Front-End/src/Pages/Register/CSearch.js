@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from "react";
 import CRegHome from "./CRegHome";
-import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
-import TextField from "@material-ui/core/TextField";
-import Button from "@material-ui/core/Button";
+import { makeStyles } from "@mui/styles";
+import { TextField, Button } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -28,9 +26,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: "center",
     padding: "20px",
     width: "80%",
-    border: `1px solid ${theme.palette.primary.main}`,
+    border: "1px solid",
     borderRadius: "5px",
-    boxShadow: `3px 3px 3px ${theme.palette.grey[300]}`,
+    boxShadow: `3px 3px 3px`,
   },
   input: {
     margin: "10px",
@@ -73,7 +71,7 @@ function CSearch() {
           <Button
             className={classes.button}
             variant="contained"
-            color="primary"
+            color="error"
             type="submit"
           >
             Search

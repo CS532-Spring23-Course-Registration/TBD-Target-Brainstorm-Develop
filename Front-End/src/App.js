@@ -1,5 +1,5 @@
 import Home from "./Pages/Home";
-import Login from "./Pages/Login";
+import Login from "./Components/Login";
 import SignupForm from "./Pages/Signup";
 import Menu from "./Components/Menu";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
@@ -11,6 +11,9 @@ import MyCourses from "./Pages/Register/MyCourses";
 import Courses from "./Pages/Register/Courses";
 import Cinfo from "./Pages/Register/Cinfo";
 import CReg from "./Pages/Register/CReg";
+import Navigation from "./Components/Navigation";
+import Profile from "./Components/Profile";
+import AcademicRecord from "./Components/acedemic_Record";
 
 function App() {
   return (
@@ -29,6 +32,9 @@ function App() {
           <Route path="/courses" element={<Courses />} />
           <Route path="/courseinfo" element={<Cinfo />} />
           <Route path="/register" element={<CReg />} />
+          <Route path="/" element={<Navigation />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/academic-Record" element={<AcademicRecord />} />
         </Routes>
       </Router>
     </div>

@@ -1,6 +1,6 @@
 import React from "react";
 import CRegHome from "./CRegHome";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles({
   root: {
