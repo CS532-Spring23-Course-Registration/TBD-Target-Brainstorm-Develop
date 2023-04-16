@@ -1,33 +1,43 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './Components/Login/Login';
-import Navigation from './Components/NavigationMenu/Navigation';
-import Profile from './Components/ProfileTab/Profile';
-import AcademicRecord from "./Components/Academic Record/acedemic_Record"; 
+import Home from "./Pages/Home";
+import Login from "./Components/Login";
+import SignupForm from "./Pages/Signup";
+import Menu from "./Components/Menu";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import PDF from "./Components/PDF";
+import CRegHome from "./Pages/Register/CRegHome";
+import CSearch from "./Pages/Register/CSearch";
+import MajorList from "./Pages/Register/MajorList";
+import MyCourses from "./Pages/Register/MyCourses";
+import Courses from "./Pages/Register/Courses";
+import Cinfo from "./Pages/Register/Cinfo";
+import CReg from "./Pages/Register/CReg";
+import Navigation from "./Components/Navigation";
+import Profile from "./Components/Profile";
+import AcademicRecord from "./Components/acedemic_Record";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    setLoggedIn(true);
-  };
-
-  if (!loggedIn) {
-    return <Login onLogin={handleLogin} />;
-  }
-
   return (
-    <Router>
-      <div className="App">
+    <div>
+      <Router>
+        <Menu></Menu>
         <Routes>
+          <Route exact path="/signup" element={<SignupForm />} />
           <Route path="/login" element={<Login />} />
+          <Route path="/home" element={<Home />} />
+          <Route path="/pdf" element={<PDF />} />
+          <Route path="/reghome" element={<CRegHome />} />
+          <Route path="/search" element={<CSearch />} />
+          <Route path="/majorlist" element={<MajorList />} />
+          <Route path="/mycourses" element={<MyCourses />} />
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/courseinfo" element={<Cinfo />} />
+          <Route path="/register" element={<CReg />} />
           <Route path="/" element={<Navigation />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/Academic-Record" element={<AcademicRecord />} />
+          <Route path="/academic-Record" element={<AcademicRecord />} />
         </Routes>
-      </div>
-    </Router>
+      </Router>
+    </div>
   );
 }
 

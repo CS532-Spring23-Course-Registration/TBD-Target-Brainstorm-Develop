@@ -1,6 +1,14 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Container, Box, TextField, Button, CssBaseline, Card } from '@mui/material';
-import styled from '@mui/system/styled';
+import React from "react";
+import {
+  Typography,
+  Container,
+  Box,
+  TextField,
+  Button,
+  CssBaseline,
+  Card,
+} from "@mui/material";
+import styled from "@mui/system/styled";
 
 const LoginButton = styled(Button)`
   background-color: lightcoral;
@@ -13,14 +21,8 @@ const LoginButton = styled(Button)`
 function Login({ onLogin }) {
   return (
     <div>
-      <CssBaseline />
-      <AppBar position="static" color='error'>
-        <Toolbar>
-          <Typography variant="h6">Course Registration</Typography>
-        </Toolbar>
-      </AppBar>
       <Container maxWidth="xs">
-        <Card variant='outlined' color='error'>
+        <Card variant="outlined" color="error">
           <Box sx={{ mt: 8, mb: 4 }}>
             <Typography variant="h4" align="center">
               Login
@@ -50,11 +52,16 @@ function Login({ onLogin }) {
               variant="outlined"
             />
             <Box sx={{ mt: 2 }}>
-              <LoginButton fullWidth type="submit" variant="contained" color="primary">
+              <LoginButton
+                fullWidth
+                type="submit"
+                variant="contained"
+                color="primary"
+              >
                 Sign In
               </LoginButton>
             </Box>
-          </form> 
+          </form>
         </Card>
       </Container>
     </div>
