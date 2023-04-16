@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import SearchIcon from "@mui/icons-material/Search";
@@ -35,11 +35,8 @@ const useStyles = makeStyles({
   },
 });
 
-const options = ["Home", "Academics", "Student Records", "Contact"];
-
 function CRegHome() {
   const classes = useStyles();
-  const [selectedOption, setSelectedOption] = useState(null);
 
   return (
     <div className={classes.root}>

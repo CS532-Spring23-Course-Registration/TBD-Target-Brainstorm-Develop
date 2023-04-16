@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import {
-  AppBar,
-  Toolbar,
   Typography,
   Container,
   Box,
@@ -10,10 +8,8 @@ import {
   List,
   ListItem,
   ListItemText,
-  Button,
   Divider,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 function AcademicRecord() {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -34,11 +30,6 @@ function AcademicRecord() {
   };
 
   const options = ["Home", "Academics", "Student Records", "Contact"];
-
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    navigate("/login");
-  };
 
   return (
     <div>

@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import {
-  AppBar,
-  Toolbar,
   Typography,
   Container,
   Box,
@@ -14,7 +12,6 @@ import {
   TextField,
   Button,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 function Profile() {
   const [personalInfo, setPersonalInfo] = useState({
@@ -184,11 +181,6 @@ function Profile() {
   };
 
   const options = ["Personal Information", "Address", "Contacts"];
-
-  const navigate = useNavigate();
-  const goBack = () => {
-    navigate(-1); // This will navigate back to the previous page in the history stack
-  };
 
   return (
     <div>

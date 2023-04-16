@@ -1,18 +1,14 @@
 import React from "react";
 import {
-  AppBar,
-  Toolbar,
   Typography,
   Container,
   Box,
   Grid,
   Card,
   CardContent,
-  Button,
 } from "@mui/material";
 import styled from "@mui/system/styled";
 import { Link as RouterLink } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
 const NavigationHeader = styled(Typography)`
   background-color: lightcoral;
@@ -50,11 +46,6 @@ const options = [
 ];
 
 function Navigation() {
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    navigate("/login");
-  };
-
   return (
     <div>
       <Container maxWidth="md">

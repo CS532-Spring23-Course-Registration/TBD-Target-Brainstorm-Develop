@@ -50,7 +50,7 @@ function Menu() {
             component={Link}
             to="/login"
           >
-            Login
+            Logout
           </Button>
         </Toolbar>
       </AppBar>
