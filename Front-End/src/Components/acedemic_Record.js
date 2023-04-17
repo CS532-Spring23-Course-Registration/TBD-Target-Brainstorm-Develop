@@ -1,42 +1,38 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Container, Box, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Card, CardContent, List, ListItem, ListItemText, Button, Divider } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import {
+  Typography,
+  Container,
+  Box,
+  Card,
+  CardContent,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+} from "@mui/material";
 
 function AcademicRecord() {
- 
-  
   const [selectedOption, setSelectedOption] = useState(null);
 
   const renderOptionContent = () => {
     switch (selectedOption) {
-      case 'Home':
+      case "Home":
         return <Typography>Home Content</Typography>;
-      case 'Academics':
+      case "Academics":
         return <Typography>Academics Content</Typography>;
-      case 'Student Records':
+      case "Student Records":
         return <Typography>Student Records Content</Typography>;
-      case 'Contact':
+      case "Contact":
         return <Typography>Contact Content</Typography>;
       default:
         return null;
     }
   };
 
-  const options = ['Home', 'Academics', 'Student Records', 'Contact'];
-
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    navigate('/login'); 
-  };
+  const options = ["Home", "Academics", "Student Records", "Contact"];
 
   return (
     <div>
-      <AppBar position="static" color="error">
-        <Toolbar>
-          <Typography variant="h6" flexGrow={1}>Course Registration</Typography>
-          <Button variant="contained" style={{ backgroundColor: 'white', color: 'black' }} onClick={handleLogout}>Logout</Button>
-        </Toolbar>
-      </AppBar>
       <Container maxWidth="lg">
         <Box sx={{ mt: 4, mb: 4 }}>
           <Typography variant="h4" align="left">

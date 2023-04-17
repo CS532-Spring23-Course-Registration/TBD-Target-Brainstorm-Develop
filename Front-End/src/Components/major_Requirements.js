@@ -1,22 +1,32 @@
-import React, { useState } from 'react';
-import { AppBar, Toolbar, Typography, Container, Box, Card, CardContent, List, ListItem, ListItemText, Divider } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import {
+  Typography,
+  Container,
+  Box,
+  Card,
+  CardContent,
+  List,
+  ListItem,
+  ListItemText,
+  Divider,
+} from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 function MajorRequirements() {
   const [selectedOption, setSelectedOption] = useState(null);
 
   const renderOptionContent = () => {
     switch (selectedOption) {
-      case 'Home':
-        navigate('/');
+      case "Home":
+        navigate("/");
         return null;
-      case 'Major Required Courses':
+      case "Major Required Courses":
         return <div>Major Required Courses </div>;
-      case 'Completed Courses':
+      case "Completed Courses":
         return <div>Completed Courses</div>;
-      case 'Student Status':
+      case "Student Status":
         return <div>Status content</div>;
-      case 'Student History':
+      case "Student History":
         return <div>History content</div>;
       default:
         return null;
@@ -24,23 +34,17 @@ function MajorRequirements() {
   };
 
   const options = [
-    'Home',
-    'Major Required Courses',
-    'Completed Courses',
-    'Student Status',
-    'Student History',
+    "Home",
+    "Major Required Courses",
+    "Completed Courses",
+    "Student Status",
+    "Student History",
   ];
 
   const navigate = useNavigate();
 
   return (
     <div>
-      <AppBar position="static" color="error">
-        <Toolbar>
-          <Typography variant="h6" flexGrow={1}>Course Registration</Typography>
-          {/* Add the Logout button here */}
-        </Toolbar>
-      </AppBar>
       <Container maxWidth="lg">
         <Box sx={{ mt: 4, mb: 4 }}>
           <Typography variant="h4" align="left">
@@ -53,7 +57,7 @@ function MajorRequirements() {
               <List>
                 {options.map((option, index) => (
                   <div key={index}>
-                    <ListItem button onClick={() => setSelectedOption(option)}>
+                    <ListItem onClick={() => setSelectedOption(option)}>
                       <ListItemText primary={option} />
                     </ListItem>
                     {index !== options.length - 1 && <Divider />}

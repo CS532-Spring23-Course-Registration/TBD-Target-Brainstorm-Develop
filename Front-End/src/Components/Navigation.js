@@ -1,8 +1,14 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Container, Box, Grid, Card, CardContent, Button} from '@mui/material';
-import styled from '@mui/system/styled';
-import { Link as RouterLink } from 'react-router-dom';
-import { useNavigate } from 'react-router-dom';
+import React from "react";
+import {
+  Typography,
+  Container,
+  Box,
+  Grid,
+  Card,
+  CardContent,
+} from "@mui/material";
+import styled from "@mui/system/styled";
+import { Link as RouterLink } from "react-router-dom";
 
 const NavigationHeader = styled(Typography)`
   background-color: lightcoral;
@@ -28,33 +34,20 @@ const StyledLink = styled(RouterLink)`
 `;
 
 const options = [
-  { title: 'Profile', path: '/profile' },
-  { title: 'Academic Record', path: '/Academic-Record' },
-  { title: 'Course Register', path: '/Course-Register' },
-  { title: 'Major Requirements', path: '/Major-Requirements' },
-  { title: 'Faculty And Course Information', path: '/Faculty-And-Course-Information' },
-  { title: 'Course Grades', path: '/Course-Grades' },
-
-  
+  { title: "Profile", path: "/profile" },
+  { title: "Academic Record", path: "/Academic-Record" },
+  { title: "Course Register", path: "/Course-Register" },
+  { title: "Major Requirements", path: "/Major-Requirements" },
+  {
+    title: "Faculty And Course Information",
+    path: "/Faculty-And-Course-Information",
+  },
+  { title: "Course Grades", path: "/Course-Grades" },
 ];
 
-
-
 function Navigation() {
-
-  const navigate = useNavigate();
-  const handleLogout = () => {
-    navigate('/login'); 
-  };
-
   return (
     <div>
-      <AppBar position="static" color="error">
-        <Toolbar>
-          <Typography variant="h5" flexGrow={1}>Course Registration</Typography>
-          <Button variant="contained" style={{ backgroundColor: 'white', color: 'black' }} onClick={handleLogout} >Logout</Button>
-        </Toolbar>
-      </AppBar>
       <Container maxWidth="md">
         <Box sx={{ mt: 8, mb: 8 }}>
           <NavigationHeader variant="h4">Navigate</NavigationHeader>
