@@ -34,12 +34,17 @@ function Login(props) {
         },
         body: JSON.stringify({ email, password }),
       });
-      const data = await response.json();
-      
-      const sessionKey = data.session_key;
 
-      if (sessionKey != null) {
+      const authCheck = response.status;
+
+      if (authCheck === 401) {
+        console.log("Authentication failed.");
+      } else {
         console.log("Successful Login!");
+
+        const data = await response.json();
+        const sessionKey = data.session_key;
+        
         Cookies.set('session_key', sessionKey, { expires : 12/24, path: '/'});
         props.updateAuthentication(true);
       }

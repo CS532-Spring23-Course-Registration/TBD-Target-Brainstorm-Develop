@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Container,
@@ -11,6 +11,7 @@ import {
   Divider,
 } from "@mui/material";
 import InfoCard from "./InfoCard";
+import Cookies from 'js-cookie';
 
 function Profile() {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -26,6 +27,22 @@ function Profile() {
     "example@gmail.com",
     "example@gmail.com",
   ];
+
+  const [data, setData] = useState([]);
+  const sessionId = Cookies.get('session_id');
+
+  useEffect(() => {
+    fetch('http://localhost:3000/', {
+      headers: {
+        'Authorization': sessionId 
+      }
+    })
+      .then(response => response.json())
+      .then(data => console.log(data))
+      .catch(error => console.log(error));
+  });
+
+
 
   const renderOptionContent = () => {
     switch (selectedOption) {
