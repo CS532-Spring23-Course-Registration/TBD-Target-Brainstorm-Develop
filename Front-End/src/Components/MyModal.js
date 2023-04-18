@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Modal } from "@mui/material";
+import { Modal, Box } from "@mui/material";
 import PDF from "./PDF";
 
 const MyModal = () => {
@@ -18,7 +18,18 @@ const MyModal = () => {
         justifyContent: "center",
       }}
     >
-      <PDF />
+      <Box
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          width: "90vw",
+          height: "90vh",
+        }}
+      >
+        <PDF />
+      </Box>
     </Modal>
   );
 };

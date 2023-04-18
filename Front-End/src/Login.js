@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button, TextField, Grid, Paper, Typography } from "@mui/material";
-import { makeStyles } from "@mui/styles";
+import { Button, TextField, Grid, Paper, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
 import { Link } from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -23,23 +23,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignupForm = () => {
+const LoginForm = () => {
   const classes = useStyles();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const navigate = useNavigate();
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    const response = await fetch("/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username, password }),
-    });
-    if (response.ok) {
-      navigate("/login");
-    }
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [data, setData] = useState(null);
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    console.log("email:", email, "password:", password);
   };
+
+  const fetchData = () => {
+    const params = {
+      key1: 'value1',
+      key2: 'value2'
+    };
+
+    fetch('/api/data', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(params)
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Handle the response data
+      setData(data);
+    })
+    .catch(error => {
+      console.log('Error retrieving data');
+    });
+  }
+
+
+
+
 
   return (
     <Grid
@@ -47,15 +68,15 @@ const SignupForm = () => {
       component="main"
       className={classes.root}
       direction="column"
-      justifyContent="center"
+      justify="center"
       alignItems="center"
     >
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <div className={classes.paper}>
           <Typography component="h1" variant="h5">
-            Sign up
+            Sign in
           </Typography>
-          <form className={classes.form} onSubmit={handleSignup}>
+          <form className={classes.form} onSubmit={handleSubmit}>
             <TextField
               variant="outlined"
               margin="normal"
@@ -63,11 +84,11 @@ const SignupForm = () => {
               fullWidth
               id="email"
               label="Email Address"
-              name="username"
+              name="email"
               autoComplete="email"
               autoFocus
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              value={email}
+              onChange={(event) => setEmail(event.target.value)}
             />
             <TextField
               variant="outlined"
@@ -80,7 +101,7 @@ const SignupForm = () => {
               id="password"
               autoComplete="current-password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(event) => setPassword(event.target.value)}
             />
             <Button
               type="submit"
@@ -88,10 +109,9 @@ const SignupForm = () => {
               variant="contained"
               color="primary"
               className={classes.submit}
-              component={Link}
-              to="/login"
+              component={Link} to="/Home"
             >
-              Sign Up
+              Sign In
             </Button>
           </form>
         </div>
@@ -100,4 +120,4 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default LoginForm;
