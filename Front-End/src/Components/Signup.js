@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import styled from "@mui/system/styled";
 import { Link } from "react-router-dom";
-import Cookies from 'js-cookie';
+
 const LoginButton = styled(Button)`
   background-color: lightcoral;
   &:hover {
@@ -18,16 +18,21 @@ const LoginButton = styled(Button)`
   }
 `;
 
-function Login(props) {
+function Signup({ onLogin }) {
+  const handleClick = (event) => {
+    console.log("called");
+
+    event.preventDefault();
+    onLogin();
+  };
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  //Send POST request for User Authentication
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch("http://example.com/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -35,14 +40,7 @@ function Login(props) {
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
-      
-      const sessionKey = data.session_key;
-
-      if (sessionKey != null) {
-        console.log("Successful Login!");
-        Cookies.set('session_key', sessionKey, { expires : 12/24, path: '/'});
-        props.updateAuthentication(true);
-      }
+      console.log(data);
     } catch (error) {
       console.error(error);
     }
@@ -84,7 +82,7 @@ function Login(props) {
               variant="outlined"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Box sx={{ mt: 2 }} >
+            <Box sx={{ mt: 2 }} onClick={handleClick}>
               <LoginButton
                 fullWidth
                 type="submit"
@@ -103,4 +101,4 @@ function Login(props) {
   );
 }
 
-export default Login;
+export default Signup;
