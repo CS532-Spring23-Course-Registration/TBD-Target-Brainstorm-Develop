@@ -1,8 +1,10 @@
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { useState } from 'react';
+
 import Home from "./Pages/Home";
 import Login from "./Components/Login";
 import SignupForm from "./Pages/Signup";
 import Menu from "./Components/Menu";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import PDF from "./Components/PDF";
 import CRegHome from "./Pages/Register/CRegHome";
 import CSearch from "./Pages/Register/CSearch";
@@ -16,13 +18,20 @@ import Profile from "./Components/Profile";
 import AcademicRecord from "./Components/acedemic_Record";
 
 function App() {
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  const updateAuthentication = (newStatus) => {
+    setIsAuthenticated(newStatus);
+  }
+
   return (
     <div>
       <Router>
-        <Menu></Menu>
+      {isAuthenticated && <Menu />}
         <Routes>
           <Route path="/signup" element={<SignupForm />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} updateAuthentication={updateAuthentication}/>
           <Route path="/home" element={<Home />} />
           <Route path="/pdf" element={<PDF />} />
           <Route path="/reghome" element={<CRegHome />} />
