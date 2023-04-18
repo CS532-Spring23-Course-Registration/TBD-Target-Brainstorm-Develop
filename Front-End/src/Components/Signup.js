@@ -18,7 +18,14 @@ const LoginButton = styled(Button)`
   }
 `;
 
-function Login() {
+function Signup({ onLogin }) {
+  const handleClick = (event) => {
+    console.log("called");
+
+    event.preventDefault();
+    onLogin();
+  };
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
@@ -75,7 +82,7 @@ function Login() {
               variant="outlined"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Box sx={{ mt: 2 }}>
+            <Box sx={{ mt: 2 }} onClick={handleClick}>
               <LoginButton
                 fullWidth
                 type="submit"
@@ -94,4 +101,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Signup;
