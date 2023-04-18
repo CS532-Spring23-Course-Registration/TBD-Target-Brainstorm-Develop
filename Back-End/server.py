@@ -5,6 +5,7 @@ import secrets
 
 #This is a test DB. Change after actual DB has been created
 from test import User
+from app import create_app, create_database, db
 
 app = Flask(__name__)
 cache = Cache(app, config={'CACHE_TYPE': 'flask_caching.backends.SimpleCache'})# Initialize Flask-Caching
@@ -14,6 +15,8 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = secrets.token_hex(16) # Secret key used to sign session cookies
 
 db = SQLAlchemy(app) # Initialize SQLAlchemy
+(app, cache, db) = create_app()
+
 
 
 # Define a function to generate a new session key using the secrets module
