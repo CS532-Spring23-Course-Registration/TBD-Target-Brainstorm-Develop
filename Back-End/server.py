@@ -2,22 +2,16 @@ from flask import Flask, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_caching import Cache
 import secrets
-
-#This is a test DB. Change after actual DB has been created
-from test import User
-from app import create_app, create_database, db
+from app.models.app import Users, app
 
 app = Flask(__name__)
 cache = Cache(app, config={'CACHE_TYPE': 'flask_caching.backends.SimpleCache'})# Initialize Flask-Caching
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/registration.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = secrets.token_hex(16) # Secret key used to sign session cookies
 
 db = SQLAlchemy(app) # Initialize SQLAlchemy
-(app, cache, db) = create_app()
-
-
 
 # Define a function to generate a new session key using the secrets module
 def generate_session_key():
@@ -36,7 +30,7 @@ def get_user_session_key(user_id):
 def login():
     username = request.json.get('username')
     password = request.json.get('password')
-    user = User.get_user_by_username(username)
+    user = Users.get_user_by_username(username)
     if not user or user.password != password:
         return jsonify({'message': 'Invalid credentials'}), 401
     # Retrieve or generate a session key for the user and return it to the client
