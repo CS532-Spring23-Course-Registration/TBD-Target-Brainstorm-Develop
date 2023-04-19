@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///registration.db'
@@ -88,7 +89,7 @@ class Faculty(db.Model):
         q = Departments.query.filter_by(id=assigned_department).first() # Query if department is valid
         
         if (q != None):
-            f = Faculty(name=name, position_title=position_title,phone_number=phone_number, office_number=office_number, office_hours=office_hours, assigned_department=assigned_department)
+            f = Faculty(name=name, position_title=position_title,phone_number=phone_number, office_number=office_number, assigned_department=assigned_department, office_hours=office_hours)
             db.session.add(f)
             db.session.commit()
             
@@ -148,6 +149,13 @@ class Users(db.Model):
         db.session.commit()
         
         return print("User %s created with ID %d" % (name, u.id))
+    
+    def get_user_by_username(name):
+        Session = sessionmaker(bind=db.engine)
+        session = Session()
+        user = session.query(Users).filter_by(name=name).first()
+        session.close()
+        return user
         
 
 class Departments(db.Model):
@@ -163,15 +171,13 @@ class Departments(db.Model):
     @classmethod
     def add(cls, name):
         q = Departments.query.filter_by(name=name).first()
+        if q and (q.name == name):
+            return print("Duplicate department found with ID %d." % q.id)
         
-        if (q != None):
-            if (q.name == name):
-                return print("Duplicate department found with ID %d." % q.id)
-            
         d = Departments(name=name)
         db.session.add(d)
         db.session.commit()
-            
+
         return print("Department %s created with ID %d" % (name, d.id))
     
     
