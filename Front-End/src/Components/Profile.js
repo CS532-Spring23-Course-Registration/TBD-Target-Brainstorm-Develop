@@ -11,7 +11,7 @@ import {
   Divider,
 } from "@mui/material";
 import InfoCard from "./InfoCard";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 function Profile() {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -27,6 +27,9 @@ function Profile() {
     "example@gmail.com",
     "example@gmail.com",
   ];
+  const [pValues, setPvalues] = useState({});
+  const [aValues, setAvalues] = useState({});
+  const [cValues, setCvalues] = useState({});
 
   const [data, setData] = useState([]);
   const sessionId = Cookies.get('session_id');
@@ -43,21 +46,27 @@ function Profile() {
       },
       body: JSON.stringify(params)
     })
-      .then(response => response.json())
-      .then(data => console.log(data))
-      .catch(error => console.log(error));
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
+        const updatedPvalues = [data.name, null, null, data.id];
+        setPvalues(updatedPvalues);
+        const updatedAvalues = [data.address, null, null, null];
+        setAvalues(updatedAvalues);
+        const updatedCvalues = [data.phone_number, null, null, null];
+        setCvalues(updatedCvalues);
+      })
+      .catch((error) => console.log(error));
   });
-
-
 
   const renderOptionContent = () => {
     switch (selectedOption) {
       case "Personal Information":
-        return <InfoCard labels={Pinfo} values={Pvalues} />;
+        return <InfoCard labels={Pinfo} values={pValues} />;
       case "Address":
-        return <InfoCard labels={Ainfo} values={Avalues} />;
+        return <InfoCard labels={Ainfo} values={aValues} />;
       case "Contacts":
-        return <InfoCard labels={Cinfo} values={Cvalues} />;
+        return <InfoCard labels={Cinfo} values={cValues} />;
       default:
         return <InfoCard labels={Pinfo} values={Pvalues} />;
     }
