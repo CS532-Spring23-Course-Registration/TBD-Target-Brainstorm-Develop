@@ -3,14 +3,17 @@ import { AppBar, Toolbar, Typography, Container, Box, Table, TableBody, TableCel
 import { useNavigate } from 'react-router-dom';
 
 function AcademicRecord() {
- 
-  
+  // ...
+  // All the existing data and variables go here
+  // ...
+
   const [selectedOption, setSelectedOption] = useState(null);
 
   const renderOptionContent = () => {
     switch (selectedOption) {
       case 'Home':
-        return <Typography>Home Content</Typography>;
+        navigate('/');
+        return null;
       case 'Academics':
         return <Typography>Academics Content</Typography>;
       case 'Student Records':
