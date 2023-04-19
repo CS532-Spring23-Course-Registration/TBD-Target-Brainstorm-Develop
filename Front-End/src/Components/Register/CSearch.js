@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CRegHome from "./CRegHome";
 import { makeStyles } from "@mui/styles";
 import { TextField, Button, List, ListItem, ListItemText } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,7 +60,11 @@ function CSearch() {
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const Courses = ["CS 550 6654", "CS 532 6634", "CS 480 2992"];
+  const Courses = [
+    { name: "Course A", description: "This is course A" },
+    { name: "Course B", description: "This is course B" },
+    { name: "Course C", description: "This is course C" },
+  ];
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -93,13 +98,17 @@ function CSearch() {
           </Button>
         </form>
         {Courses.length > 0 && (
-          <List className={classes.courseList}>
-            {Courses.map((result, i) => (
-              <ListItem key={i} className={classes.courseItem}>
-                <ListItemText primary={result} />
-              </ListItem>
-            ))}
-          </List>
+           <List className={classes.courseList}>
+           {Courses.map((result, i) => (
+             <ListItem　key={i} className={classes.courseItem} component={Link} to = "/cinfo/${result.id}" >
+               <ListItemText
+                 primary={result.name}
+                 secondary={result.description}
+               />
+          
+             </ListItem>
+           ))}
+         </List>
         )}
       </div>
     </div>
