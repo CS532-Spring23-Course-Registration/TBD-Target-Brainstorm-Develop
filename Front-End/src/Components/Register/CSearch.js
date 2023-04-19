@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CRegHome from "./CRegHome";
 import { makeStyles } from "@mui/styles";
-import { TextField, Button } from "@mui/material";
+import { TextField, Button, List, ListItem, ListItemText } from "@mui/material";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,8 +36,22 @@ const useStyles = makeStyles((theme) => ({
   button: {
     marginTop: "20px",
   },
-  results: {
-    marginTop: "20px",
+  courseList: {
+    display: "block",
+    margin: "0 auto",
+    maxWidth: "1200px",
+  },
+  courseItem: {
+    position: "relative",
+    backgroundColor: "#fff",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.1)",
+    borderRadius: "8px",
+    overflow: "hidden",
+    transition: "transform 0.2s ease-in-out",
+    "&:hover": {
+      transform: "scale(1.02)",
+    },
+    marginBottom: "24px", // add spacing between course items
   },
 }));
 
@@ -45,10 +59,11 @@ function CSearch() {
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
+  const Courses = ["CS 550 6654", "CS 532 6634", "CS 480 2992"];
 
   const handleSearch = (e) => {
     e.preventDefault();
-    fetch(`http://127.0.0.1:5000/courses?search=${searchTerm}`)
+    fetch(`/courses/personal_course_report?search=${searchTerm}`)
       .then((res) => res.json())
       .then((data) => {
         setSearchResults(data.courses);
@@ -77,13 +92,15 @@ function CSearch() {
             Search
           </Button>
         </form>
-        {searchResults.length > 0 && (
-          <div className={classes.results}>
-            {searchResults.map((result, i) => (
-              <p key={i}>{result}</p>
+        {Courses.length > 0 && (
+          <List className={classes.courseList}>
+            {Courses.map((result, i) => (
+              <ListItem key={i} className={classes.courseItem}>
+                <ListItemText primary={result} />
+              </ListItem>
             ))}
-          </div>
-        )}{" "}
+          </List>
+        )}
       </div>
     </div>
   );

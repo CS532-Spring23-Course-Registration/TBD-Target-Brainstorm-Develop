@@ -20,23 +20,19 @@ function Profile() {
   const Cinfo = ["Home Phone:", "Cell Phone:", "Email:", "Personal Email:"];
 
   const Pvalues = ["John Doe", "01/01/2000", "Male", "123456"];
-  const Avalues = ["1234 sdsu blvd", "San Diego", "California", "123456"];
-  const Cvalues = [
-    "000-000-0000",
-    "000-000-0000",
-    "example@gmail.com",
-    "example@gmail.com",
-  ];
+  // const Avalues = ["1234 sdsu blvd", "San Diego", "California", "123456"];
+  // const Cvalues = [
+  //   "000-000-0000",
+  //   "000-000-0000",
+  //   "example@gmail.com",
+  //   "example@gmail.com",
+  // ];
   const [pValues, setPvalues] = useState({});
   const [aValues, setAvalues] = useState({});
   const [cValues, setCvalues] = useState({});
 
   const [data, setData] = useState([]);
   const sessionId = Cookies.get('session_id');
-  const params = {
-    reportName: 'student_info'
-  };
-
 
   const test = "test";
 
@@ -55,7 +51,7 @@ function Profile() {
     })
       .then((response) => response.json())
       .then((data) => {
-        setData(data);
+        // setData(data);
         const updatedPvalues = [data.name, null, null, data.id];
         setPvalues(updatedPvalues);
         const updatedAvalues = [data.address, null, null, null];
