@@ -30,12 +30,18 @@ function Profile() {
 
   const [data, setData] = useState([]);
   const sessionId = Cookies.get('session_id');
+  const params = {
+    reportName: 'student_info'
+  };
+
 
   useEffect(() => {
     fetch('http://localhost:3000/', {
+      method: 'GET',
       headers: {
         'Authorization': sessionId 
-      }
+      },
+      body: JSON.stringify(params)
     })
       .then(response => response.json())
       .then(data => console.log(data))
