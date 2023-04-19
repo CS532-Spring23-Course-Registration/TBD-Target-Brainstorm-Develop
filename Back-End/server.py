@@ -1,9 +1,12 @@
 from flask import request, jsonify
+from flask_cors import CORS
 from app import create_app
 from app.models.app import Users, app
 import secrets
 
 (app, cache, db) = create_app()
+
+CORS(app)
 
 # Define a function to generate a new session key using the secrets module
 def generate_session_key():

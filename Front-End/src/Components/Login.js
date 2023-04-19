@@ -28,7 +28,7 @@ function Login(props) {
     event.preventDefault();
     
     try {
-      const response = await fetch('http://localhost:3000/login', {
+      const response = await fetch('http://127.0.0.1:5000/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -94,8 +94,6 @@ function Login(props) {
                 type="submit"
                 variant="contained"
                 color="primary"
-                component={Link}
-                to="/"
               >
                 Sign In
               </LoginButton>

@@ -41,8 +41,11 @@ function Profile() {
     reportName: "student_info"
   };
 
+  //Causing Infinite Loop 
+
+
   useEffect(() => {
-    fetch('http://localhost:3000/query', {
+    fetch('http://127.0.0.1:5000/query', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -60,7 +63,7 @@ function Profile() {
         setCvalues(updatedCvalues);
       })
       .catch((error) => console.log(error));
-  });
+  }, []);
 
   const renderOptionContent = () => {
     switch (selectedOption) {
