@@ -39,8 +39,7 @@ const options = [
   { title: "Course Register", path: "/reghome" },
   { title: "Major Requirements", path: "/Major-Requirements" },
   {
-    title: "Faculty And Course Information",
-    path: "/",
+    title: "Faculty And Course Information", path: "/faculty-and-course-info",
   },
   { title: "Course Grades", path: "/" },
 ];

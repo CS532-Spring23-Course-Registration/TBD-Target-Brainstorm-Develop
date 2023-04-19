@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import CRegHome from "./CRegHome";
 import { makeStyles } from "@mui/styles";
 import { TextField, Button, List, ListItem, ListItemText } from "@mui/material";
+import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -100,14 +101,16 @@ function CSearch() {
         {Courses.length > 0 && (
           <List className={classes.courseList}>
             {Courses.map((result, i) => (
-              <ListItem key={i} className={classes.courseItem}>
+              <ListItem
+                key={i}
+                className={classes.courseItem}
+                component={Link}
+                to="/cinfo/${result.id}"
+              >
                 <ListItemText
                   primary={result.name}
                   secondary={result.description}
                 />
-                <span>{result.name}</span>
-                <span>{result.name}</span>
-                <span>{result.name}</span>
               </ListItem>
             ))}
           </List>
