@@ -44,7 +44,7 @@ def get():
         if not user_id:
             return jsonify({'message': 'Invalid session key'}), 401
         cache.set(session_key, user_id, timeout=600)
-        return "Query has been completed"
+        return jsonify({'message': "Query has been completed"}), 200
     else:
         return jsonify({'message': 'Content-Type not supported!'}), 401
 
