@@ -38,11 +38,18 @@ function Profile() {
   };
 
 
+  const test = "test";
+
+  const params = {
+    session_id: test,
+    reportName: "student_info"
+  };
+
   useEffect(() => {
-    fetch('http://localhost:3000/', {
-      method: 'GET',
+    fetch('http://localhost:3000/query', {
+      method: 'POST',
       headers: {
-        'Authorization': sessionId 
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(params)
     })
