@@ -36,13 +36,12 @@ const StyledLink = styled(RouterLink)`
 const options = [
   { title: "Profile", path: "/profile" },
   { title: "Academic Record", path: "/Academic-Record" },
-  { title: "Course Register", path: "/Course-Register" },
+  { title: "Course Register", path: "/reghome" },
   { title: "Major Requirements", path: "/Major-Requirements" },
   {
-    title: "Faculty And Course Information",
-    path: "/Faculty-And-Course-Information",
+    title: "Faculty And Course Information", path: "/faculty-and-course-info",
   },
-  { title: "Course Grades", path: "/Course-Grades" },
+  { title: "Course Grades", path: "/" },
 ];
 
 function Navigation() {

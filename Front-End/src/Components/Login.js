@@ -26,30 +26,29 @@ function Login(props) {
   //Send POST request for User Authentication
   const handleSubmit = async (event) => {
     event.preventDefault();
+    
     try {
-      const response = await fetch("http://localhost:3000/login", {
-        method: "POST",
+      const response = await fetch('http://localhost:3000/login', {
+        method: 'POST',
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email, password })
       });
-
-      const authCheck = response.status;
-
-      if (authCheck === 401) {
-        console.log("Authentication failed.");
+  
+      if (response.status === 401) {
+        console.log('Authentication Failed.');
       } else {
-        console.log("Successful Login!");
-
+        console.log('Successful Login.');
+  
         const data = await response.json();
         const sessionKey = data.session_key;
-        
-        Cookies.set('session_key', sessionKey, { expires : 12/24, path: '/'});
+  
+        Cookies.set("session_key", sessionKey, { expires: 12 / 24, path: "/" });
         props.updateAuthentication(true);
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
