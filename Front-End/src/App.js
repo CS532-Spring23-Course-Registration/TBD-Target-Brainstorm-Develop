@@ -1,33 +1,50 @@
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './Components/Login/Login';
-import Navigation from './Components/NavigationMenu/Navigation';
-import Profile from './Components/ProfileTab/Profile';
-import AcademicRecord from "./Components/Academic Record/acedemic_Record"; 
+
+import Login from "./Components/Login";
+import Menu from "./Components/Menu";
+import PDF from "./Components/PDF";
+import CRegHome from "./Components/Register/CRegHome";
+import CSearch from "./Components/Register/CSearch";
+import MajorList from "./Components/Register/MajorList";
+import MyCourses from "./Components/Register/MyCourses";
+import Courses from "./Components/Register/Courses";
+import Cinfo from "./Components/Register/Cinfo";
+import CReg from "./Components/Register/CReg";
+import Navigation from "./Components/Navigation";
+import Profile from "./Components/Profile";
+import AcademicRecord from "./Components/acedemic_Record";
+import Signup from "./Components/Signup";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    setLoggedIn(true);
-  };
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
-  if (!loggedIn) {
-    return <Login onLogin={handleLogin} />;
+  const updateAuthentication = (newStatus) => {
+    setIsAuthenticated(newStatus);
   }
 
   return (
-    <Router>
-      <div className="App">
+    <div>
+      <Router>
+      {isAuthenticated && <Menu />}
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route path="/login" element={<Login />} updateAuthentication={updateAuthentication}/>
+          <Route path="/pdf" element={<PDF />} />
+          <Route path="/reghome" element={<CRegHome />} />
+          <Route path="/search" element={<CSearch />} />
+          <Route path="/majorlist" element={<MajorList />} />
+          <Route path="/mycourses" element={<MyCourses />} />
+          <Route path="/courses" element={<Courses />} />
+          <Route path="/courseinfo" element={<Cinfo />} />
+          <Route path="/register" element={<CReg />} />
           <Route path="/" element={<Navigation />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/Academic-Record" element={<AcademicRecord />} />
+          <Route path="/academic-Record" element={<AcademicRecord />} />
         </Routes>
-      </div>
-    </Router>
+      </Router>
+    </div>
   );
 }
 

@@ -16,19 +16,19 @@ class Student(db.Model):
     name = db.Column(db.String(100), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False)
     address = db.Column(db.String(100), nullable=False)
-    dob = db.Column(db.String(100), nullable=False) # Possible convert to DateTime rather than string
+    dob = db.Column(db.Date, nullable=False) # Possible convert to DateTime rather than string
     major = db.Column(db.String(100), nullable=False)
     minor = db.Column(db.String(100), nullable=True)
 
     # Many-to-Many
-    enrolled_courses = db.relationship('CoursePerSemester', secondary='enrollment', backref='student')
+    enrolled_courses = db.relationship('CoursePerSemester', secondary='enrollment', backref='student', overlaps='enrolled_courses,student')
 
     # One-to-One
     grades = db.relationship('StudentGrades', backref='student', uselist=False)
     misc_notes = db.relationship('StudentMiscNotes', backref='student', uselist=False)
     
     # Function to create a student in table
-    # Ex. Student.create('Robert', '85851112222', '555 Main St', '01/01/1991', 'Computer Science')
+    # Ex. Student.create('Robert', '85851112222', '555 Main St', date(1998,6,27), 'Computer Science')
     @classmethod
     def create(cls, name, phone_number, address, dob, major, minor=None):
         s = Student(name=name, phone_number=phone_number, address=address, dob=dob, major=major, minor=minor)
@@ -55,6 +55,20 @@ class StudentMiscNotes(db.Model):
     description = db.Column(db.String(500), nullable=True)
  
  
+    @classmethod
+    def create_note(student_id, editor_id, description):
+        q = Student.query.filter_by(id=student_id).first()
+        
+        if (q != None):
+            mn = StudentMiscNotes(student_id=student_id,editor_id=editor_id,description=description)
+            db.session.add(mn)
+            db.session.commit(mn)
+            
+            return print("Note created for student %s." % q.name)
+        else:
+            return print('Student not found with ID %d.' % student_id)
+            
+    
 class Faculty(db.Model):
     __tablename__ = 'faculty'
     id = db.Column(db.Integer, primary_key=True)
@@ -225,17 +239,48 @@ class CoursePerSemester(db.Model):
     __tablename__ = 'coursepersemester'
     id = db.Column(db.Integer, primary_key=True)
     course_id = db.Column(db.Integer, db.ForeignKey('courses.id')) # Courses foreign key
-    course_semester_id = db.Column(db.Integer, nullable=False) 
+    course_year = db.Column(db.Integer, nullable=False) # Year, ex. 2023
     course_semester = db.Column(db.String(20), nullable=False)
     faculty_id = db.Column(db.Integer, db.ForeignKey('faculty.id')) # Faculty foreign key
     schedule_number = db.Column(db.Integer, nullable=False) # 2 digit number
-    course_date_time = db.Column(db.DateTime, nullable=False) # Format (DD HH:MM-HH:MM)
+    course_date_time = db.Column(db.String, nullable=False) # Format (DD HH:MM-HH:MM) String for now
     course_location = db.Column(db.String(20), nullable=False) # 'On-line' or Campus room number
     max_seats = db.Column(db.Integer, nullable=False) # 4 digit number
     seats_available = db.Column(db.Integer, nullable=False) # 4 digit number
     
     students = db.relationship('Student', secondary='enrollment', backref='coursepersemester',overlaps='enrolled_courses,student')
     course = db.relationship('Courses', backref='coursepersemester') # many to one to Courses
+    
+    # Function to add a course to a given semester.
+    # Ex. CoursePerSemester.add_course_to_semester(1,2023,'Fall',3,1,'W 1200-1315', 'Online', 20, 11)
+    @classmethod
+    def add_course_to_semester(cls, course_id, course_year, course_semester, faculty_id, schedule_number, course_date_time, course_location, max_seats, seats_available):
+        q_course = Courses.query.filter_by(id=course_id).first()
+        q_faculty = Faculty.query.filter_by(id=faculty_id).first()
+        
+        if (q_course == None):
+            return print("Course ID %d not found." % course_id)
+        if (q_faculty == None):
+            return print("Faculty ID %d not found." % faculty_id)
+        
+        # Detect duplicates within given semester
+        q_c = CoursePerSemester.query.filter_by(course_id=course_id, course_year=course_year, course_semester=course_semester).first()
+        
+        if (q_c != None):
+            return print("Dupicate course found within given semester: %s %d." % (course_semester, course_year))
+        
+        # max_seats and seats_available validation
+        if (max_seats < seats_available):
+            return print("max_seats inputted is less than seats_available.")
+        
+        
+        c = CoursePerSemester(course_id=course_id,course_year=course_year,course_semester=course_semester,faculty_id=faculty_id,schedule_number=schedule_number,course_date_time=course_date_time,
+                              course_location=course_location,max_seats=max_seats,seats_available=seats_available)
+
+        db.session.add(c)
+        db.session.commit()
+        
+        return print("Added course %s to %s %d semester." % (q_course.name, course_semester, course_year))
     
     
 class Enrollment(db.Model):
@@ -266,6 +311,10 @@ class CoursePrerequisites(db.Model):
     course = db.relationship('Courses', foreign_keys='CoursePrerequisites.course_id')
     prereq_course = db.relationship('Courses', foreign_keys='CoursePrerequisites.prereq_id')
 
+    # Placeholder function
+    @classmethod
+    def add_class_prereq(cls, course_id, prereq_id):
+        return
 
 class CourseByOutline(db.Model):
     __tablename__ = 'coursebyoutline'
@@ -274,7 +323,8 @@ class CourseByOutline(db.Model):
     major_outline_id = db.Column(db.Integer, db.ForeignKey('majoroutline.id'), nullable=True)
     minor_outline_id = db.Column(db.Integer, db.ForeignKey('minoroutline.id'), nullable=True)
     course_required = db.Column(db.Boolean, default=True, nullable=False)
-
+    
+    
 # Create registration.db
 with app.app_context():
     db.create_all()

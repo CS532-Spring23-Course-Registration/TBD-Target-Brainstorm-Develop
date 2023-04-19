@@ -37,6 +37,22 @@ def login():
     session_key = get_user_session_key(user.id)
     return jsonify({'session_key': session_key}), 200
 
+@app.route('/query', methods=['POST'])
+def get():
+    content_type = request.headers.get('Content-Type')
+    if (content_type == 'application/json'):
+        request_json = request.get_json()
+        session_key = request_json['session_id']
+        if not session_key:
+            return jsonify({'message': 'Session key is missing'}), 401
+        user_id = cache.get(session_key)
+        if not user_id:
+            return jsonify({'message': 'Invalid session key'}), 401
+        cache.set(session_key, user_id, timeout=600)
+        return jsonify({'message': "Query has been completed"}), 200
+    else:
+        return jsonify({'message': 'Content-Type not supported!'}), 401
+
 # Define the GET endpoint that requires a valid session key
 @app.route('/', methods=['GET'])
 def get():
