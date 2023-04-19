@@ -40,6 +40,7 @@ const useStyles = makeStyles((theme) => ({
     display: "block",
     margin: "0 auto",
     maxWidth: "1200px",
+    width: "80%",
   },
   courseItem: {
     position: "relative",
@@ -59,7 +60,11 @@ function CSearch() {
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState("");
   const [searchResults, setSearchResults] = useState([]);
-  const Courses = ["CS 550 6654", "CS 532 6634", "CS 480 2992"];
+  const Courses = [
+    { name: "Course A", description: "This is course A" },
+    { name: "Course B", description: "This is course B" },
+    { name: "Course C", description: "This is course C" },
+  ];
 
   const handleSearch = (e) => {
     e.preventDefault();
@@ -96,7 +101,13 @@ function CSearch() {
           <List className={classes.courseList}>
             {Courses.map((result, i) => (
               <ListItem key={i} className={classes.courseItem}>
-                <ListItemText primary={result} />
+                <ListItemText
+                  primary={result.name}
+                  secondary={result.description}
+                />
+                <span>{result.name}</span>
+                <span>{result.name}</span>
+                <span>{result.name}</span>
               </ListItem>
             ))}
           </List>
