@@ -53,18 +53,6 @@ def get():
     else:
         return jsonify({'message': 'Content-Type not supported!'}), 401
 
-# Define the GET endpoint that requires a valid session key
-@app.route('/', methods=['GET'])
-def get():
-    session_key = request.headers.get('Authorization')
-    if not session_key:
-        return jsonify({'message': 'Session key is missing'}), 401
-    user_id = cache.get(session_key)
-    if not user_id:
-        return jsonify({'message': 'Invalid session key'}), 401
-    cache.set(session_key, user_id, timeout=600)
-    return "Get has been completed"
-
 # Define the PUT endpoint that requires a valid session key
 @app.route('/', methods=['PUT'])
 def put():
