@@ -8,8 +8,7 @@ import {
   Card,
 } from "@mui/material";
 import styled from "@mui/system/styled";
-import { Link } from "react-router-dom";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 const LoginButton = styled(Button)`
   background-color: lightcoral;
   &:hover {
@@ -19,31 +18,30 @@ const LoginButton = styled(Button)`
 `;
 
 function Login(props) {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   //Send POST request for User Authentication
   const handleSubmit = async (event) => {
     event.preventDefault();
-    
+
     try {
-      const response = await fetch('http://127.0.0.1:5000/login', {
-        method: 'POST',
+      const response = await fetch("http://127.0.0.1:5000/login", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
-  
+
       if (response.status === 401) {
-        console.log('Authentication Failed.');
+        console.log("Authentication Failed.");
       } else {
-        console.log('Successful Login.');
-  
+        console.log("Successful Login.");
+
         const data = await response.json();
         const sessionKey = data.session_key;
-  
+
         Cookies.set("session_key", sessionKey, { expires: 12 / 24, path: "/" });
         props.updateAuthentication(true);
       }
@@ -88,7 +86,7 @@ function Login(props) {
               variant="outlined"
               onChange={(e) => setPassword(e.target.value)}
             />
-            <Box sx={{ mt: 2 }} >
+            <Box sx={{ mt: 2 }}>
               <LoginButton
                 fullWidth
                 type="submit"

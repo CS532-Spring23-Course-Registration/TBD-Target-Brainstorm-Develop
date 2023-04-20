@@ -12,9 +12,9 @@ import MyCourses from "./Components/Register/MyCourses";
 import Cinfo from "./Components/Register/Cinfo";
 import Navigation from "./Components/Navigation";
 import Profile from "./Components/Profile";
-import AcademicRecord from "./Components/acedemic_Record";
 import Signup from "./Components/Signup";
 import MajorRequirements from "./Components/major_Requirements";
+import CGrades from "./Components/CGrades";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -39,13 +39,16 @@ function App() {
           <Route path="/search" element={<CSearch />} />
           <Route path="/majorlist" element={<MajorList />} />
           <Route path="/mycourses" element={<MyCourses />} />
-          <Route path="/faculty-and-course-info" element={<FacultyAndCourses />} />
+          <Route
+            path="/faculty-and-course-info"
+            element={<FacultyAndCourses />}
+          />
           <Route path="/courseinfo" element={<Cinfo />} />
           <Route path="/" element={<Navigation />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/academic-Record" element={<AcademicRecord />} />
           <Route path="/Major-Requirements" element={<MajorRequirements />} />
           <Route exact path="/cinfo/:id" element={<Cinfo />} />
+          <Route path="/grades" element={<CGrades />} />
         </Routes>
       </Router>
     </div>
