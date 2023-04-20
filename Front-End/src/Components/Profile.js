@@ -11,7 +11,7 @@ import {
   Divider,
 } from "@mui/material";
 import InfoCard from "./InfoCard";
-import Cookies from "js-cookie";
+// import Cookies from "js-cookie";
 
 function Profile() {
   const [selectedOption, setSelectedOption] = useState(null);
@@ -31,26 +31,25 @@ function Profile() {
   const [aValues, setAvalues] = useState({});
   const [cValues, setCvalues] = useState({});
 
-  const [data, setData] = useState([]);
-  const sessionId = Cookies.get('session_id');
+  // const [data, setData] = useState([]);
+  // const sessionId = Cookies.get("session_id");
 
   const test = "test";
 
   const params = {
     session_id: test,
-    reportName: "student_info"
+    reportName: "student_info",
   };
 
-  //Causing Infinite Loop 
-
+  //Causing Infinite Loop
 
   useEffect(() => {
-    fetch('http://127.0.0.1:5000/query', {
-      method: 'POST',
+    fetch("http://127.0.0.1:5000/query", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(params)
+      body: JSON.stringify(params),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -63,7 +62,7 @@ function Profile() {
         setCvalues(updatedCvalues);
       })
       .catch((error) => console.log(error));
-  }, []);
+  });
 
   const renderOptionContent = () => {
     switch (selectedOption) {
@@ -73,12 +72,22 @@ function Profile() {
         return <InfoCard labels={Ainfo} values={aValues} />;
       case "Contacts":
         return <InfoCard labels={Cinfo} values={cValues} />;
+      case "Academics":
+        return <InfoCard labels={Cinfo} values={cValues} />;
+      case "Student Records":
+        return <InfoCard labels={Cinfo} values={cValues} />;
       default:
         return <InfoCard labels={Pinfo} values={Pvalues} />;
     }
   };
 
-  const options = ["Personal Information", "Address", "Contacts"];
+  const options = [
+    "Personal Information",
+    "Address",
+    "Academics",
+    "Student Records",
+    "Contacts",
+  ];
 
   return (
     <div>

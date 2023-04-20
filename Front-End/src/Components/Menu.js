@@ -40,15 +40,6 @@ function Menu() {
             variant="contained"
             color="error"
             component={Link}
-            to="/search"
-          >
-            Search
-          </Button>
-
-          <Button
-            variant="contained"
-            color="error"
-            component={Link}
             to="/login"
           >
             Logout

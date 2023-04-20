@@ -59,7 +59,8 @@ const useStyles = makeStyles((theme) => ({
 function CSearch() {
   const classes = useStyles();
   const [searchTerm, setSearchTerm] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
+  const [click, setClick] = useState(false);
+  // const [searchResults, setSearchResults] = useState([]);
   const Courses = [
     { name: "Course A", description: "This is course A" },
     { name: "Course B", description: "This is course B" },
@@ -67,11 +68,12 @@ function CSearch() {
   ];
 
   const handleSearch = (e) => {
+    setClick(true);
     e.preventDefault();
     fetch(`/courses/personal_course_report?search=${searchTerm}`)
       .then((res) => res.json())
       .then((data) => {
-        setSearchResults(data.courses);
+        // setSearchResults(data.courses);
         console.log(data);
       });
   };
@@ -97,18 +99,22 @@ function CSearch() {
             Search
           </Button>
         </form>
-        {Courses.length > 0 && (
-           <List className={classes.courseList}>
-           {Courses.map((result, i) => (
-             <ListItem　key={i} className={classes.courseItem} component={Link} to = "/cinfo/${result.id}" >
-               <ListItemText
-                 primary={result.name}
-                 secondary={result.description}
-               />
-          
-             </ListItem>
-           ))}
-         </List>
+        {click === true && (
+          <List className={classes.courseList}>
+            {Courses.map((result, i) => (
+              <ListItem
+                key={i}
+                className={classes.courseItem}
+                component={Link}
+                to={`/cinfo/${result.id}`}
+              >
+                <ListItemText
+                  primary={result.name}
+                  secondary={result.description}
+                />
+              </ListItem>
+            ))}
+          </List>
         )}
       </div>
     </div>
