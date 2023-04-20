@@ -14,6 +14,7 @@ import Navigation from "./Components/Navigation";
 import Profile from "./Components/Profile";
 import Signup from "./Components/Signup";
 import MajorRequirements from "./Components/major_Requirements";
+import CGrades from "./Components/CGrades";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -47,6 +48,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/Major-Requirements" element={<MajorRequirements />} />
           <Route exact path="/cinfo/:id" element={<Cinfo />} />
+          <Route path="/grades" element={<CGrades />} />
         </Routes>
       </Router>
     </div>

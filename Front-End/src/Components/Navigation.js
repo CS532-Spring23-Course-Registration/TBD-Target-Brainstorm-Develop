@@ -41,7 +41,7 @@ const options = [
     title: "Faculty And Course Information",
     path: "/faculty-and-course-info",
   },
-  { title: "Course Grades", path: "/" },
+  { title: "Course Grades", path: "/grades" },
 ];
 
 function Navigation() {
