@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   AppBar,
   Drawer,
   IconButton,
+  Button,
   List,
   ListItem,
   ListItemIcon,
@@ -16,24 +17,82 @@ import {
   Box,
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
+import Cookies from 'js-cookie';
 
 const FacultyAndCourses = () => {
-    const [open, setOpen] = useState(false);
-    const [selectedItem, setSelectedItem] = useState("");
+    var sessionId = Cookies.get('session_id');
+    sessionId = "test";
+    
+    const [selectedItem, setSelectedItem] = useState("Courses");
+    
+    //States for the search boxes
     const [searchQuery, setSearchQuery] = useState("");
-  
-    const handleDrawerToggle = () => {
-      setOpen(!open);
-    };
-  
+    const [departmentQuery, setDepartmentQuery] = useState("");
+
+    //Params for requests
+    const [reportType, setReportType] = useState("course_info");
+    const [reportParameter, setReportParameter] = useState("course");
+    const [reportFilters, setReportFilters] = useState("all_faculty_all_departments");
+
     const handleListItemClick = (item) => {
-      setSelectedItem(item);
+        setSelectedItem(item);
+        if (selectedItem !== "Courses") {
+            setReportType("course_info");
+            setReportParameter("course");
+        } else {
+            setReportType("faculty_info");
+            setReportParameter("faculty")
+        }
     };
-  
+
     const handleSearchChange = (event) => {
-      setSearchQuery(event.target.value);
+        setSearchQuery(event.target.value);
     };
+
+    const handleSubmit = async () => {
+        try {
+            const response = await fetch('http://127.0.0.1:5000/query', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    reportName: reportType,
+                    reportFilters: reportFilters,
+                    [reportParameter]: searchQuery,
+                    department: departmentQuery,
+                    sessionId: sessionId
+                })
+            });
+
+          const data = await response.json();
+        }
+
+        catch (error) {
+            console.log(error);
+        }
+    }
   
+
+
+    const handleDepartmentSearchChange = async (event) => {
+        setDepartmentQuery(event.target.value);
+    };
+
+    useEffect(() => {
+        if (searchQuery === "" && departmentQuery === "" && reportType === 'faculty_info') {
+            setReportFilters("all_faculty_all_departments");
+        } else if (searchQuery === "" && departmentQuery === "" && reportType === 'course_info') {
+            setReportFilters("all_courses_all_departments");
+        } else if (searchQuery === "" && departmentQuery.length > 0 && reportType === 'course_info') {
+            setReportFilters("all_courses_by_department");
+        } else if (searchQuery === "" && departmentQuery.length > 0 && reportType === 'faculty_info') {
+            setReportFilters("all_courses_by_department");
+        } else {
+            setReportFilters("");
+        }
+    }, [searchQuery, departmentQuery, reportType]);
+
     const options = ["Courses", "Faculty"];
   
     return (
@@ -43,7 +102,7 @@ const FacultyAndCourses = () => {
           backgroundColor: '#fff',
           boxShadow: '0 0 10px rgba(0, 0, 0, 0.2)',
           borderRadius: '10px',
-          width: '300px',
+          width: '20%',
           margin: '20px',
           padding: '10px'
         }}>
@@ -60,20 +119,43 @@ const FacultyAndCourses = () => {
             ))}
           </List>
         </Box>
-        <Box sx={{ margin: '20px' }}>
-          <TextField
-            id="search-bar"
-            label={`Search ${selectedItem}`}
-            variant="outlined"
-            fullWidth
-            value={searchQuery}
-            onChange={handleSearchChange}
-            sx={{
-              marginTop: '20px',
-              width: '60%'
-            }}
-          />
-        </Box>
+            <Box sx={{ 
+                margin: '20px',
+                display: 'flex',
+                flexDirection: 'column'
+            }}>
+                <TextField
+                    id="search-bar"
+                    label={`Search ${selectedItem}`}
+                    variant="outlined"
+                    fullWidth
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    sx={{
+                    marginTop: '20px'
+                    }}
+                />
+                <Box sx={{ margin: '20px', width: '600px' }}>
+                    <TextField
+                        id="department-search-bar"
+                        label="Department"
+                        variant="outlined"
+                        fullWidth
+                        value={departmentQuery}
+                        onChange={handleDepartmentSearchChange}
+                        sx={{
+                        marginTop: '20px',
+                        width: '30%'
+                        }}
+                        InputProps={{
+                        sx: {
+                            backgroundColor: "#f5f5f5"
+                        }
+                        }}
+                    />
+                </Box>
+                <Button onClick={() => handleSubmit()} type="submit" variant="contained" sx={{ width: '100px' }}>Submit</Button>
+            </Box>
         </Box>
       </div>
     );
