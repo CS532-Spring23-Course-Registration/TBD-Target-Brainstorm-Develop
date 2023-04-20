@@ -7,3 +7,7 @@ env/
 
 # Ignore .DS_Store
 .DS_Store
+../.DS_Store
+
+# Ignore instance/ This is where the local database is stored
+instance/
