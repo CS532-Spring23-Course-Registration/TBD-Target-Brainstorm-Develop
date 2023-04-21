@@ -62,7 +62,7 @@ function Profile() {
         setCvalues(updatedCvalues);
       })
       .catch((error) => console.log(error));
-  });
+  }, []);
 
   const renderOptionContent = () => {
     switch (selectedOption) {
