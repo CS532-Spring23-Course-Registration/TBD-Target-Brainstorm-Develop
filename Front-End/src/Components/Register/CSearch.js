@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme) => ({
     display: "block",
     margin: "0 auto",
     maxWidth: "1200px",
+    width: "80%",
   },
   courseItem: {
     position: "relative",
@@ -98,17 +99,21 @@ function CSearch() {
           </Button>
         </form>
         {Courses.length > 0 && (
-           <List className={classes.courseList}>
-           {Courses.map((result, i) => (
-             <ListItem　key={i} className={classes.courseItem} component={Link} to = "/cinfo/${result.id}" >
-               <ListItemText
-                 primary={result.name}
-                 secondary={result.description}
-               />
-          
-             </ListItem>
-           ))}
-         </List>
+          <List className={classes.courseList}>
+            {Courses.map((result, i) => (
+              <ListItem
+                key={i}
+                className={classes.courseItem}
+                component={Link}
+                to="/cinfo/${result.id}"
+              >
+                <ListItemText
+                  primary={result.name}
+                  secondary={result.description}
+                />
+              </ListItem>
+            ))}
+          </List>
         )}
       </div>
     </div>
