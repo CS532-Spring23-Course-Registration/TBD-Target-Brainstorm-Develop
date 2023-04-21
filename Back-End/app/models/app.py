@@ -376,8 +376,6 @@ class ProgramOutline(db.Model):
     
     approver = db.relationship('Users', backref='outlines_approved')
     program = db.relationship('Programs', backref='outlines')
-    
-    courses = db.relationship('CourseByOutline', backref='program_outline')
 
     # StudentGrades can query for the courses that are already completed for the student
     # Can be compared with ProgramCourses to find what courses are still required
@@ -385,10 +383,11 @@ class ProgramOutline(db.Model):
 class CourseByOutline(db.Model):
     __tablename__ = 'coursebyoutline'
     id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.Integer, db.ForeignKey('programoutline.student_id')) 
+    outline_id = db.Column(db.Integer, db.ForeignKey('programoutline.id'))
     course_id =  db.Column(db.Integer, db.ForeignKey('programcourses.course_id')) # Foreign key to reference list of program courses
     
     course = db.relationship('ProgramCourses', backref='outlines_present')
+    program_outline = db.relationship('ProgramOutline', backref='courses')
     
 
 # Create registration.db
