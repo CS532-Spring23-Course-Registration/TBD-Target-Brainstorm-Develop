@@ -34,6 +34,7 @@ const FacultyAndCourses = () => {
     const [reportParameter, setReportParameter] = useState("course");
     const [reportFilters, setReportFilters] = useState("all_faculty_all_departments");
 
+    //Updates the state when user clicks an option from the side menu
     const handleListItemClick = (item) => {
         setSelectedItem(item);
         if (selectedItem !== "Courses") {
@@ -45,10 +46,17 @@ const FacultyAndCourses = () => {
         }
     };
 
+    //Updates the state for the main search bar
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value);
     };
 
+    //Updates the state for the department search bar
+    const handleDepartmentSearchChange = async (event) => {
+        setDepartmentQuery(event.target.value);
+    };
+
+    //Function for making API call when the submit button is pressed
     const handleSubmit = async () => {
         try {
             const response = await fetch('http://127.0.0.1:5000/query', {
@@ -64,7 +72,6 @@ const FacultyAndCourses = () => {
                     sessionId: sessionId
                 })
             });
-
           const data = await response.json();
         }
 
@@ -73,12 +80,8 @@ const FacultyAndCourses = () => {
         }
     }
   
-
-
-    const handleDepartmentSearchChange = async (event) => {
-        setDepartmentQuery(event.target.value);
-    };
-
+    //Every time a state changes, this checks if the report filter should be changed based
+    //off what the user has entered in their search boxes.
     useEffect(() => {
         if (searchQuery === "" && departmentQuery === "" && reportType === 'faculty_info') {
             setReportFilters("all_faculty_all_departments");
@@ -87,7 +90,7 @@ const FacultyAndCourses = () => {
         } else if (searchQuery === "" && departmentQuery.length > 0 && reportType === 'course_info') {
             setReportFilters("all_courses_by_department");
         } else if (searchQuery === "" && departmentQuery.length > 0 && reportType === 'faculty_info') {
-            setReportFilters("all_courses_by_department");
+            setReportFilters("all_faculty_by_department");
         } else {
             setReportFilters("");
         }
