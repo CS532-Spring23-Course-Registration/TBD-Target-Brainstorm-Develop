@@ -25,6 +25,7 @@ class Student(db.Model):
     # One-to-One
     grades = db.relationship('StudentGrades', backref='student', uselist=False)
     misc_notes = db.relationship('StudentMiscNotes', backref='student', uselist=False)
+    outline = db.relationship('ProgramOutline', backref='student', uselist=False)
     
     # Function to create a student in table
     # Ex. Student.create('Robert', '85851112222', '555 Main St', date(1998,6,27), 'Computer Science')
@@ -154,7 +155,13 @@ class Users(db.Model):
         db.session.commit()
         
         return print("User %s created with ID %d" % (name, u.id))
-        
+    
+    # def get_user_by_username(name):
+    #     Session = sessionmaker(bind=db.engine)
+    #     session = Session()
+    #     user = session.query(Users).filter_by(name=name).first()
+    #     session.close()
+    #     return 
 
 class Departments(db.Model):
     __tablename__ = 'departments'
@@ -192,6 +199,7 @@ class Courses(db.Model):
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'))
     
     programs_included = db.relationship('ProgramCourses', backref='course')
+    
     
     # Function to add a course to the Courses table.
     # Ex. Courses.add('MATH151', 'Calculus 2', 3.0, '3')
@@ -311,7 +319,7 @@ class Programs(db.Model):
     num_units = db.Column(db.Integer, nullable=False)
     
     courses = db.relationship('ProgramCourses', backref='program')         # One to Many
-    advisors = db.relationship('ProgramAdvisors', backref='program')          # One to Many
+    advisors = db.relationship('ProgramAdvisors', backref='program')       # One to Many
     
 
 class ProgramCourses(db.Model):
@@ -329,9 +337,12 @@ class ProgramCourses(db.Model):
         if (q != None):
             return print("Course ID %d is already within program ID %d." % (course_id, program_id))
         
+        a = ProgramCourses(program_id=program_id, course_id=course_id, is_required=is_required)
+        db.session.add(a)
+        db.session.commit()
         
-        
-        return
+        return print("Course ID %d added to program ID %d." % (course_id, program_id))
+
 
 class ProgramAdvisors(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -352,41 +363,34 @@ class ProgramAdvisors(db.Model):
         
         return print("Successfully added faculty ID %d to program ID %d." % (faculty_id, program_id))
     
-
-class MajorOutline(db.Model):
-    __tablename__ = 'majoroutline'
-    id = db.Column(db.Integer, primary_key=True) # 4 digit ID
+    
+class ProgramOutline(db.Model):
+    __tablename__ = 'programoutline'
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, db.ForeignKey('student.id'))
     program_id = db.Column(db.Integer, db.ForeignKey('programs.id')) # Programs foreign key
-    total_units = db.Column(db.Float, nullable=False)
-    elective_units = db.Column(db.Float, nullable=False)
-    creator_id = db.Column(db.Integer, db.ForeignKey('users.id')) # Users foreign key
+    version_number = db.Column(db.Integer, nullable=False)
+    course_status = db.Column(db.String, nullable=False) # "Approved", "Dropped", "Waived". If "Approved", cannot be deleted BUT can be modified
+    change_date = db.Column(db.DateTime, default=datetime.utcnow)
+    approver_id = db.Column(db.Integer, db.ForeignKey('users.id')) # Users foreign key
     
-    user_creator = db.relationship('Users', backref='major_outlines_created')
+    approver = db.relationship('Users', backref='outlines_approved')
+    program = db.relationship('Programs', backref='outlines')
     
-    
-class MinorOutline(db.Model):
-    __tablename__ = 'minoroutline'
-    id = db.Column(db.Integer, primary_key=True) # 4 digit ID
-    program_id = db.Column(db.Integer, db.ForeignKey('programs.id')) # Programs foreign key
-    total_units = db.Column(db.Float, nullable=False)
-    elective_units = db.Column(db.Float, nullable=False)
-    creator_id = db.Column(db.Integer, db.ForeignKey('users.id')) # Users foreign key
-    
-    user_creator = db.relationship('Users', backref='minor_outlines_created')
+    courses = db.relationship('CourseByOutline', backref='program_outline')
 
+    # StudentGrades can query for the courses that are already completed for the student
+    # Can be compared with ProgramCourses to find what courses are still required
 
 class CourseByOutline(db.Model):
     __tablename__ = 'coursebyoutline'
     id = db.Column(db.Integer, primary_key=True)
-    version_number = db.Column(db.Integer, nullable=False)
-    course_id = db.Column(db.Integer, db.ForeignKey('courses.id'))
-    major_outline_id = db.Column(db.Integer, db.ForeignKey('majoroutline.id'), nullable=True)
-    minor_outline_id = db.Column(db.Integer, db.ForeignKey('minoroutline.id'), nullable=True)
-    course_status = db.Column(db.String, nullable=False) # "Approved", "Dropped", "Waived". If "Approved", cannot be deleted BUT can be modified
-    change_date = db.Column(db.DateTime, default=datetime.utcnow)
-    course_required = db.Column(db.Boolean, default=True, nullable=False)
+    student_id = db.Column(db.Integer, db.ForeignKey('programoutline.student_id')) 
+    course_id =  db.Column(db.Integer, db.ForeignKey('programcourses.course_id')) # Foreign key to reference list of program courses
     
+    course = db.relationship('ProgramCourses', backref='outlines_present')
     
+
 # Create registration.db
 with app.app_context():
     db.create_all()
