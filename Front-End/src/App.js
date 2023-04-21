@@ -6,6 +6,7 @@ import Profile from './Components/ProfileTab/Profile';
 import AcademicRecord from "./Components/Academic Record/academic_Record";
 import MajorRequirements from './Components/Major Requirements/major_Requirements'; 
 import FacultyAndCourseInformation from './Components/Faculty And Course information/faculty_Course_Information';
+import CourseGrades from './Components/Course Grades/course_Grades';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -29,6 +30,7 @@ function App() {
           <Route path="/Academic-Record" element={<AcademicRecord />} />
           <Route path="/Major-Requirements" element={<MajorRequirements />} />
           <Route path ="/Faculty-And-Course-Information" element ={<FacultyAndCourseInformation />} />
+          <Route path ="/Course-Grades" element ={<CourseGrades />} />
         </Routes>
       </div>
     </Router>
