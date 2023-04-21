@@ -1,12 +1,6 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import {
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableCell,
-} from "@mui/material";
+import { Table, TableBody, TableRow, TableCell } from "@mui/material";
 
 function CGrades() {
   const [courseDetails, setCourseDetails] = useState({
@@ -24,8 +18,6 @@ function CGrades() {
       .then((response) => setCourseDetails(response.data))
       .catch((error) => console.error(error));
   }, []);
-
-  const studentList = courseDetails.students || [];
 
   return (
     <div>
