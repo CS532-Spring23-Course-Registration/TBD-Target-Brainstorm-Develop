@@ -39,7 +39,6 @@ function App() {
             <Route path="/*" element={<Navigate to="/login" />} />
           ) : (
             <>
-              <Route path="/pdf" element={<PDF />} />
               <Route path="/search" element={<CSearch />} />
               <Route path="/majorlist" element={<MajorList />} />
               <Route
