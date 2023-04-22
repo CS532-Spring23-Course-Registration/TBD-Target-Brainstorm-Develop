@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
 import React, { useState } from "react";
 
 import Login from "./Components/Login";
@@ -29,22 +29,30 @@ function App() {
           <Route path="/signup" element={<Signup />} />
           <Route
             path="/login"
-            element={<Login />}
-            updateAuthentication={updateAuthentication}
+            element={<Login updateAuthentication={updateAuthentication} />}
           />
-          <Route path="/pdf" element={<PDF />} />
-          <Route path="/search" element={<CSearch />} />
-          <Route path="/majorlist" element={<MajorList />} />
-          <Route
-            path="/faculty-and-course-info"
-            element={<FacultyAndCourses />}
-          />
-          <Route path="/courseinfo" element={<Cinfo />} />
-          <Route path="/" element={<Navigation />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/Major-Requirements" element={<MajorRequirements />} />
-          <Route exact path="/cinfo/:id" element={<Cinfo />} />
-          <Route path="/grades" element={<CGrades />} />
+          {!isAuthenticated ? (
+            <Route
+              path="/*"
+              element={<Navigate to="/login" />}
+            />
+          ) : (
+            <>
+              <Route path="/pdf" element={<PDF />} />
+              <Route path="/search" element={<CSearch />} />
+              <Route path="/majorlist" element={<MajorList />} />
+              <Route
+                path="/faculty-and-course-info"
+                element={<FacultyAndCourses />}
+              />
+              <Route path="/courseinfo" element={<Cinfo />} />
+              <Route path="/" element={<Navigation />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/Major-Requirements" element={<MajorRequirements />} />
+              <Route exact path="/cinfo/:id" element={<Cinfo />} />
+              <Route path="/grades" element={<CGrades />} />
+            </>
+          )}
         </Routes>
       </Router>
     </div>
