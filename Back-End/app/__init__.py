@@ -1,3 +1,4 @@
+import secrets
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_caching import Cache
@@ -14,14 +15,14 @@ def create_app():
 
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = secrets.token_hex(16) # Secret key used to sign session cookies
-    cache = Cache(app, config={'CACHE_TYPE': 'simple'}) # Initialize Flask-Caching
+    cache = Cache(app, config={'CACHE_TYPE': 'flask_caching.backends.SimpleCache'}) # Initialize Flask-Caching
 
     
     db.init_app(app)
     
-    from views import secrets
+    from .views.db_secrets import db_secrets
     
-    app.register_blueprint(secrets, url_prefix='/')
+    app.register_blueprint(db_secrets, url_prefix='/')
     
     # with app.app_context():
     #     db.create_all()

@@ -1,33 +1,54 @@
-import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import Login from './Components/Login/Login';
-import Navigation from './Components/NavigationMenu/Navigation';
-import Profile from './Components/ProfileTab/Profile';
-import AcademicRecord from "./Components/Academic Record/acedemic_Record"; 
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import React, { useState } from "react";
+
+import Login from "./Components/Login";
+import Menu from "./Components/Menu";
+import PDF from "./Components/PDF";
+import FacultyAndCourses from "./Components/FacultyAndCourses";
+import CRegHome from "./Components/Register/CRegHome";
+import CSearch from "./Components/Register/CSearch";
+import MajorList from "./Components/Register/MajorList";
+import MyCourses from "./Components/Register/MyCourses";
+import Cinfo from "./Components/Register/Cinfo";
+import Navigation from "./Components/Navigation";
+import Profile from "./Components/Profile";
+import AcademicRecord from "./Components/acedemic_Record";
+import Signup from "./Components/Signup";
+import MajorRequirements from "./Components/major_Requirements";
 
 function App() {
-  const [loggedIn, setLoggedIn] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
-  const handleLogin = (e) => {
-    e.preventDefault();
-    setLoggedIn(true);
+  const updateAuthentication = (newStatus) => {
+    setIsAuthenticated(newStatus);
   };
 
-  if (!loggedIn) {
-    return <Login onLogin={handleLogin} />;
-  }
-
   return (
-    <Router>
-      <div className="App">
+    <div>
+      <Router>
+        {isAuthenticated && <Menu />}
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/login"
+            element={<Login />}
+            updateAuthentication={updateAuthentication}
+          />
+          <Route path="/pdf" element={<PDF />} />
+          <Route path="/reghome" element={<CRegHome />} />
+          <Route path="/search" element={<CSearch />} />
+          <Route path="/majorlist" element={<MajorList />} />
+          <Route path="/mycourses" element={<MyCourses />} />
+          <Route path="/faculty-and-course-info" element={<FacultyAndCourses />} />
+          <Route path="/courseinfo" element={<Cinfo />} />
           <Route path="/" element={<Navigation />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/Academic-Record" element={<AcademicRecord />} />
+          <Route path="/academic-Record" element={<AcademicRecord />} />
+          <Route path="/Major-Requirements" element={<MajorRequirements />} />
+          <Route exact path="/cinfo/:id" element={<Cinfo />} />
         </Routes>
-      </div>
-    </Router>
+      </Router>
+    </div>
   );
 }
 

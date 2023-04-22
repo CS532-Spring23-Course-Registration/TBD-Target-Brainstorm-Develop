@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
+from sqlalchemy.orm import sessionmaker
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///registration.db'
@@ -108,6 +109,7 @@ class Faculty(db.Model):
         if (q != None):
             f = Faculty(name=name, position_title=position_title, phone_number=phone_number,
                         office_number=office_number, office_hours=office_hours, assigned_department=assigned_department)
+
             db.session.add(f)
             db.session.commit()
 
@@ -182,7 +184,6 @@ class Users(db.Model):
     #     user = session.query(Users).filter_by(name=name).first()
     #     session.close()
     #     return
-
 
 class Departments(db.Model):
     __tablename__ = 'departments'
