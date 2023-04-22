@@ -1,0 +1,8 @@
+{
+  "title": "personal_course_report",
+  "type": "object",
+  "properties": {
+    "reportName": "personal_course_report",
+    "sessionId": {"type": "integer"}
+  }
+}

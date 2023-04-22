@@ -1,0 +1,18 @@
+{
+  "title": "gradeStatistics",
+  "type": "object",
+  "properties": {
+    "reportName": {"type": "string", "const": "gradeStatistics"},
+    "sessionId": {"type": "integer"},
+    "granularity": {
+      "type": "string",
+      "enum": [
+        "course",
+        "department",
+        "university"
+      ]
+    },
+    "department": {"type": "string"},
+    "course": {"type": "string"}
+  }
+}

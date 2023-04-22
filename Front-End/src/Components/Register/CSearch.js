@@ -105,7 +105,7 @@ function CSearch() {
                  primary={result.name}
                  secondary={result.description}
                />
-          
+
              </ListItem>
            ))}
          </List>
