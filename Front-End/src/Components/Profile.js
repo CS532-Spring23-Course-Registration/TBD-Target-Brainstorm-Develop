@@ -41,7 +41,7 @@ function Profile() {
 
   const params = {
     session_id: test,
-    reportName: "student_info",
+    reportName: "studentInfo",
   };
 
   const [click, setClick] = useState(false);

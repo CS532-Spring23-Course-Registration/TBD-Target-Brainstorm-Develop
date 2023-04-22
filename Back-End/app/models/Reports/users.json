@@ -1,0 +1,16 @@
+{
+  "title": "users",
+  "type": "object",
+  "properties": {
+    "reportName": {"type": "string", "const": "users"},
+    "sessionId": {"type": "integer"},
+    "granularity": {
+      "type": "string",
+      "enum": [
+        "user",
+        "faculty",
+        "student"
+      ]
+    }
+  }
+}

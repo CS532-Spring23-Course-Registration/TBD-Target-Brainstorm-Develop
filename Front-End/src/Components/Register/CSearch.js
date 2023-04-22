@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import CRegHome from "./CRegHome";
 import { makeStyles } from "@mui/styles";
 import {
@@ -39,11 +39,11 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     margin: "10px",
-    width: "75%",
+    width: "77%",
   },
   department_input: {
     margin: "10px",
-    width: "30%",
+    width: "50%",
   },
   button: {
     margin: "30px",
@@ -70,16 +70,27 @@ const useStyles = makeStyles((theme) => ({
 function CSearch() {
   const classes = useStyles();
 
+  //Parameters for the API call
   const [searchQuery, setSearchQuery] = useState("");
+  const [departmentQuery, setDepartmentQuery] = useState("");
+  const [checkBoxValue, setCheckBoxValue] = useState(false);
+  const [reportFilter, setReportFilter] = useState();
+
   const [click, setClick] = useState(false);
   const [data, setData] = useState(null);
   const sessionId = "test";
+  const studentId = "test2";
   // const [searchResults, setSearchResults] = useState([]);
   const Courses = [
     { name: "Course A", description: "This is course A" },
     { name: "Course B", description: "This is course B" },
     { name: "Course C", description: "This is course C" },
   ];
+
+  const handleCheckBox = () => {
+    var temp = checkBoxValue;
+    setCheckBoxValue(!temp);
+  };
 
   const handleSearch = (event) => {
     fetch("http://127.0.0.1:5000/query", {
@@ -88,7 +99,12 @@ function CSearch() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        session_id: sessionId,
+        reportName: "courses",
+        course: searchQuery,
+        reportFilters: reportFilter,
+        department: departmentQuery,
+        studentId: studentId,
+        sessionId: sessionId,
       }),
     })
       .then((response) => response.json())
@@ -98,22 +114,25 @@ function CSearch() {
       .catch((error) => console.log(error));
   };
 
-  // const handleSearch = (e) => {
-  //   setClick(true);
-  //   e.preventDefault();
-  //   fetch(`/courses/personal_course_report?search=${searchQuery}`)
-  //     .then((res) => res.json())
-  //     .then((data) => {
-  //       // setSearchResults(data.courses);
-  //       console.log(data);
-  //     });
-  // };
+  useEffect(() => {
+    if (searchQuery === "" && departmentQuery === "" && !checkBoxValue) {
+      setReportFilter("allClassesAllDepartments");
+    } else if (searchQuery === "" && departmentQuery === "" && checkBoxValue) {
+      setReportFilter("openClassesAllDepartments");
+    } else if (searchQuery === "" && departmentQuery !== "" && !checkBoxValue) {
+      setReportFilter("allClassesByDepartment");
+    } else if (searchQuery === "" && departmentQuery !== "" && checkBoxValue) {
+      setReportFilter("openClassesByDepartment");
+    } else {
+      setReportFilter("");
+    }
+  }, [searchQuery, departmentQuery, checkBoxValue]);
 
   return (
     <div className={classes.root}>
       <CRegHome />
       <div className={classes.contents}>
-        <form className={classes.form} onSubmit={handleSearch}>
+        <form className={classes.form}>
           <TextField
             className={classes.input}
             label="Class"
@@ -122,19 +141,26 @@ function CSearch() {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
           />
-          <TextField
-            className={classes.department_input}
-            label="Department"
-            variant="outlined"
-            margin="normal"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+          <Box display="flex" alignItems="center" justifyContent="center">
+            <TextField
+              className={classes.department_input}
+              label="Department"
+              variant="outlined"
+              margin="normal"
+              value={departmentQuery}
+              onChange={(e) => setDepartmentQuery(e.target.value)}
+            />
+            <Box display="flex" alignItems="center" marginLeft="10px">
+              <input type="checkbox" onClick={() => handleCheckBox()} />
+              <label>Show Open Classes</label>
+            </Box>
+          </Box>
+
           <Button
             className={classes.button}
             variant="contained"
             color="error"
-            type="submit"
+            onClick={() => handleSearch()}
           >
             Search
           </Button>

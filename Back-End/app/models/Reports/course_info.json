@@ -1,0 +1,18 @@
+{
+  "title": "course_info",
+  "type": "object",
+  "properties": {
+    "reportName": "course_info",
+    "sessionId": {"type": "integer"},
+    "reportFilters": {
+      "type": "string",
+      "enum": [
+        "all_courses_all_departments",
+        "all_courses_by_department",
+        "specific_course"
+      ]
+    },
+    "departmentId": {"type": "integer"},
+    "courseId": {"type": "integer"}
+  }
+}
