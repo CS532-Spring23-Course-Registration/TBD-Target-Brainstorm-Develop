@@ -25,8 +25,22 @@ Virtualenv is a useful tool to create isolated Python environments, which is par
    ```
    pip install Flask
    ```
+    ```
+    make download
+    ```
 
-5. Once you're done working on your project, deactivate the virtual environment:
+5. Run the flask application
+
+    ```
+    flask --app server run
+    ```
+
+6. Before you deactivate the virtual environment and end your coding session
+
+    ```
+    pip freeze > requirements.txt
+
+7. Once you're done working on your project, deactivate the virtual environment:
 
    ```
    deactivate
@@ -35,20 +49,6 @@ Virtualenv is a useful tool to create isolated Python environments, which is par
 By using virtualenv, you can ensure that your Flask project has its own isolated environment and doesn't interfere with any other projects or system libraries.
 
 Remember to activate the virtual environment whenever you start working with this project.
-
-## Upon installing and activating Virtual Environment
-
-1. Install the necessary dependencies
-
-    ```
-    make download
-    ```
-
-2. Before you deactivate the virtual environment and end your coding session
-
-    ```
-    pip freeze > requirements.txt
-    ```
 
 > **IMPORTANT**: Whenever you need to install a new package for your Flask project, be sure to do so inside the virtual environment by activating it with the command:
 

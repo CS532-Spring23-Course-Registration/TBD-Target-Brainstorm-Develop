@@ -29,17 +29,20 @@ def login():
     print()
     # user = Users.get_user_by_username(username)
     if username == "adminFaculty" and password == "admin":
-        return jsonify({'message': 'Invalid credentials', \
-                        'sessionId': get_user_session_key(123), \
+        return jsonify({'sessionId': get_user_session_key(123), \
                         'userId': get_user_session_key(0), \
                         'userName': 'userStudent', \
                         'permission': 'faculty'}), 200
     elif username == "adminStudent" and password == "admin":
-        return jsonify({'message': 'Invalid credentials', \
-                       'sessionId': get_user_session_key(1234), \
+        return jsonify({'sessionId': get_user_session_key(1234), \
                         'userId': get_user_session_key(1), \
                         'userName': 'userStudent', \
                         'permission': 'student'}), 200
+    elif username == "adminAdmin" and password == "admin":
+        return jsonify({'sessionId': get_user_session_key(1235), \
+                        'userId': get_user_session_key(2), \
+                        'userName': 'userAdmin', \
+                        'permission': 'admin'}), 200
     # Retrieve or generate a session key for the user and return it to the client
     # session_key = get_user_session_key(user.id)
     return jsonify({'session_key': "test_key"}), 200
