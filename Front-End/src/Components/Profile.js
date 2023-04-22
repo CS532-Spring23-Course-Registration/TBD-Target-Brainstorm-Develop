@@ -11,6 +11,9 @@ import {
   Divider,
 } from "@mui/material";
 import InfoCard from "./InfoCard";
+import PrintPDFButton from "../PDFButton";
+import Print from "./Print";
+
 // import Cookies from "js-cookie";
 
 function Profile() {
@@ -41,6 +44,11 @@ function Profile() {
     reportName: "studentInfo",
   };
 
+  const [click, setClick] = useState(false);
+  const handleClick = () => {
+    setClick(true);
+    console.log("clicked");
+  };
   //Causing Infinite Loop
 
   useEffect(() => {
@@ -92,29 +100,40 @@ function Profile() {
   return (
     <div>
       <Container maxWidth="lg">
-        <Box sx={{ mt: 4, mb: 4 }}>
-          <Typography variant="h4" align="left">
-            Profile
-          </Typography>
-        </Box>
+        <div style={{ display: click ? "none" : "inline-flex" }}>
+          <Box sx={{ mt: 4, mb: 4 }}>
+            <Typography variant="h4" align="left">
+              Profile
+            </Typography>
+          </Box>
+        </div>
         <Box display="flex">
-          <Card sx={{ width: 400 }}>
-            <CardContent>
-              <List>
-                {options.map((option, index) => (
-                  <div key={index}>
-                    <ListItem onClick={() => setSelectedOption(option)}>
-                      <ListItemText primary={option} />
-                    </ListItem>
-                    {index !== options.length - 1 && <Divider />}
-                  </div>
-                ))}
-              </List>
-            </CardContent>
-          </Card>
+          <div style={{ display: click ? "none" : "inline-flex" }}>
+            <Card sx={{ width: 400 }}>
+              <CardContent>
+                <List>
+                  {options.map((option, index) => (
+                    <div key={index}>
+                      <ListItem onClick={() => setSelectedOption(option)}>
+                        <ListItemText primary={option} />
+                      </ListItem>
+                      {index !== options.length - 1 && <Divider />}
+                    </div>
+                  ))}
+                </List>
+              </CardContent>
+            </Card>
+          </div>
           <Box flexGrow={1} ml={2}>
             {renderOptionContent()}
           </Box>
+        </Box>
+        <Box onClick={handleClick}>
+          <div style={{ display: click ? "none" : "inline-flex" }}>
+            {" "}
+            <Print />
+          </div>
+          <PrintPDFButton />
         </Box>
       </Container>
     </div>

@@ -1,9 +1,13 @@
-import { BrowserRouter as Router, Route, Routes, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+  Navigate,
+} from "react-router-dom";
 import React, { useState } from "react";
 
 import Login from "./Components/Login";
 import Menu from "./Components/Menu";
-import PDF from "./Components/PDF";
 import FacultyAndCourses from "./Components/FacultyAndCourses";
 import CSearch from "./Components/Register/CSearch";
 import MajorList from "./Components/Register/MajorList";
@@ -32,10 +36,7 @@ function App() {
             element={<Login updateAuthentication={updateAuthentication} />}
           />
           {!isAuthenticated ? (
-            <Route
-              path="/*"
-              element={<Navigate to="/login" />}
-            />
+            <Route path="/*" element={<Navigate to="/login" />} />
           ) : (
             <>
               <Route path="/pdf" element={<PDF />} />
@@ -48,7 +49,10 @@ function App() {
               <Route path="/courseinfo" element={<Cinfo />} />
               <Route path="/" element={<Navigation />} />
               <Route path="/profile" element={<Profile />} />
-              <Route path="/Major-Requirements" element={<MajorRequirements />} />
+              <Route
+                path="/Major-Requirements"
+                element={<MajorRequirements />}
+              />
               <Route exact path="/cinfo/:id" element={<Cinfo />} />
               <Route path="/grades" element={<CGrades />} />
             </>

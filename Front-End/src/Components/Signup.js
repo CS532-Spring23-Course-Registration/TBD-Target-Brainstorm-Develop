@@ -71,7 +71,7 @@ function SignUp() {
         <Card variant="outlined" color="error">
           <Box sx={{ mt: 8, mb: 4 }}>
             <Typography variant="h4" align="center">
-              Singup
+              Signup
             </Typography>
           </Box>
           <form className={classes.form} onSubmit={handleSubmit}>

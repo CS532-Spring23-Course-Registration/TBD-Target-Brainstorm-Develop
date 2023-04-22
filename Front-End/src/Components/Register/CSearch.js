@@ -1,7 +1,14 @@
 import React, { useState, useEffect } from "react";
 import CRegHome from "./CRegHome";
 import { makeStyles } from "@mui/styles";
-import { Box, TextField, Button, List, ListItem, ListItemText } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -32,11 +39,11 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     margin: "10px",
-    width: "77%"
+    width: "77%",
   },
   department_input: {
     margin: "10px",
-    width: "50%"
+    width: "50%",
   },
   button: {
     margin: "30px",
@@ -67,8 +74,7 @@ function CSearch() {
   const [searchQuery, setSearchQuery] = useState("");
   const [departmentQuery, setDepartmentQuery] = useState("");
   const [checkBoxValue, setCheckBoxValue] = useState(false);
-  const [reportFilter, setReportFilter] = useState()
-
+  const [reportFilter, setReportFilter] = useState();
 
   const [click, setClick] = useState(false);
   const [data, setData] = useState(null);
@@ -98,7 +104,7 @@ function CSearch() {
         reportFilters: reportFilter,
         department: departmentQuery,
         studentId: studentId,
-        sessionId: sessionId
+        sessionId: sessionId,
       }),
     })
       .then((response) => response.json())
@@ -127,39 +133,40 @@ function CSearch() {
       <CRegHome />
       <div className={classes.contents}>
         <form className={classes.form}>
+          <TextField
+            className={classes.input}
+            label="Class"
+            variant="outlined"
+            margin="normal"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Box display="flex" alignItems="center" justifyContent="center">
             <TextField
-              className={classes.input}
-              label="Class"
+              className={classes.department_input}
+              label="Department"
               variant="outlined"
-              margin= "normal"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
+              margin="normal"
+              value={departmentQuery}
+              onChange={(e) => setDepartmentQuery(e.target.value)}
             />
-            <Box display="flex" alignItems="center" justifyContent="center">
-              <TextField
-                className={classes.department_input}
-                label="Department"
-                variant="outlined"
-                margin= "normal"
-                value={departmentQuery}
-                onChange={(e) => setDepartmentQuery(e.target.value)}
-              />
-              <Box display="flex" alignItems="center" marginLeft="10px">
-                <input type="checkbox" onClick={() => handleCheckBox()}/>
-                <label>Show Open Classes</label>
-              </Box>
+            <Box display="flex" alignItems="center" marginLeft="10px">
+              <input type="checkbox" onClick={() => handleCheckBox()} />
+              <label>Show Open Classes</label>
             </Box>
+          </Box>
 
-            <Button
-              className={classes.button}
-              variant="contained"
-              color="error"
-              onClick={() => handleSearch()}
-            >
-              Search
-            </Button>
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="error"
+            onClick={() => handleSearch()}
+          >
+            Search
+          </Button>
         </form>
-        {data !== null && (
+        {/* {data !== null && ( */}
+        {click == !true && (
           <List className={classes.courseList}>
             {Courses.map((result, i) => (
               <ListItem
