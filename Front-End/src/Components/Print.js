@@ -1,22 +1,10 @@
 import React, { useState, useEffect } from "react";
-import {
-  Typography,
-  Container,
-  Box,
-  Card,
-  CardContent,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
-} from "@mui/material";
+import { Container, Box } from "@mui/material";
 import InfoCard from "./InfoCard";
-import PrintPDFButton from "../PDFButton";
-import Print from "./Print";
 
 // import Cookies from "js-cookie";
 
-function Profile() {
+function Print() {
   const [selectedOption, setSelectedOption] = useState(null);
   const Pinfo = ["Name:", "Date of Birth:", "Gender:", "ID:"];
   const Ainfo = ["Street Address:", "City:", "State:", "Zip Code:"];
@@ -72,23 +60,6 @@ function Profile() {
       .catch((error) => console.log(error));
   }, []);
 
-  const renderOptionContent = () => {
-    switch (selectedOption) {
-      case "Personal Information":
-        return <InfoCard labels={Pinfo} values={pValues} />;
-      case "Address":
-        return <InfoCard labels={Ainfo} values={aValues} />;
-      case "Contacts":
-        return <InfoCard labels={Cinfo} values={cValues} />;
-      case "Academics":
-        return <InfoCard labels={Cinfo} values={cValues} />;
-      case "Student Records":
-        return <InfoCard labels={Cinfo} values={cValues} />;
-      default:
-        return <InfoCard labels={Pinfo} values={Pvalues} />;
-    }
-  };
-
   const options = [
     "Personal Information",
     "Address",
@@ -100,44 +71,16 @@ function Profile() {
   return (
     <div>
       <Container maxWidth="lg">
-        <div style={{ display: click ? "none" : "inline-flex" }}>
-          <Box sx={{ mt: 4, mb: 4 }}>
-            <Typography variant="h4" align="left">
-              Profile
-            </Typography>
-          </Box>
-        </div>
-        <Box display="flex">
-          <div style={{ display: click ? "none" : "inline-flex" }}>
-            <Card sx={{ width: 400 }}>
-              <CardContent>
-                <List>
-                  {options.map((option, index) => (
-                    <div key={index}>
-                      <ListItem onClick={() => setSelectedOption(option)}>
-                        <ListItemText primary={option} />
-                      </ListItem>
-                      {index !== options.length - 1 && <Divider />}
-                    </div>
-                  ))}
-                </List>
-              </CardContent>
-            </Card>
-          </div>
-          <Box flexGrow={1} ml={2}>
-            {renderOptionContent()}
-          </Box>
-        </Box>
-        <Box onClick={handleClick}>
-          <div style={{ display: click ? "none" : "inline-flex" }}>
-            {" "}
-            <Print />
-          </div>
-          <PrintPDFButton />
+        <Box flexGrow={1} ml={2}>
+          <InfoCard labels={Pinfo} values={pValues} />;
+          <InfoCard labels={Ainfo} values={aValues} />;
+          <InfoCard labels={Cinfo} values={cValues} />;
+          <InfoCard labels={Cinfo} values={cValues} />;
+          <InfoCard labels={Cinfo} values={cValues} />;
         </Box>
       </Container>
     </div>
   );
 }
 
-export default Profile;
+export default Print;

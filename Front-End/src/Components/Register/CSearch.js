@@ -1,7 +1,14 @@
 import React, { useState } from "react";
 import CRegHome from "./CRegHome";
 import { makeStyles } from "@mui/styles";
-import { Box, TextField, Button, List, ListItem, ListItemText } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  List,
+  ListItem,
+  ListItemText,
+} from "@mui/material";
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -32,11 +39,11 @@ const useStyles = makeStyles((theme) => ({
   },
   input: {
     margin: "10px",
-    width: "75%"
+    width: "75%",
   },
   department_input: {
     margin: "10px",
-    width: "30%"
+    width: "30%",
   },
   button: {
     margin: "30px",
@@ -82,7 +89,6 @@ function CSearch() {
       },
       body: JSON.stringify({
         session_id: sessionId,
-
       }),
     })
       .then((response) => response.json())
@@ -91,7 +97,6 @@ function CSearch() {
       })
       .catch((error) => console.log(error));
   };
-
 
   // const handleSearch = (e) => {
   //   setClick(true);
@@ -109,32 +114,33 @@ function CSearch() {
       <CRegHome />
       <div className={classes.contents}>
         <form className={classes.form} onSubmit={handleSearch}>
-            <TextField
-              className={classes.input}
-              label="Class"
-              variant="outlined"
-              margin= "normal"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <TextField
-              className={classes.department_input}
-              label="Department"
-              variant="outlined"
-              margin= "normal"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <Button
-              className={classes.button}
-              variant="contained"
-              color="error"
-              type="submit"
-            >
-              Search
-            </Button>
+          <TextField
+            className={classes.input}
+            label="Class"
+            variant="outlined"
+            margin="normal"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <TextField
+            className={classes.department_input}
+            label="Department"
+            variant="outlined"
+            margin="normal"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+          <Button
+            className={classes.button}
+            variant="contained"
+            color="error"
+            type="submit"
+          >
+            Search
+          </Button>
         </form>
-        {data !== null && (
+        {/* {data !== null && ( */}
+        {click == !true && (
           <List className={classes.courseList}>
             {Courses.map((result, i) => (
               <ListItem

@@ -3,7 +3,6 @@ import React, { useState } from "react";
 
 import Login from "./Components/Login";
 import Menu from "./Components/Menu";
-import PDF from "./Components/PDF";
 import FacultyAndCourses from "./Components/FacultyAndCourses";
 import CSearch from "./Components/Register/CSearch";
 import MajorList from "./Components/Register/MajorList";
@@ -33,7 +32,6 @@ function App() {
             element={<Login />}
             updateAuthentication={updateAuthentication}
           />
-          <Route path="/pdf" element={<PDF />} />
           <Route path="/search" element={<CSearch />} />
           <Route path="/majorlist" element={<MajorList />} />
           <Route path="/mycourses" element={<MyCourses />} />
