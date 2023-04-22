@@ -31,18 +31,18 @@ def login():
     # user = Users.get_user_by_username(username)
     if username == "adminFaculty" and password == "admin":
         return jsonify({'message': 'Invalid credentials', \
-                        'sessionId': get_user_session_key(), \
-                        'userId': get_user_session_key(), \
+                        'sessionId': get_user_session_key(12345), \
+                        'userId': get_user_session_key(0), \
                         'userName': 'userStudent', \
                         'permission': 'faculty'}), 200
     elif username == "adminStudent" and password == "admin":
         return jsonify({'message': 'Invalid credentials', \
-                       'sessionId': get_user_session_key(), \
-                        'userId': get_user_session_key(), \
+                       'sessionId': get_user_session_key(123456), \
+                        'userId': get_user_session_key(1), \
                         'userName': 'userStudent', \
                         'permission': 'student'}), 200
     # Retrieve or generate a session key for the user and return it to the client
-    session_key = get_user_session_key(user.id)
+    # session_key = get_user_session_key(user.id)
     return jsonify({'session_key': "test_key"}), 200
 
 @app.route('/query', methods=['POST'])

@@ -33,7 +33,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Login(props) {
-  const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   //Send POST request for User Authentication
@@ -46,7 +46,7 @@ function Login(props) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, password }),
       });
 
       if (response.status === 401) {
@@ -55,9 +55,8 @@ function Login(props) {
         console.log("Successful Login.");
 
         const data = await response.json();
-        const sessionKey = data.session_key;
 
-        Cookies.set("session_key", sessionKey, { expires: 12 / 24, path: "/" });
+        Cookies.set("session_key", data.sessionId, { expires: 12 / 24, path: "/" });
         props.updateAuthentication(true);
       }
     } catch (error) {
@@ -84,12 +83,12 @@ function Login(props) {
                     id="email"
                     label="Email Address"
                     name="email"
-                    value={email}
+                    value={username}
                     autoComplete="email"
                     margin="normal"
                     variant="outlined"
                     autoFocus
-                    onChange={(e) => setEmail(e.target.value)}
+                    onChange={(e) => setUsername(e.target.value)}
                   />
                 </Box>
                 <Box>
