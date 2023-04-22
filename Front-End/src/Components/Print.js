@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { Container, Box } from "@mui/material";
 import InfoCard from "./InfoCard";
+import PrintPDFButton from "../PDFButton";
+import Backdrop from "@mui/material/Backdrop";
 
 // import Cookies from "js-cookie";
 
@@ -72,13 +74,14 @@ function Print() {
     <div>
       <Container maxWidth="lg">
         <Box flexGrow={1} ml={2}>
-          <InfoCard labels={Pinfo} values={pValues} />;
-          <InfoCard labels={Ainfo} values={aValues} />;
-          <InfoCard labels={Cinfo} values={cValues} />;
-          <InfoCard labels={Cinfo} values={cValues} />;
-          <InfoCard labels={Cinfo} values={cValues} />;
+          <InfoCard labels={Pinfo} values={pValues} />
+          <InfoCard labels={Ainfo} values={aValues} />
+          <InfoCard labels={Cinfo} values={cValues} />
+          <InfoCard labels={Cinfo} values={cValues} />
+          <InfoCard labels={Cinfo} values={cValues} />
         </Box>
       </Container>
+      <PrintPDFButton />
     </div>
   );
 }

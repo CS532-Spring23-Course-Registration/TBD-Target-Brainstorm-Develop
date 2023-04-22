@@ -9,14 +9,14 @@ import {
   ListItem,
   ListItemText,
   Divider,
+  Button,
 } from "@mui/material";
 import InfoCard from "./InfoCard";
-import PrintPDFButton from "../PDFButton";
-import Print from "./Print";
+import { Link } from "react-router-dom";
 
 // import Cookies from "js-cookie";
 
-function Profile() {
+function Profile(props) {
   const [selectedOption, setSelectedOption] = useState(null);
   const Pinfo = ["Name:", "Date of Birth:", "Gender:", "ID:"];
   const Ainfo = ["Street Address:", "City:", "State:", "Zip Code:"];
@@ -44,11 +44,6 @@ function Profile() {
     reportName: "studentInfo",
   };
 
-  const [click, setClick] = useState(false);
-  const handleClick = () => {
-    setClick(true);
-    console.log("clicked");
-  };
   //Causing Infinite Loop
 
   useEffect(() => {
@@ -89,6 +84,10 @@ function Profile() {
     }
   };
 
+  const handleClick = () => {
+    props.updatePrintState(false);
+  };
+
   const options = [
     "Personal Information",
     "Address",
@@ -100,41 +99,40 @@ function Profile() {
   return (
     <div>
       <Container maxWidth="lg">
-        <div style={{ display: click ? "none" : "inline-flex" }}>
-          <Box sx={{ mt: 4, mb: 4 }}>
-            <Typography variant="h4" align="left">
-              Profile
-            </Typography>
-          </Box>
-        </div>
+        <Box sx={{ mt: 4, mb: 4 }}>
+          <Typography variant="h4" align="left">
+            Profile
+          </Typography>
+        </Box>
         <Box display="flex">
-          <div style={{ display: click ? "none" : "inline-flex" }}>
-            <Card sx={{ width: 400 }}>
-              <CardContent>
-                <List>
-                  {options.map((option, index) => (
-                    <div key={index}>
-                      <ListItem onClick={() => setSelectedOption(option)}>
-                        <ListItemText primary={option} />
-                      </ListItem>
-                      {index !== options.length - 1 && <Divider />}
-                    </div>
-                  ))}
-                </List>
-              </CardContent>
-            </Card>
-          </div>
+          <Card sx={{ width: 400 }}>
+            <CardContent>
+              <List>
+                {options.map((option, index) => (
+                  <div key={index}>
+                    <ListItem onClick={() => setSelectedOption(option)}>
+                      <ListItemText primary={option} />
+                    </ListItem>
+                    {index !== options.length - 1 && <Divider />}
+                  </div>
+                ))}
+              </List>
+            </CardContent>
+          </Card>
           <Box flexGrow={1} ml={2}>
             {renderOptionContent()}
           </Box>
         </Box>
-        <Box onClick={handleClick}>
-          <div style={{ display: click ? "none" : "inline-flex" }}>
-            {" "}
-            <Print />
-          </div>
-          <PrintPDFButton />
-        </Box>
+
+        <Button
+          variant="contained"
+          color="error"
+          component={Link}
+          to="/print"
+          onClick={handleClick}
+        >
+          Print Results
+        </Button>
       </Container>
     </div>
   );

@@ -17,6 +17,7 @@ import Profile from "./Components/Profile";
 import Signup from "./Components/Signup";
 import MajorRequirements from "./Components/major_Requirements";
 import CGrades from "./Components/CGrades";
+import Print from "./Components/Print";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -25,10 +26,16 @@ function App() {
     setIsAuthenticated(newStatus);
   };
 
+  const [isPrintable, setPrintable] = useState(true);
+
+  const updatePrintState = (newStatus) => {
+    setPrintable(newStatus);
+  };
+
   return (
     <div>
       <Router>
-        {isAuthenticated && <Menu />}
+        {isAuthenticated && isPrintable && <Menu />}
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route
@@ -39,7 +46,7 @@ function App() {
             <Route path="/*" element={<Navigate to="/login" />} />
           ) : (
             <>
-              <Route path="/pdf" element={<PDF />} />
+              <Route path="/print" element={<Print />} />
               <Route path="/search" element={<CSearch />} />
               <Route path="/majorlist" element={<MajorList />} />
               <Route
@@ -48,7 +55,10 @@ function App() {
               />
               <Route path="/courseinfo" element={<Cinfo />} />
               <Route path="/" element={<Navigation />} />
-              <Route path="/profile" element={<Profile />} />
+              <Route
+                path="/profile"
+                element={<Profile updatePrintState={updatePrintState} />}
+              />
               <Route
                 path="/Major-Requirements"
                 element={<MajorRequirements />}
