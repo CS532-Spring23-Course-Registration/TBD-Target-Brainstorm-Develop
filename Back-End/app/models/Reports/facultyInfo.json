@@ -1,0 +1,18 @@
+{
+  "title": "facultyInfo",
+  "type": "object",
+  "properties": {
+    "reportName": {"type": "string", "const": "facultyInfo"},
+    "sessionId": {"type": "integer"},
+    "reportFilters": {
+      "type": "string",
+      "enum": [
+        "allFacultyAllDepartments",
+        "allFacultyByDepartment",
+        "specificFaculty"
+      ]
+    },
+    "departmentId": {"type": "integer"},
+    "facultyId": {"type": "string"}
+  }
+}

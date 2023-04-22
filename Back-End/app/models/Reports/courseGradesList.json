@@ -1,0 +1,9 @@
+{
+  "title": "courseGradesList",
+  "type": "object",
+  "properties": {
+    "reportName": {"type": "string", "const": "courseGradesList"},
+    "sessionId": {"type": "integer"},
+    "course": {"type": "string"}
+  }
+}

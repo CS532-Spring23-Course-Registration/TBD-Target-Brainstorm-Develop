@@ -1,9 +1,13 @@
 from flask import request, jsonify
 from app import create_app
+from app.utils import db_service
 from app.models.app import Users, app
+from flask_cors import CORS
+
 import secrets
 
 (app, cache, db) = create_app()
+CORS(app)
 
 # Define a function to generate a new session key using the secrets module
 def generate_session_key():
@@ -22,26 +26,37 @@ def get_user_session_key(user_id):
 def login():
     username = request.json.get('username')
     password = request.json.get('password')
-    user = Users.get_user_by_username(username)
-    if not user or user.password != password:
-        return jsonify({'message': 'Invalid credentials'}), 401
+    print()
+    # user = Users.get_user_by_username(username)
+    if username == "adminFaculty" and password == "admin":
+        return jsonify({'message': 'Invalid credentials', \
+                        'sessionId': get_user_session_key(), \
+                        'userId': get_user_session_key(), \
+                        'userName': 'userStudent', \
+                        'permission': 'faculty'}), 200
+    elif username == "adminStudent" and password == "admin":
+        return jsonify({'message': 'Invalid credentials', \
+                       'sessionId': get_user_session_key(), \
+                        'userId': get_user_session_key(), \
+                        'userName': 'userStudent', \
+                        'permission': 'student'}), 200
     # Retrieve or generate a session key for the user and return it to the client
     session_key = get_user_session_key(user.id)
-    return jsonify({'session_key': session_key}), 200
+    return jsonify({'session_key': "test_key"}), 200
 
 @app.route('/query', methods=['POST'])
-def get():
+def query():
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
         request_json = request.get_json()
-        session_key = request_json['session_id']
+        session_key = request_json['sessionId']
         if not session_key:
             return jsonify({'message': 'Session key is missing'}), 401
         user_id = cache.get(session_key)
         if not user_id:
             return jsonify({'message': 'Invalid session key'}), 401
         cache.set(session_key, user_id, timeout=600)
-        return jsonify({'message': "Query has been completed"}), 200
+        return db_service.getData(request_json)
     else:
         return jsonify({'message': 'Content-Type not supported!'}), 401
 
@@ -79,6 +94,9 @@ def generate_test_session_key(user_id):
     cache.set(session_key, user_id)
     return session_key
 
+def test():
+    db_service.executeQuery({})
 
 if __name__ == '__main__':
     app.run(debug=True)
+    test()

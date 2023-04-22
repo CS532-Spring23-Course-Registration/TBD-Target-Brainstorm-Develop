@@ -1,0 +1,8 @@
+{
+  "title": "student_info",
+  "type": "object",
+  "properties": {
+    "reportName": "student_info",
+    "sessionId": {"type": "integer"}
+  }
+}

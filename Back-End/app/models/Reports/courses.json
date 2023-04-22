@@ -1,0 +1,20 @@
+{
+  "title": "courses",
+  "type": "object",
+  "properties": {
+    "reportName": {"type": "string", "const": "courses"},
+    "sessionId": {"type": "integer"},
+    "reportFilters": {
+      "type": "string",
+      "enum": [
+        "allClassesByDepartment",
+        "openClassesByDepartment",
+        "openClassesAllDepartments",
+        "allClassesAllDepartments",
+        "currentlyEnrolled"
+      ]
+    },
+    "department": {"type": "string"},
+    "studentId": {"type": "integer"}
+  }
+}

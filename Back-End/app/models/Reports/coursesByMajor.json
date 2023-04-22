@@ -1,0 +1,9 @@
+{
+  "title": "coursesByMajor",
+  "type": "object",
+  "properties": {
+    "reportName": {"type": "string", "const": "coursesByMajor"},
+    "major": {"type": "string"},
+    "sessionId": {"type": "integer"}
+  }
+}
