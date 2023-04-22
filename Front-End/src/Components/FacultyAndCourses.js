@@ -73,20 +73,20 @@ const FacultyAndCourses = () => {
   const [departmentQuery, setDepartmentQuery] = useState("");
 
   //Params for requests
-  const [reportType, setReportType] = useState("course_info");
+  const [reportType, setReportType] = useState("courseInfo");
   const [reportParameter, setReportParameter] = useState("course");
   const [reportFilters, setReportFilters] = useState(
-    "all_faculty_all_departments"
+    "allFacultyAllDepartments"
   );
 
   //Updates the state when user clicks an option from the side menu
   const handleListItemClick = (item) => {
     setSelectedItem(item);
     if (selectedItem !== "Courses") {
-      setReportType("course_info");
+      setReportType("courseInfo");
       setReportParameter("course");
     } else {
-      setReportType("faculty_info");
+      setReportType("facultyInfo");
       setReportParameter("faculty");
     }
   };
@@ -129,27 +129,27 @@ const FacultyAndCourses = () => {
     if (
       searchQuery === "" &&
       departmentQuery === "" &&
-      reportType === "faculty_info"
+      reportType === "facultyInfo"
     ) {
-      setReportFilters("all_faculty_all_departments");
+      setReportFilters("allFacultyAllDepartments");
     } else if (
       searchQuery === "" &&
       departmentQuery === "" &&
-      reportType === "course_info"
+      reportType === "courseInfo"
     ) {
-      setReportFilters("all_courses_all_departments");
+      setReportFilters("allCoursesAllDepartments");
     } else if (
       searchQuery === "" &&
       departmentQuery.length > 0 &&
-      reportType === "course_info"
+      reportType === "courseInfo"
     ) {
-      setReportFilters("all_courses_by_department");
+      setReportFilters("allCoursesByDepartment");
     } else if (
       searchQuery === "" &&
       departmentQuery.length > 0 &&
-      reportType === "faculty_info"
+      reportType === "facultyInfo"
     ) {
-      setReportFilters("all_faculty_by_department");
+      setReportFilters("allFacultyByDepartment");
     } else {
       setReportFilters("");
     }

@@ -7,7 +7,6 @@ import PDF from "./Components/PDF";
 import FacultyAndCourses from "./Components/FacultyAndCourses";
 import CSearch from "./Components/Register/CSearch";
 import MajorList from "./Components/Register/MajorList";
-import MyCourses from "./Components/Register/MyCourses";
 import Cinfo from "./Components/Register/Cinfo";
 import Navigation from "./Components/Navigation";
 import Profile from "./Components/Profile";
@@ -36,7 +35,6 @@ function App() {
           <Route path="/pdf" element={<PDF />} />
           <Route path="/search" element={<CSearch />} />
           <Route path="/majorlist" element={<MajorList />} />
-          <Route path="/mycourses" element={<MyCourses />} />
           <Route
             path="/faculty-and-course-info"
             element={<FacultyAndCourses />}
