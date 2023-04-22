@@ -2,6 +2,7 @@ import secrets
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_caching import Cache
+from flask_migrate import Migrate
 
 from os import path
 
@@ -20,17 +21,21 @@ def create_app():
     
     db.init_app(app)
     
+    # DB Migration
+    migrate = Migrate(app, db)
+    migrate.init_app(app, db)
+    
     from .views.db_secrets import db_secrets
     
     app.register_blueprint(db_secrets, url_prefix='/')
     
-    # with app.app_context():
-    #     db.create_all()
+    create_database(app)
     
     return (app, cache, db)
 
 
 def create_database(app):
     if not path.exists('app/' + DB_NAME):
-        db.create_all(app=app)
-        print('Created Database!')
+        with app.app_context():
+            db.create_all(app=app)
+            print('Created Database!')
