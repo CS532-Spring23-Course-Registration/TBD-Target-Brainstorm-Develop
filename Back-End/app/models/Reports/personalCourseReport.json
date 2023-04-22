@@ -1,0 +1,8 @@
+{
+  "title": "personalCourseReport",
+  "type": "object",
+  "properties": {
+    "reportName": {"type": "string", "const": "personalCourseReport"},
+    "sessionId": {"type": "integer"}
+  }
+}
