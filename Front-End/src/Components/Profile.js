@@ -9,11 +9,14 @@ import {
   ListItem,
   ListItemText,
   Divider,
+  Button,
 } from "@mui/material";
 import InfoCard from "./InfoCard";
-import Cookies from "js-cookie";
+import { Link } from "react-router-dom";
 
-function Profile() {
+// import Cookies from "js-cookie";
+
+function Profile(props) {
   const [selectedOption, setSelectedOption] = useState(null);
   const Pinfo = ["Name:", "Date of Birth:", "Gender:", "ID:"];
   const Ainfo = ["Street Address:", "City:", "State:", "Zip Code:"];
@@ -31,23 +34,25 @@ function Profile() {
   const [aValues, setAvalues] = useState({});
   const [cValues, setCvalues] = useState({});
 
-  const [data, setData] = useState([]);
-  const sessionId = Cookies.get('session_id');
+  // const [data, setData] = useState([]);
+  // const sessionId = Cookies.get("session_id");
 
   const test = "test";
 
   const params = {
     session_id: test,
-    reportName: "student_info"
+    reportName: "studentInfo",
   };
 
+  //Causing Infinite Loop
+
   useEffect(() => {
-    fetch('http://localhost:3000/query', {
-      method: 'POST',
+    fetch("http://127.0.0.1:5000/query", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      body: JSON.stringify(params)
+      body: JSON.stringify(params),
     })
       .then((response) => response.json())
       .then((data) => {
@@ -60,7 +65,7 @@ function Profile() {
         setCvalues(updatedCvalues);
       })
       .catch((error) => console.log(error));
-  });
+  }, []);
 
   const renderOptionContent = () => {
     switch (selectedOption) {
@@ -70,12 +75,26 @@ function Profile() {
         return <InfoCard labels={Ainfo} values={aValues} />;
       case "Contacts":
         return <InfoCard labels={Cinfo} values={cValues} />;
+      case "Academics":
+        return <InfoCard labels={Cinfo} values={cValues} />;
+      case "Student Records":
+        return <InfoCard labels={Cinfo} values={cValues} />;
       default:
         return <InfoCard labels={Pinfo} values={Pvalues} />;
     }
   };
 
-  const options = ["Personal Information", "Address", "Contacts"];
+  const handleClick = () => {
+    props.updatePrintState(false);
+  };
+
+  const options = [
+    "Personal Information",
+    "Address",
+    "Academics",
+    "Student Records",
+    "Contacts",
+  ];
 
   return (
     <div>
@@ -104,6 +123,16 @@ function Profile() {
             {renderOptionContent()}
           </Box>
         </Box>
+
+        <Button
+          variant="contained"
+          color="error"
+          component={Link}
+          to="/print"
+          onClick={handleClick}
+        >
+          Print Results
+        </Button>
       </Container>
     </div>
   );
