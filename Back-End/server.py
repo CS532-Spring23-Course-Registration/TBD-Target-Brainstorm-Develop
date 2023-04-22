@@ -14,7 +14,7 @@ def generate_session_key():
     return secrets.token_hex(16)
 
 # Define a memoized function that retrieves or generates a session key for a user and caches it using Flask-Caching
-@cache.memoize(timeout=600)
+@cache.memoize(timeout=6000)
 def get_user_session_key(user_id):
     session_key = generate_session_key()
     # Store the session key in the cache with the user_id as the key
@@ -30,18 +30,18 @@ def login():
     # user = Users.get_user_by_username(username)
     if username == "adminFaculty" and password == "admin":
         return jsonify({'message': 'Invalid credentials', \
-                        'sessionId': get_user_session_key(), \
-                        'userId': get_user_session_key(), \
+                        'sessionId': get_user_session_key(123), \
+                        'userId': get_user_session_key(0), \
                         'userName': 'userStudent', \
                         'permission': 'faculty'}), 200
     elif username == "adminStudent" and password == "admin":
         return jsonify({'message': 'Invalid credentials', \
-                       'sessionId': get_user_session_key(), \
-                        'userId': get_user_session_key(), \
+                       'sessionId': get_user_session_key(1234), \
+                        'userId': get_user_session_key(1), \
                         'userName': 'userStudent', \
                         'permission': 'student'}), 200
     # Retrieve or generate a session key for the user and return it to the client
-    session_key = get_user_session_key(user.id)
+    # session_key = get_user_session_key(user.id)
     return jsonify({'session_key': "test_key"}), 200
 
 @app.route('/query', methods=['POST'])
@@ -55,7 +55,6 @@ def query():
         user_id = cache.get(session_key)
         if not user_id:
             return jsonify({'message': 'Invalid session key'}), 401
-        cache.set(session_key, user_id, timeout=600)
         return db_service.getData(request_json)
     else:
         return jsonify({'message': 'Content-Type not supported!'}), 401
