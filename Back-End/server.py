@@ -5,7 +5,6 @@ from app.models.app import Users, app
 import secrets
 
 (app, cache, db) = create_app()
-
 CORS(app)
 
 # Define a function to generate a new session key using the secrets module
@@ -37,13 +36,13 @@ def get():
     content_type = request.headers.get('Content-Type')
     if (content_type == 'application/json'):
         request_json = request.get_json()
-        session_key = request_json['session_id']
-        if not session_key:
-            return jsonify({'message': 'Session key is missing'}), 401
-        user_id = cache.get(session_key)
-        if not user_id:
-            return jsonify({'message': 'Invalid session key'}), 401
-        cache.set(session_key, user_id, timeout=600)
+        # session_key = request_json['session_id']
+        # if not session_key:
+        #     return jsonify({'message': 'Session key is missing'}), 401
+        # user_id = cache.get(session_key)
+        # if not user_id:
+        #     return jsonify({'message': 'Invalid session key'}), 401
+        # cache.set(session_key, user_id, timeout=600)
         return jsonify({'message': "Query has been completed"}), 200
     else:
         return jsonify({'message': 'Content-Type not supported!'}), 401

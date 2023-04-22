@@ -9,6 +9,9 @@ import {
 } from "@mui/material";
 import styled from "@mui/system/styled";
 import Cookies from "js-cookie";
+import { Link } from "react-router-dom";
+import { makeStyles } from "@mui/styles";
+
 const LoginButton = styled(Button)`
   background-color: lightcoral;
   &:hover {
@@ -16,6 +19,18 @@ const LoginButton = styled(Button)`
     opacity: 0.8;
   }
 `;
+
+const useStyles = makeStyles((theme) => ({
+  box_container: {
+    display: "flex",
+    margin: "20px",
+    padding: "20px",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
+  }
+}));
 
 function Login(props) {
   const [email, setEmail] = useState("");
@@ -52,53 +67,64 @@ function Login(props) {
 
   return (
     <div>
-      <Container maxWidth="xs">
-        <Card variant="outlined" color="error">
-          <Box sx={{ mt: 8, mb: 4 }}>
-            <Typography variant="h4" align="center">
-              Login
-            </Typography>
-          </Box>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              value={email}
-              autoComplete="email"
-              margin="normal"
-              variant="outlined"
-              autoFocus
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              required
-              fullWidth
-              id="password"
-              label="Password"
-              name="password"
-              type="password"
-              value={password}
-              autoComplete="current-password"
-              margin="normal"
-              variant="outlined"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Box sx={{ mt: 2 }}>
-              <LoginButton
-                fullWidth
-                type="submit"
-                variant="contained"
-                color="primary"
-              >
-                Sign In
-              </LoginButton>
+      <Box className={useStyles.box_container} mt={10}>
+        <Container maxWidth="sm">
+          <Card variant="outlined" color="error">
+            <Box sx={{ mt: 8, mb: 4 }}>
+              <Typography variant="h4" align="center">
+                Login
+              </Typography>
             </Box>
-          </form>
-        </Card>
-      </Container>
+            <form onSubmit={handleSubmit}>
+            <Box m={4}>
+              <Box>
+                  <TextField
+                    required
+                    fullWidth
+                    id="email"
+                    label="Email Address"
+                    name="email"
+                    value={email}
+                    autoComplete="email"
+                    margin="normal"
+                    variant="outlined"
+                    autoFocus
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </Box>
+                <Box>
+                  <TextField
+                    required
+                    fullWidth
+                    id="password"
+                    label="Password"
+                    name="password"
+                    type="password"
+                    value={password}
+                    autoComplete="current-password"
+                    margin="normal"
+                    variant="outlined"
+                    onChange={(e) => setPassword(e.target.value)}
+                  />
+                </Box>
+                <Box sx={{ mt: 2 }}>
+                  <LoginButton
+                    fullWidth
+                    type="submit"
+                    variant="contained"
+                    color="primary"
+                  >
+                    Sign In
+                  </LoginButton>
+                  <Typography component={Link} to="/signup">
+                    Sign up?
+                  </Typography>            
+                </Box>
+              </Box>
+            </form>
+          </Card>
+        </Container>
+      </Box>
     </div>
   );
 }

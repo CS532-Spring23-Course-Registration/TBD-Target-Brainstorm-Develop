@@ -31,7 +31,7 @@ function Menu() {
             variant="contained"
             color="error"
             component={Link}
-            to="/reghome"
+            to="/search"
           >
             Register
           </Button>

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { makeStyles } from "@mui/styles";
 import {
   Typography,
   Container,
@@ -7,98 +8,135 @@ import {
   Button,
   Card,
 } from "@mui/material";
-import styled from "@mui/system/styled";
-import { Link } from "react-router-dom";
+import axios from "axios";
 
-const LoginButton = styled(Button)`
-  background-color: lightcoral;
-  &:hover {
-    background-color: lightcoral;
-    opacity: 0.8;
-  }
-`;
+const useStyles = makeStyles((theme) => ({
+  box_container: {
+    display: "flex",
+    margin: "20px",
+    padding: "20px",
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    flexDirection: "column",
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    margin: "20px",
+  },
+  input: { marginTop: "20px" },
+  inputBox: { paddingTop: "30px" },
 
-function Signup({ onLogin }) {
-  const handleClick = (event) => {
-    console.log("called");
+  submitButton: { marginTop: "20px" },
+}));
 
+function SignUp() {
+  const classes = useStyles();
+  const [id, setId] = useState("");
+  const [name, setName] = useState("");
+  const [address, setAddress] = useState("");
+  const [dateOfBirth, setDateOfBirth] = useState("");
+  const [major, setMajor] = useState("");
+  const [minor, setMinor] = useState("");
+
+  const handleSubmit = (event) => {
     event.preventDefault();
-    onLogin();
-  };
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+    const formData = {
+      reportName: "student_info",
+      id: id,
+      name: name,
+      address: address,
+      dateOfBirth: dateOfBirth,
+      major: major,
+      minor: minor,
+    };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-    try {
-      const response = await fetch("http://example.com/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
+    axios
+      .post("/api/signup", formData)
+      .then((response) => {
+        console.log(response);
+        window.location.href = "/";
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      const data = await response.json();
-      console.log(data);
-    } catch (error) {
-      console.error(error);
-    }
   };
 
   return (
-    <div>
-      <Container maxWidth="xs">
+    <Box className={useStyles.box_container} mt={10}>
+      <Container maxWidth="sm">
         <Card variant="outlined" color="error">
           <Box sx={{ mt: 8, mb: 4 }}>
             <Typography variant="h4" align="center">
-              Login
+              Singup
             </Typography>
           </Box>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              required
-              fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              value={email}
-              autoComplete="email"
-              margin="normal"
-              variant="outlined"
-              autoFocus
-              onChange={(e) => setEmail(e.target.value)}
-            />
-            <TextField
-              required
-              fullWidth
-              id="password"
-              label="Password"
-              name="password"
-              type="password"
-              value={password}
-              autoComplete="current-password"
-              margin="normal"
-              variant="outlined"
-              onChange={(e) => setPassword(e.target.value)}
-            />
-            <Box sx={{ mt: 2 }} onClick={handleClick}>
-              <LoginButton
-                fullWidth
-                type="submit"
-                variant="contained"
-                color="primary"
-                component={Link}
-                to="/"
-              >
-                Sign In
-              </LoginButton>
+          <form className={classes.form} onSubmit={handleSubmit}>
+            <Box className={classes.input}>
+              {" "}
+              <TextField
+                label="ID"
+                variant="outlined"
+                value={id}
+                onChange={(event) => setId(event.target.value)}
+              />
+            </Box>
+
+            <Box className={classes.input}>
+              <TextField
+                label="Name"
+                variant="outlined"
+                value={name}
+                onChange={(event) => setName(event.target.value)}
+              />
+            </Box>
+            <Box className={classes.input}>
+              <TextField
+                label="Address"
+                variant="outlined"
+                value={address}
+                onChange={(event) => setAddress(event.target.value)}
+              />
+            </Box>
+            <Box className={classes.input}>
+              <TextField
+                label="Date of Birth"
+                variant="outlined"
+                type="date"
+                value={dateOfBirth}
+                InputProps={{ className: classes.inputBox }}
+                onChange={(event) => setDateOfBirth(event.target.value)}
+              />
+            </Box>
+            <Box className={classes.input}>
+              <TextField
+                label="Major"
+                variant="outlined"
+                value={major}
+                onChange={(event) => setMajor(event.target.value)}
+              />
+            </Box>
+            <Box className={classes.input}>
+              <TextField
+                label="Minor"
+                variant="outlined"
+                value={minor}
+                onChange={(event) => setMinor(event.target.value)}
+              />
+            </Box>
+            <Box className={classes.submitButton}>
+              <Button type="submit" variant="contained" color="primary">
+                Sign Up
+              </Button>
             </Box>
           </form>
         </Card>
       </Container>
-    </div>
+    </Box>
   );
 }
 
-export default Signup;
+export default SignUp;

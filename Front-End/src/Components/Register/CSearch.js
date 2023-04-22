@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import CRegHome from "./CRegHome";
 import { makeStyles } from "@mui/styles";
-import { TextField, Button, List, ListItem, ListItemText } from "@mui/material";
+import { Box, TextField, Button, List, ListItem, ListItemText } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -24,18 +24,22 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "center",
     padding: "20px",
-    width: "80%",
+    width: "75%",
     border: "1px solid",
     borderRadius: "5px",
-    boxShadow: `3px 3px 3px`,
+    boxShadow: `1px 1px 1px`,
   },
   input: {
     margin: "10px",
+    width: "75%"
+  },
+  department_input: {
+    margin: "10px",
+    width: "30%"
   },
   button: {
-    marginTop: "20px",
+    margin: "30px",
   },
   courseList: {
     display: "block",
@@ -58,8 +62,11 @@ const useStyles = makeStyles((theme) => ({
 
 function CSearch() {
   const classes = useStyles();
-  const [searchTerm, setSearchTerm] = useState("");
+
+  const [searchQuery, setSearchQuery] = useState("");
   const [click, setClick] = useState(false);
+  const [data, setData] = useState(null);
+  const sessionId = "test";
   // const [searchResults, setSearchResults] = useState([]);
   const Courses = [
     { name: "Course A", description: "This is course A" },
@@ -67,39 +74,67 @@ function CSearch() {
     { name: "Course C", description: "This is course C" },
   ];
 
-  const handleSearch = (e) => {
-    setClick(true);
-    e.preventDefault();
-    fetch(`/courses/personal_course_report?search=${searchTerm}`)
-      .then((res) => res.json())
+  const handleSearch = (event) => {
+    fetch("http://127.0.0.1:5000/query", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        session_id: sessionId,
+
+      }),
+    })
+      .then((response) => response.json())
       .then((data) => {
-        // setSearchResults(data.courses);
         console.log(data);
-      });
+      })
+      .catch((error) => console.log(error));
   };
+
+
+  // const handleSearch = (e) => {
+  //   setClick(true);
+  //   e.preventDefault();
+  //   fetch(`/courses/personal_course_report?search=${searchQuery}`)
+  //     .then((res) => res.json())
+  //     .then((data) => {
+  //       // setSearchResults(data.courses);
+  //       console.log(data);
+  //     });
+  // };
 
   return (
     <div className={classes.root}>
       <CRegHome />
       <div className={classes.contents}>
         <form className={classes.form} onSubmit={handleSearch}>
-          <TextField
-            className={classes.input}
-            label="Search"
-            variant="outlined"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <Button
-            className={classes.button}
-            variant="contained"
-            color="error"
-            type="submit"
-          >
-            Search
-          </Button>
+            <TextField
+              className={classes.input}
+              label="Class"
+              variant="outlined"
+              margin= "normal"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <TextField
+              className={classes.department_input}
+              label="Department"
+              variant="outlined"
+              margin= "normal"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+            <Button
+              className={classes.button}
+              variant="contained"
+              color="error"
+              type="submit"
+            >
+              Search
+            </Button>
         </form>
-        {click === true && (
+        {data !== null && (
           <List className={classes.courseList}>
             {Courses.map((result, i) => (
               <ListItem

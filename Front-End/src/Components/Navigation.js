@@ -35,7 +35,7 @@ const StyledLink = styled(RouterLink)`
 
 const options = [
   { title: "Profile", path: "/profile" },
-  { title: "Course Register", path: "/reghome" },
+  { title: "Course Register", path: "/search" },
   { title: "Major Requirements", path: "/Major-Requirements" },
   {
     title: "Faculty And Course Information",

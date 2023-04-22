@@ -5,7 +5,6 @@ import Login from "./Components/Login";
 import Menu from "./Components/Menu";
 import PDF from "./Components/PDF";
 import FacultyAndCourses from "./Components/FacultyAndCourses";
-import CRegHome from "./Components/Register/CRegHome";
 import CSearch from "./Components/Register/CSearch";
 import MajorList from "./Components/Register/MajorList";
 import MyCourses from "./Components/Register/MyCourses";
@@ -35,7 +34,6 @@ function App() {
             updateAuthentication={updateAuthentication}
           />
           <Route path="/pdf" element={<PDF />} />
-          <Route path="/reghome" element={<CRegHome />} />
           <Route path="/search" element={<CSearch />} />
           <Route path="/majorlist" element={<MajorList />} />
           <Route path="/mycourses" element={<MyCourses />} />
