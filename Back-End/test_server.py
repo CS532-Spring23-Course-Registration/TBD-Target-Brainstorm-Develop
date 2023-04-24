@@ -202,6 +202,7 @@ class TestServer(unittest.TestCase):
                              'class': class_name})
             
             #Test for correct response
+            self.assertEqual(response.status_code, 200)
             self.assertAlmostEqual(response.json['message'], 'Json was correctly validated')
 
     # Test query with invalid session key: Pass
@@ -227,8 +228,16 @@ class TestServer(unittest.TestCase):
                              'class': class_name})
             
             # Test for correct response
+            self.assertAlmostEqual(response.status_code, 401)
             self.assertEqual(response.json['message'], 'Invalid session key')
-            
+
+    # Test index: Passed
+    def test_index(self):
+        with app.test_client() as client:
+            response = client.get('/')
+            self.assertEqual(response.status_code, 400)
+            self.assertEqual(response.data, b'Record not found')
+
 if __name__ == '__main__':
     unittest.main()
 
