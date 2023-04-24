@@ -11,7 +11,7 @@ import styled from "@mui/system/styled";
 import { Link as RouterLink } from "react-router-dom";
 
 const NavigationHeader = styled(Typography)`
-  background-color: lightcoral;
+  background-color: gray;
   color: white;
   padding: 16px;
   text-align: center;
@@ -35,13 +35,13 @@ const StyledLink = styled(RouterLink)`
 
 const options = [
   { title: "Profile", path: "/profile" },
-  { title: "Academic Record", path: "/Academic-Record" },
-  { title: "Course Register", path: "/reghome" },
+  { title: "Course Register", path: "/search" },
   { title: "Major Requirements", path: "/Major-Requirements" },
   {
-    title: "Faculty And Course Information", path: "/faculty-and-course-info",
+    title: "Faculty And Course Information",
+    path: "/faculty-and-course-info",
   },
-  { title: "Course Grades", path: "/" },
+  { title: "Course Grades", path: "/grades" },
 ];
 
 function Navigation() {
@@ -49,7 +49,7 @@ function Navigation() {
     <div>
       <Container maxWidth="md">
         <Box sx={{ mt: 8, mb: 8 }}>
-          <NavigationHeader variant="h4">Navigate</NavigationHeader>
+          <NavigationHeader variant="h4">Menu</NavigationHeader>
         </Box>
         <Grid container spacing={10}>
           {options.map((option, index) => (

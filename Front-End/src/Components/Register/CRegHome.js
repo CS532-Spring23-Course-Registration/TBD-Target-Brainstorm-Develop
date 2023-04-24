@@ -46,7 +46,7 @@ function CRegHome() {
             <ListItem>
               <Link to="/search" className={classes.link}>
                 <SearchIcon className={classes.icon} />
-                Search
+                Search Courses
               </Link>
             </ListItem>
             <Divider />
@@ -54,18 +54,9 @@ function CRegHome() {
               {" "}
               <Link to="/majorlist" className={classes.link}>
                 <LibraryBooksIcon className={classes.icon} />
-                Major Courses
+                Currently Enrolled Courses
               </Link>
             </ListItem>
-            <Divider />
-            <ListItem>
-              {" "}
-              <Link to="/mycourses" className={classes.link}>
-                <CalendarMonthIcon className={classes.icon} />
-                View Courses
-              </Link>
-            </ListItem>
-            <Divider />
           </List>
         </CardContent>
       </Card>

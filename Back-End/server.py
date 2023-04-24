@@ -1,4 +1,5 @@
 from flask import request, jsonify
+from flask_cors import CORS
 from app import create_app
 from app.utils import db_service
 from app.models.app import Users, app

@@ -31,18 +31,9 @@ function Menu() {
             variant="contained"
             color="error"
             component={Link}
-            to="/reghome"
-          >
-            Register
-          </Button>
-
-          <Button
-            variant="contained"
-            color="error"
-            component={Link}
             to="/search"
           >
-            Search
+            Register
           </Button>
 
           <Button

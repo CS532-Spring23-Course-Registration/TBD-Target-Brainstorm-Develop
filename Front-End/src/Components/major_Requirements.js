@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Typography,
   Container,
@@ -11,9 +11,35 @@ import {
   Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 function MajorRequirements() {
   const [selectedOption, setSelectedOption] = useState(null);
+  const [data, setData] = useState(null);
+
+  var sessionId = Cookies.get('session_id');
+  sessionId = "test";
+
+
+  useEffect(() => {
+      fetch("http://127.0.0.1:5000/query", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          reportName: "student_major_outline",
+          studentId: 1, 
+          sessionId: sessionId
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // setData(data);
+          console.log(data);
+        })
+        .catch((error) => console.log(error));
+    }, []);
 
   const renderOptionContent = () => {
     switch (selectedOption) {

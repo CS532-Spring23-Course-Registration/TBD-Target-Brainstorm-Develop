@@ -55,8 +55,6 @@ class StudentGrades(db.Model):
     grade = db.Column(db.String(2), nullable=False)
     earned_credits = db.Column(db.Integer, nullable=False)
     is_external_course = db.Column(db.Boolean, default=False)
-    course_notes = db.Column(db.Boolean, default=False)
-    general_notes = db.Column(db.Boolean, default=False)
 
 
 class StudentMiscNotes(db.Model):
