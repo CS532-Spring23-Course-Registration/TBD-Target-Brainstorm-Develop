@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "reportName": {"type": "string", "const": "gradeStatistics"},
-    "sessionId": {"type": "integer"},
+    "sessionId": {"type": "string"},
     "granularity": {
       "type": "string",
       "enum": [
