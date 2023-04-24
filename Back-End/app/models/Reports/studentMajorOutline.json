@@ -4,6 +4,6 @@
   "properties": {
     "reportName": {"type": "string", "const": "studentMajorOutline"},
     "studentId": {"type": "integer"},
-    "sessionId": {"type": "integer"}
+    "sessionId": {"type": "string"}
   }
 }

@@ -3,7 +3,7 @@
   "type": "object",
   "properties": {
     "reportName": {"type": "string", "const": "courseGradesList"},
-    "sessionId": {"type": "integer"},
+    "sessionId": {"type": "string"},
     "course": {"type": "string"}
   }
 }

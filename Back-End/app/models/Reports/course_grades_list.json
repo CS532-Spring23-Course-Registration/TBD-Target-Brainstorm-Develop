@@ -1,9 +1,0 @@
-{
-  "title": "course_grades_list",
-  "type": "object",
-  "properties": {
-    "reportName": "course_grades_list",
-    "sessionId": {"type": "integer"},
-    "courseId": {"type": "integer"}
-  }
-}

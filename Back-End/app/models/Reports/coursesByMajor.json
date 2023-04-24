@@ -4,6 +4,6 @@
   "properties": {
     "reportName": {"type": "string", "const": "coursesByMajor"},
     "major": {"type": "string"},
-    "sessionId": {"type": "integer"}
+    "sessionId": {"type": "string"}
   }
 }
