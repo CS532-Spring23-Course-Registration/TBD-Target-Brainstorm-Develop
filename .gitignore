@@ -16,3 +16,5 @@ Back-End/.idea/vcs.xml
 Back-End/.idea/workspace.xml
 *.xml
 *.iml
+../../.DS_Store
+.DS_Store
