@@ -50,8 +50,6 @@ function Login(props) {
         body: JSON.stringify({ username, password }),
       });
 
-      
-
       if (response.status === 401) {
 
         console.log("Authentication Failed.");
@@ -61,18 +59,17 @@ function Login(props) {
         console.log("Successful Login.");
 
         const data  = await response.json();
-
-        console.log("DATA: ");
         console.log(data);
 
         Cookies.set("session_key", data.sessionId, { expires: 12 / 24, path: "/" });
+        Cookies.set("user_id", data.userId, {expires: 12/24, path:"/"});
+        Cookies.set("user_name", data.userName, {expires: 12/24, path: "/"});
 
         props.setUser({
           auth: true,
           permission: data.permission
         });
 
-        console.log("Redirecting");
         navigate('/');
       }
     } catch (error) {

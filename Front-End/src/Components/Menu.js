@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Menu(props) {
   const classes = useStyles();
+  var permissionCheck = false;
 
   const handleLogout = (event) => {
     const cookies = Object.keys(Cookies.get());
@@ -35,6 +36,12 @@ function Menu(props) {
     });
   };
 
+  console.log("Permission: " +props.permission)
+
+  if (props.permission === "admin") {
+    permissionCheck = true;
+  }
+
 
   return (
     <div className={classes.root}>
@@ -44,15 +51,16 @@ function Menu(props) {
           <Button variant="contained" color="error" component={Link} to="/">
             Home
           </Button>
-          <Button
+          {permissionCheck ? (
+            <Button
             variant="contained"
             color="error"
             component={Link}
             to="/search"
           >
-            Register
+            Register User
           </Button>
-
+          ) : null}
           <Button
             variant="contained"
             color="error"

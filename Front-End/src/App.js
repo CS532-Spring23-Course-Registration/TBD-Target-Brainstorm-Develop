@@ -33,13 +33,10 @@ function App() {
     setPrintable(newStatus);
   };
 
-  console.log('App loaded');
-  console.log("Auth Status: " +user.auth);
-
   return (
     <div>
       <Router>
-        {user.auth && isPrintable && <Menu  setUser={setUser}/>}
+        {user.auth && isPrintable && <Menu  setUser={setUser} permission={user.permission}/>}
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route
