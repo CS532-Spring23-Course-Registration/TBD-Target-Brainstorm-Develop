@@ -28,7 +28,11 @@ function Menu(props) {
       Cookies.remove(cookie, { path: '/' });
     });
   
-    props.updateAuthentication(false);
+    props.setUser({
+      auth: false, 
+      permission: "",
+      id: ""
+    });
   };
 
 

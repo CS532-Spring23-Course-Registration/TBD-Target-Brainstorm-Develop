@@ -166,7 +166,7 @@ function CSearch() {
           </Button>
         </form>
         {/* {data !== null && ( */}
-        {click == !true && (
+        {click === !true && (
           <List className={classes.courseList}>
             {Courses.map((result, i) => (
               <ListItem

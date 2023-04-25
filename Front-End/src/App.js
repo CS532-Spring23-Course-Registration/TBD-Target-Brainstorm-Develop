@@ -20,11 +20,12 @@ import CGrades from "./Components/CGrades";
 import Print from "./Components/Print";
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
-  const updateAuthentication = (newStatus) => {
-    setIsAuthenticated(newStatus);
-  };
+  const [user, setUser] = useState({
+    auth: false,
+    permission: "",
+    id: ""
+  });
 
   const [isPrintable, setPrintable] = useState(true);
 
@@ -32,17 +33,20 @@ function App() {
     setPrintable(newStatus);
   };
 
+  console.log('App loaded');
+  console.log("Auth Status: " +user.auth);
+
   return (
     <div>
       <Router>
-        {isAuthenticated && isPrintable && <Menu updateAuthentication={updateAuthentication} />}
+        {user.auth && isPrintable && <Menu  setUser={setUser}/>}
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route
             path="/login"
-            element={<Login updateAuthentication={updateAuthentication} />}
+            element={<Login setUser={setUser} />}
           />
-          {!isAuthenticated ? (
+          {!user.auth ? (
             <Route path="/*" element={<Navigate to="/login" />} />
           ) : (
             <>
