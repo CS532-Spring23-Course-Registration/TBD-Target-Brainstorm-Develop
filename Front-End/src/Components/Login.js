@@ -49,15 +49,18 @@ function Login(props) {
         body: JSON.stringify({ username, password }),
       });
 
+      
+
       if (response.status === 401) {
         console.log("Authentication Failed.");
       } else {
         console.log("Successful Login.");
 
-        const data = await response.json();
+        const data  = await response.json();
 
         Cookies.set("session_key", data.sessionId, { expires: 12 / 24, path: "/" });
         props.updateAuthentication(true);
+        window.location.href = "/";
       }
     } catch (error) {
       console.log(error);

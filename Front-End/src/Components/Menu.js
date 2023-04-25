@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Button, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,8 +18,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Menu() {
+function Menu(props) {
   const classes = useStyles();
+
+  const handleLogout = (event) => {
+    const cookies = Object.keys(Cookies.get());
+  
+    cookies.forEach(cookie => {
+      Cookies.remove(cookie, { path: '/' });
+    });
+  
+    props.updateAuthentication(false);
+  };
+
+
   return (
     <div className={classes.root}>
       <AppBar position="static" color="error">
@@ -41,6 +54,7 @@ function Menu() {
             color="error"
             component={Link}
             to="/login"
+            onClick={() => handleLogout()}
           >
             Logout
           </Button>

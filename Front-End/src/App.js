@@ -35,7 +35,7 @@ function App() {
   return (
     <div>
       <Router>
-        {isAuthenticated && isPrintable && <Menu />}
+        {isAuthenticated && isPrintable && <Menu updateAuthentication={updateAuthentication} />}
         <Routes>
           <Route path="/signup" element={<Signup />} />
           <Route
