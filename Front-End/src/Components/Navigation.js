@@ -40,11 +40,19 @@ const options = [
   {
     title: "Faculty And Course Information",
     path: "/faculty-and-course-info",
-  },
-  { title: "Course Grades", path: "/grades" },
+  }
 ];
 
-function Navigation() {
+
+
+function Navigation(props) {
+
+  console.log()
+
+  const modifiedOptions = props.permission === "faculty" || props.permission === "admin"
+    ? [...options, {title: "Course Grades", path: "/grades"}]
+    : options;
+
   return (
     <div>
       <Container maxWidth="md">
@@ -52,7 +60,7 @@ function Navigation() {
           <NavigationHeader variant="h4">Menu</NavigationHeader>
         </Box>
         <Grid container spacing={10}>
-          {options.map((option, index) => (
+          {modifiedOptions.map((option, index) => (
             <Grid item key={index} sm={12} md={6} xs={4}>
               <StyledLink to={option.path}>
                 <NavigationCard>

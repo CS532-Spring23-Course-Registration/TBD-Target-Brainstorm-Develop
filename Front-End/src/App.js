@@ -55,7 +55,7 @@ function App() {
                 element={<FacultyAndCourses />}
               />
               <Route path="/courseinfo" element={<Cinfo />} />
-              <Route path="/" element={<Navigation />} />
+              <Route path="/" element={<Navigation permission={user.permission} />} />
               <Route
                 path="/profile"
                 element={<Profile updatePrintState={updatePrintState} />}
