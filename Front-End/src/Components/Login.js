@@ -61,7 +61,7 @@ function Login(props) {
         const data  = await response.json();
         console.log(data);
 
-        Cookies.set("session_key", data.sessionId, { expires: 12 / 24, path: "/" });
+        Cookies.set("session_id", data.sessionId, { expires: 12 / 24, path: "/" });
         Cookies.set("user_id", data.userId, {expires: 12/24, path:"/"});
         Cookies.set("user_name", data.userName, {expires: 12/24, path: "/"});
 
@@ -127,10 +127,7 @@ function Login(props) {
                     color="primary"
                   >
                     Sign In
-                  </LoginButton>
-                  <Typography component={Link} to="/signup">
-                    Sign up?
-                  </Typography>            
+                  </LoginButton>           
                 </Box>
               </Box>
             </form>

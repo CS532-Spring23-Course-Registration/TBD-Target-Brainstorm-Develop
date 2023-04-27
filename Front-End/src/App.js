@@ -18,6 +18,7 @@ import Signup from "./Components/Signup";
 import MajorRequirements from "./Components/major_Requirements";
 import CGrades from "./Components/CGrades";
 import Print from "./Components/Print";
+import AdminPanel from "./Components/AdminPanel";
 
 function App() {
 
@@ -48,6 +49,7 @@ function App() {
           ) : (
             <>
               <Route path="/print" element={<Print />} />
+              <Route path="/adminpanel" element={<AdminPanel />} />
               <Route path="/search" element={<CSearch />} />
               <Route path="/majorlist" element={<MajorList />} />
               <Route

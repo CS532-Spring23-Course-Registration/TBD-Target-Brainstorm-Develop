@@ -39,6 +39,7 @@ function Profile(props) {
 
   const test = "test";
 
+  
   const params = {
     session_id: test,
     reportName: "studentInfo",

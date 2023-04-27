@@ -28,7 +28,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 function CourseGrades() {
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("Course Grades");
 
   // Add more students if you want...
   const students = [
