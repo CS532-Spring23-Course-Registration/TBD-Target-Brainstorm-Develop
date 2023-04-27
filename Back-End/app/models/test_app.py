@@ -138,18 +138,18 @@ class TestApp(unittest.TestCase):
 
     # Test creating a new program: Pass
     def test_add_program(self):
-            with app.app_context():
-                # create a new department
-                Departments.add('Computer Science')
-                department = Departments.query.filter_by(name='Computer Science').first()
+        with app.app_context():
+            # create a new department
+            Departments.add('Computer Science')
+            department = Departments.query.filter_by(name='Computer Science').first()
 
-                # create a new program
-                Programs.create('Computer Science', department.id, 3)
+            # create a new program
+            Programs.create('Computer Science', department.id, 3)
 
-                # check if the program was added to the database
-                program = Programs.query.filter_by(name='Computer Science').first()
-                self.assertIsNotNone(program)
-                self.assertEqual(program.department_id, department.id)
+            # check if the program was added to the database
+            program = Programs.query.filter_by(name='Computer Science').first()
+            self.assertIsNotNone(program)
+            self.assertEqual(program.department_id, department.id)
 
     # Test add course to semester: Passed
     def test_add_course_to_semester(self):
