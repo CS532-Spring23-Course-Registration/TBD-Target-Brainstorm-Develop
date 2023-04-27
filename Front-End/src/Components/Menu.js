@@ -56,9 +56,19 @@ function Menu(props) {
             variant="contained"
             color="error"
             component={Link}
-            to="/search"
+            to="/signup"
           >
             Register User
+          </Button>
+          ) : null}
+          {permissionCheck ? (
+            <Button
+            variant="contained"
+            color="error"
+            component={Link}
+            to="/adminpanel"
+          >
+            Admin Panel
           </Button>
           ) : null}
           <Button
