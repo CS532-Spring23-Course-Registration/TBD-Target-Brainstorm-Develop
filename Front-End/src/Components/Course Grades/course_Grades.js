@@ -28,7 +28,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 function CourseGrades() {
-  const [selectedOption, setSelectedOption] = useState("Course Grades");
+  const [selectedOption, setSelectedOption] = useState(null);
 
   // Add more students if you want...
   const students = [
@@ -37,14 +37,6 @@ function CourseGrades() {
   ];
 
   const [grades, setGrades] = useState(Array(students.length).fill(''));
-
-  // useEffect(() => {
-  //   axios
-  //     .get("/api/courses/123")
-  //     .then((response) => setCourseDetails(response.data))
-  //     .catch((error) => console.error(error));
-  // }, []);
-
 
   const handleGradeChange = (event, index) => {
     const newGrades = [...grades];
@@ -142,9 +134,18 @@ function CourseGrades() {
     const options = ['Home', 'Course Grades'];
     
     const navigate = useNavigate();
+    const handleLogout = () => {
+    navigate('/login');
+    };
     
     return (
     <div>
+        <AppBar position="static" color="error">
+            <Toolbar>
+                <Typography variant="h6" flexGrow={1}> Course Grades </Typography>
+                <Button variant="contained" style={{ backgroundColor: 'white', color: 'black' }} onClick={handleLogout}> Logout </Button>
+            </Toolbar>
+        </AppBar>
         <Container maxWidth="lg">
             <Box sx={{ mt: 4, mb: 4 }}>
                 <Typography variant="h4" align="left"> Course Grades </Typography>

@@ -39,7 +39,6 @@ def login():
                         'userName': user.name, \
                         'permission': user.permissions}), 200
 
-
 @app.route('/query', methods=['POST'])
 def query():
     content_type = request.headers.get('Content-Type')
