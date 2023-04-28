@@ -63,9 +63,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const FacultyAndCourses = () => {
-  var sessionId = Cookies.get("session_id");
-  sessionId = "test";
+  const sessionId = Cookies.get("session_id");
 
+  
   const [selectedItem, setSelectedItem] = useState("Courses");
 
   //States for the search boxes

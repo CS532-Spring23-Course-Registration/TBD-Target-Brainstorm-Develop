@@ -1,9 +1,0 @@
-{
-  "title": "studentMajorOutline",
-  "type": "object",
-  "properties": {
-    "reportName": {"type": "string", "const": "studentMajorOutline"},
-    "studentId": {"type": "integer"},
-    "sessionId": {"type": "string"}
-  }
-}
