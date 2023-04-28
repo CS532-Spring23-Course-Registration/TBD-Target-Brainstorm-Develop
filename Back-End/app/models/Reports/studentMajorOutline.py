@@ -1,4 +1,4 @@
-from flask import current_app as app
+from flask import current_app as app, jsonify
 
 from app.models.app import *
 
@@ -17,7 +17,7 @@ class StudentMajorOutline:
 
     def execute_query(self, requestJson):
         with app.app_context():
-            return "We're here", 200
+            return jsonify({"message": "We're here"})
 
     def create_response_json(self):
         return

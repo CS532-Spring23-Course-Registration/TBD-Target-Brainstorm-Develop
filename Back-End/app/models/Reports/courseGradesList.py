@@ -1,4 +1,4 @@
-from flask import current_app as app
+from flask import current_app as app, jsonify
 from app.models.app import *
 
 
@@ -16,7 +16,7 @@ class CourseGradesList:
 
     def executeQuery(self, requestJson):
         with app.app_context():
-            return "We're here", 200
+            return jsonify({"message": "We're here"})
 
     def createResponseJson(self):
         return

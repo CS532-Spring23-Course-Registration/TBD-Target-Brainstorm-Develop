@@ -1,4 +1,4 @@
-from flask import current_app as app
+from flask import current_app as app, jsonify
 from sqlalchemy import text
 
 from app.models.app import *
@@ -47,6 +47,7 @@ class Courses:
 
             # Get the course list for the departments requested
             department_id_list = [department[0] for department in department_list]
+            return jsonify({"message": "We're here"})
 
 
     def create_response_json(self):
