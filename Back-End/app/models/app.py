@@ -1,3 +1,5 @@
+import os
+
 from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
@@ -6,7 +8,8 @@ import random
 
 # Can be removed after testing #
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///registration.db'
+db_path = os.path.join(os.path.dirname(__file__), '..', 'database', 'registration.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
 # Init database
 db = SQLAlchemy(app)
 
@@ -55,6 +58,7 @@ class StudentGrades(db.Model):
     course_sem_id = db.Column(db.Integer, db.ForeignKey('coursepersemester.id'), nullable=False) # Coursepersemester foreign key
     grade = db.Column(db.String(2), nullable=False)
     earned_credits = db.Column(db.Integer, nullable=False)
+    course_notes = db.Column(db.String(), nullable=True)
     
     
     @classmethod

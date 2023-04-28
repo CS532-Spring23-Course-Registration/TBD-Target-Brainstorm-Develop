@@ -11,7 +11,8 @@ class CoursesByMajor:
             "reportName": {"type": "string", "const": "coursesByMajor"},
             "major": {"type": "string"},
             "sessionId": {"type": "string"}
-        }
+        },
+        "required": ["sessionId", "major"]
     }
 
     def execute_query(self, requestJson):

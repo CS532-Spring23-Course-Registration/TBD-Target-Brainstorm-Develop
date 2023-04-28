@@ -14,11 +14,13 @@ class Users:
                 "type": "string",
                 "enum": [
                     "user",
+                    "admin",
                     "faculty",
                     "student"
                 ]
             }
-        }
+        },
+        "required": ["sessionId", "granularity"]
     }
 
     def execute_query(self, requestJson):

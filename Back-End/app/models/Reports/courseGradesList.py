@@ -10,7 +10,8 @@ class CourseGradesList:
             "reportName": {"type": "string", "const": "courseGradesList"},
             "sessionId": {"type": "string"},
             "course": {"type": "string"}
-        }
+        },
+        "required": ["sessionId", "course"]
     }
 
     def executeQuery(self, requestJson):

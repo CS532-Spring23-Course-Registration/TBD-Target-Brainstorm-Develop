@@ -20,7 +20,8 @@ class GradeStatistics:
             },
             "department": {"type": "string"},
             "course": {"type": "string"}
-        }
+        },
+        "required": ["sessionId", "granularity"]
     }
 
     def execute_query(self, requestJson):

@@ -20,7 +20,8 @@ class CourseInfo:
             },
             "department": {"type": "string"},
             "course": {"type": "string"}
-        }
+        },
+        "required": ["sessionId", "reportFilters"]
     }
 
     def execute_query(self, requestJson):

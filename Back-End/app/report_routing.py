@@ -19,8 +19,7 @@ def getData(requestJson, reportToExecute):
     try:
         errorsInJson = validate(requestJson, reportToExecute.validationSchema)
         if errorsInJson is None:
-            # return reportToExecute.execute_query(requestJson), 200
-            return jsonify({'message': "Validation done"}), 401
+            return reportToExecute.execute_query(requestJson)
     except ValidationError as e:
         return jsonify({'error': e.message}), 401
 

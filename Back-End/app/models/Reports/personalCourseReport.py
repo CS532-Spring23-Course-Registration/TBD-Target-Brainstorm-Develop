@@ -10,7 +10,8 @@ class PersonalCourseReport:
         "properties": {
             "reportName": {"type": "string", "const": "personalCourseReport"},
             "sessionId": {"type": "string"}
-        }
+        },
+        "required": ["sessionId"]
     }
 
     def execute_query(self, requestJson):

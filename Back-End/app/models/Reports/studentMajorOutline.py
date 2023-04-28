@@ -11,7 +11,8 @@ class StudentMajorOutline:
             "reportName": {"type": "string", "const": "studentMajorOutline"},
             "studentId": {"type": "integer"},
             "sessionId": {"type": "string"}
-        }
+        },
+        "required": ["sessionId", "studentId"]
     }
 
     def execute_query(self, requestJson):

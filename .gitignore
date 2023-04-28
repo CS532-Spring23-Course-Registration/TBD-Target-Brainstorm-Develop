@@ -18,3 +18,13 @@ Back-End/.idea/workspace.xml
 *.iml
 ../../.DS_Store
 .DS_Store
+*.py
+Back-End/migrations/script.py.mako
+Back-End/migrations/README
+Back-End/migrations/alembic.ini
+Back-End/instance/registration.db
+Back-End/echo
+Back-End/instance/registration.db
+Back-End/echo
+Back-End/instance/registration.db
+Back-End/echo
