@@ -12,14 +12,75 @@ import {
   Button,
 } from "@mui/material";
 import InfoCard from "./InfoCard";
-import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
 
-function Profile(props) {
+function Profile() {
   const [selectedOption, setSelectedOption] = useState(null);
   const Pinfo = ["ID:", "Name:", "Date of Birth:", "Address:"];
   const [pValues, setPvalues] = useState({});
   const [studentData, setStudentData] = useState({});
+  const testData = {
+    id: "123",
+    name: "jon",
+    dob: "07/14",
+    address: "1111",
+  };
+
+  const formatTestData = (data) => {
+    return [
+      { label: "ID", value: data.id },
+      { label: "Name", value: data.name },
+      { label: "Date Of Birth", value: data.dob },
+      { label: "Address", value: data.address },
+    ];
+  };
+
+  const generatePdf = async () => {
+    const pdfDoc = await PDFDocument.create();
+    const timesRomanFont = await pdfDoc.embedFont(StandardFonts.TimesRoman);
+
+    const page = pdfDoc.addPage();
+    const { width, height } = page.getSize();
+
+    const formattedData = formatTestData(testData);
+    const cellWidth = width / 2;
+    const cellHeight = 25;
+    const textHeight = 14;
+    let x = 50;
+    let y = height - 50;
+
+    const underlineWidth = width * 0.8;
+    const underlineHeight = 1;
+
+    formattedData.forEach(({ label, value }) => {
+      page.drawText(label, { x, y, size: textHeight, font: timesRomanFont });
+      page.drawText(value, {
+        x: x + cellWidth,
+        y,
+        size: textHeight,
+        font: timesRomanFont,
+      });
+
+      const underlineY = y - 5;
+      page.drawRectangle({
+        x,
+        y: underlineY,
+        width: underlineWidth,
+        height: underlineHeight,
+        color: rgb(0, 0, 0),
+        fillOpacity: 1,
+      });
+
+      y -= cellHeight + 20;
+    });
+
+    const pdfBytes = await pdfDoc.save();
+    const pdfUrl = URL.createObjectURL(
+      new Blob([pdfBytes], { type: "application/pdf" })
+    );
+    window.open(pdfUrl);
+  };
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -49,7 +110,7 @@ function Profile(props) {
     };
 
     fetchStudentData();
-  }, []);
+  });
 
   const renderOptionContent = () => {
     switch (selectedOption) {
@@ -64,10 +125,6 @@ function Profile(props) {
     }
   };
 
-  const handleClick = () => {
-    props.updatePrintState(false);
-  };
-
   const options = ["Personal Information", "Academics", "Student Records"];
 
   return (
@@ -79,7 +136,7 @@ function Profile(props) {
           </Typography>
         </Box>
         <Box display="flex">
-          <Card sx={{ width: 400 }}>
+          <Card sx={{ width: "20%", height: "80%" }}>
             <CardContent>
               <List>
                 {options.map((option, index) => (
@@ -93,20 +150,13 @@ function Profile(props) {
               </List>
             </CardContent>
           </Card>
-          <Box flexGrow={1} ml={2}>
-            {renderOptionContent()}
+          <Box flexGrow={1} display="flex" flexDirection="column">
+            <Box flexGrow={1} ml={2}>
+              {renderOptionContent()}
+            </Box>
+            <Button onClick={generatePdf}>Generate PDF</Button>
           </Box>
         </Box>
-
-        <Button
-          variant="contained"
-          color="error"
-          component={Link}
-          to="/print"
-          onClick={handleClick}
-        >
-          Print Results
-        </Button>
       </Container>
     </div>
   );

@@ -17,38 +17,26 @@ import Profile from "./Components/Profile";
 import Signup from "./Components/Signup";
 import MajorRequirements from "./Components/major_Requirements";
 import CGrades from "./Components/CGrades";
-import Print from "./Components/Print";
 import AdminPanel from "./Components/AdminPanel";
 
 function App() {
-
   const [user, setUser] = useState({
     auth: false,
     permission: "",
-    id: ""
+    id: "",
   });
-
-  const [isPrintable, setPrintable] = useState(true);
-
-  const updatePrintState = (newStatus) => {
-    setPrintable(newStatus);
-  };
 
   return (
     <div>
       <Router>
-        {user.auth && isPrintable && <Menu  setUser={setUser} permission={user.permission}/>}
+        {user.auth && <Menu setUser={setUser} permission={user.permission} />}
         <Routes>
           <Route path="/signup" element={<Signup />} />
-          <Route
-            path="/login"
-            element={<Login setUser={setUser} />}
-          />
+          <Route path="/login" element={<Login setUser={setUser} />} />
           {!user.auth ? (
             <Route path="/*" element={<Navigate to="/login" />} />
           ) : (
             <>
-              <Route path="/print" element={<Print />} />
               <Route path="/adminpanel" element={<AdminPanel />} />
               <Route path="/search" element={<CSearch />} />
               <Route path="/majorlist" element={<MajorList />} />
@@ -57,11 +45,11 @@ function App() {
                 element={<FacultyAndCourses />}
               />
               <Route path="/courseinfo" element={<Cinfo />} />
-              <Route path="/" element={<Navigation permission={user.permission} />} />
               <Route
-                path="/profile"
-                element={<Profile updatePrintState={updatePrintState} />}
+                path="/"
+                element={<Navigation permission={user.permission} />}
               />
+              <Route path="/profile" element={<Profile />} />
               <Route
                 path="/Major-Requirements"
                 element={<MajorRequirements />}
