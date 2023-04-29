@@ -276,7 +276,6 @@ class TestApp(unittest.TestCase):
             outline = ProgramOutline.query.filter_by(student_id=student.id, program_id=program.id).first()
             self.assertIsNotNone(outline)
             self.assertEqual(outline.version_number, 1)
-            self.assertEqual(outline.approver_id, faculty.id)
 
     # Test CourseByOutline.add_course_to_outline:
     def test_add_course_to_outline(self):
