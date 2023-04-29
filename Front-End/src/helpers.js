@@ -94,68 +94,55 @@ export const handleGeneralNoteChange = (event, generalNote, setGeneralNote) => {
   setGeneralNote(event.target.value);
 };
 
-export const renderOptionContent = (students, grades, notes, generalNote, handleGradeChange, handleNoteChange, handleGeneralNoteChange) => {
-  return (
-    <Box>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Student ID</TableCell>
-              <TableCell>Name</TableCell>
-              <TableCell>Grade</TableCell>
-              <TableCell>Note</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {students.map((student, index) => (
-              <TableRow key={student.id}>
-                <TableCell>{student.id}</TableCell>
-                <TableCell>{student.name}</TableCell>
-                <TableCell>
-                  <FormControl fullWidth>
-                    <InputLabel id={`grade-label-${index}`}>Grade</InputLabel>
-                    <Select
-                      labelId={`grade-label-${index}`}
-                      id={`grade-select-${index}`}
-                      value={grades[index]}
-                      onChange={(event) => handleGradeChange(event, index, grades, setGrades)}
-                    >
-                      <MenuItem value="A">A</MenuItem>
-                      <MenuItem value="B">B</MenuItem>
-                      <MenuItem value="C">C</MenuItem>
-                      <MenuItem value="D">D</MenuItem>
-                      <MenuItem value="F">F</MenuItem>
-                      <MenuItem value="CR">Credit</MenuItem>
-                      <MenuItem value="NC">No Credit</MenuItem>
-                      <MenuItem value="AU">Audit</MenuItem>
-                    </Select>
-                  </FormControl>
-                </TableCell>
-                <TableCell>
-                  <TextField
-                    fullWidth
-                    multiline
-                    rows={3}
-                    value={notes[index]}
-                    onChange={(event) => handleNoteChange(event, index, notes, setNotes)}
-                  />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Box mt={4}>
-        <Typography variant="h6">General Note:</Typography>
-        <TextField
-          fullWidth
-          multiline
-          rows={3}
-          value={generalNote}
-          onChange={(event) => handleGeneralNoteChange(event, generalNote, setGeneralNote)}
-        />
-      </Box>
-    </Box>
-  );
+// FacultyAndCourses.js
+export const updateSelectedItem = (item, selectedItem, setReportType, setReportParameter) => {
+  if (selectedItem !== item) {
+    setReportType("courseInfo");
+    setReportParameter("course");
+  } else {
+    setReportType("facultyInfo");
+    setReportParameter("faculty");
+  }
+  return item;
 };
+
+export const makeApiCall = async (reportType, reportFilters, reportParameter, searchQuery, departmentQuery, sessionId) => {
+  try {
+    const response = await fetch("http://127.0.0.1:5000/query", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        reportName: reportType,
+        reportFilters: reportFilters,
+        [reportParameter]: searchQuery,
+        department: departmentQuery,
+        sessionId: sessionId,
+      }),
+    });
+    const data = await response.json();
+    return data.data; // only return the data property from the response object
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+};
+
+//Navigation.js
+export const getModifiedOptions = (permission) => {
+  const options = [
+    { title: "Profile", path: "/profile" },
+    { title: "Course Register", path: "/search" },
+    { title: "Major Requirements", path: "/Major-Requirements" },
+    { title: "Faculty And Course Information", path: "/faculty-and-course-info" }
+  ];
+
+  if (permission === "faculty" || permission === "admin") {
+    options.push({ title: "Course Grades", path: "/grades" });
+  }
+
+  return options;
+}
+
+
