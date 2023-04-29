@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 function MajorRequirements() {
-  const [selectedOption, setSelectedOption] = useState(null);
+  const [selectedOption, setSelectedOption] = useState("Courses by Major");
   const [data, setData] = useState(null);
 
   var sessionId = Cookies.get('session_id');

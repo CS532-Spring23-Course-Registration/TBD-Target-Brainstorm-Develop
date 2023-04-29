@@ -23,8 +23,8 @@ import AdminPanel from "./Components/AdminPanel";
 function App() {
 
   const [user, setUser] = useState({
-    auth: false,
-    permission: "",
+    auth: true,
+    permission: "admin",
     id: ""
   });
 
@@ -64,7 +64,7 @@ function App() {
               />
               <Route
                 path="/Major-Requirements"
-                element={<MajorRequirements />}
+                element={<MajorRequirements user={user}/>}
               />
               <Route exact path="/cinfo/:id" element={<Cinfo />} />
               <Route path="/grades" element={<CGrades />} />
