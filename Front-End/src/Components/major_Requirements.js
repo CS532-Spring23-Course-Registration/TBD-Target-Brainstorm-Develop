@@ -3,6 +3,8 @@ import {
   Typography,
   Container,
   Box,
+  Button,
+  TextField,
   Card,
   CardContent,
   List,
@@ -46,25 +48,66 @@ function MajorRequirements() {
       case "Home":
         navigate("/");
         return null;
-      case "Major Required Courses":
-        return <div>Major Required Courses </div>;
+      case "Courses by Major":
+        return (
+          <div>
+            <Container maxWidth="lg">
+              <Box>
+                <Card>
+                  <CardContent sx={{ display: "flex", flexDirection: "row" }}>
+                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mr: 2, width: "75%" }}>
+                      <TextField
+                        variant="outlined"
+                        margin="normal"
+                        size="small"
+                        placeholder="Search Majors"
+                        InputLabelProps={{ shrink: true }}
+                        sx={{width: "85%"}}
+                      />
+                      <Button
+                        variant="contained"
+                        color="error"
+                        size="small"
+                        sx={{ mt: 2, width: "25%" }}
+                      >
+                        Search
+                      </Button>
+                    </Box>
+                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
+                      <Button
+                        variant="contained"
+                        color="error"
+                        size="small"
+                        sx={{ width: "75%", height: "45%", mt: 2, mb: 1 }}
+                        onClick={() => {} /* handleDisplayCourses() */}
+                      >
+                        Display Your Courses
+                      </Button>
+                      <Box sx={{
+                        typography: "subtitle2"
+                      }}>
+                        [User's Major]
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
+              </Box>
+            </Container>
+          </div>
+        );
       case "Completed Courses":
         return <div>Completed Courses</div>;
-      case "Student Status":
-        return <div>Status content</div>;
-      case "Student History":
-        return <div>History content</div>;
+      case "Course Outline History":
+        return ;
       default:
         return null;
     }
   };
 
   const options = [
-    "Home",
-    "Major Required Courses",
+    "Courses by Major",
     "Completed Courses",
-    "Student Status",
-    "Student History",
+    "Course Outline History"
   ];
 
   const navigate = useNavigate();
@@ -72,9 +115,9 @@ function MajorRequirements() {
   return (
     <div>
       <Container maxWidth="lg">
-        <Box sx={{ mt: 4, mb: 4 }}>
-          <Typography variant="h4" align="left">
-            Major Subsystem
+        <Box sx={{ml: 1, mt: 3, mb: 3 }}>
+          <Typography color="grey" variant="h5" align="left">
+            Major Requirements
           </Typography>
         </Box>
         <Box display="flex">
