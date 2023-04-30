@@ -11,25 +11,21 @@ import {
     DialogTitle
 } from "@mui/material";
 
-
-
-
 function CourseOutlineHistory(props) {
     const [data, setData] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
     const [open, setOpen] = useState(false);
   
-    // useEffect(() => {
-    //   fetch('https://api.example.com/data')
-    //     .then(response => response.json())
-    //     .then(data => setData(data));
-    // }, []);
+    useEffect(() => {
+      fetch('https://api.example.com/data')
+        .then(response => response.json())
+        .then(data => setData(data));
+    }, []);
   
     const handleClick = item => {
       setSelectedItem(item);
       setOpen(true);
     };
-  
     const handleClose = () => {
       setSelectedItem(null);
       setOpen(false);

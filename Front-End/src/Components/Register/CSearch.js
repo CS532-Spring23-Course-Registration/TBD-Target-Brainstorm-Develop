@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import CRegHome from "./CRegHome";
 import { makeStyles } from "@mui/styles";
 import {
   Box,
@@ -8,8 +7,17 @@ import {
   List,
   ListItem,
   ListItemText,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import Cookies from "js-cookie";
+import DisplaySearchedCourses from "./DisplaySearchedCourses";
+import SearchIcon from "@mui/icons-material/Search";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import MenuCard from "./MenuCard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,9 +41,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     padding: "20px",
     width: "75%",
-    border: "1px solid",
     borderRadius: "5px",
-    boxShadow: `1px 1px 1px`,
+    boxShadow: `0px 0px 5px 2px rgba(0, 0, 0, 0.25)`,
   },
   input: {
     margin: "10px",
@@ -67,6 +74,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Contents for menu card
+const content = [
+  {
+    text: "Search Courses",
+    to: "/search",
+    icon: <SearchIcon />,
+  },
+  {
+    text: "Currently Enrolled Courses",
+    to: "/majorlist",
+    icon: <LibraryBooksIcon />,
+  },
+];
+
 function CSearch() {
   const classes = useStyles();
 
@@ -75,11 +96,15 @@ function CSearch() {
   const [departmentQuery, setDepartmentQuery] = useState("");
   const [checkBoxValue, setCheckBoxValue] = useState(false);
   const [reportFilter, setReportFilter] = useState();
+  const [semesterQuery, setSemesterQuery] = useState("Fall");
+  const [yearQuery, setYearQuery] = useState(2023);
 
   const [click, setClick] = useState(false);
-  const [data, setData] = useState(null);
-  const sessionId = "test";
-  const studentId = "test2";
+  const [returnedCourses, setReturnedCourses] = useState(null);
+
+  const sessionId = Cookies.get("session_id");
+  const studentId = Cookies.get("user_id");
+
   // const [searchResults, setSearchResults] = useState([]);
   const Courses = [
     { name: "Course A", description: "This is course A" },
@@ -92,8 +117,8 @@ function CSearch() {
     setCheckBoxValue(!temp);
   };
 
-  const handleSearch = (event) => {
-    fetch("http://127.0.0.1:5000/query", {
+  const handleSearch = async (event) => {
+    const response = await fetch("http://127.0.0.1:5000/query", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -103,15 +128,17 @@ function CSearch() {
         course: searchQuery,
         reportFilters: reportFilter,
         department: departmentQuery,
-        studentId: studentId,
+        studentId: parseInt(studentId),
         sessionId: sessionId,
+        courseSemester: semesterQuery + " " + yearQuery,
       }),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => console.log(error));
+    });
+
+    if (response.status === 200) {
+      const data = await response.json();
+      console.log(data);
+      setReturnedCourses(data);
+    }
   };
 
   useEffect(() => {
@@ -130,7 +157,7 @@ function CSearch() {
 
   return (
     <div className={classes.root}>
-      <CRegHome />
+      <MenuCard content={content} />
       <div className={classes.contents}>
         <form className={classes.form}>
           <TextField
@@ -155,6 +182,35 @@ function CSearch() {
               <label>Show Open Classes</label>
             </Box>
           </Box>
+          <Box display="flex" width="40%" flexDirection="row">
+            <Box width="100%" display="flex" justifyContent="center">
+              <FormControl sx={{ width: "75%" }}>
+                <InputLabel>Semester</InputLabel>
+                <Select
+                  label="Semester"
+                  value={semesterQuery}
+                  onChange={(event) => setSemesterQuery(event.target.value)}
+                >
+                  <MenuItem value={"Fall"}>Fall</MenuItem>
+                  <MenuItem value={"Winter"}>Winter</MenuItem>
+                  <MenuItem value={"Summer"}>Summer</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+            <Box width="100%" display="flex" justifyContent="center">
+              <FormControl sx={{ width: "75%" }}>
+                <InputLabel>Year</InputLabel>
+                <Select
+                  label="Year"
+                  value={yearQuery}
+                  onChange={(event) => setYearQuery(event.target.value)}
+                >
+                  <MenuItem value={"2023"}>2023</MenuItem>
+                  <MenuItem value={"2024"}>2024</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </Box>
 
           <Button
             className={classes.button}
@@ -165,23 +221,8 @@ function CSearch() {
             Search
           </Button>
         </form>
-        {/* {data !== null && ( */}
-        {click === !true && (
-          <List className={classes.courseList}>
-            {Courses.map((result, i) => (
-              <ListItem
-                key={i}
-                className={classes.courseItem}
-                component={Link}
-                to={`/cinfo/${result.id}`}
-              >
-                <ListItemText
-                  primary={result.name}
-                  secondary={result.description}
-                />
-              </ListItem>
-            ))}
-          </List>
+        {returnedCourses !== null && (
+          <DisplaySearchedCourses returnedCourses={returnedCourses} />
         )}
       </div>
     </div>

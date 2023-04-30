@@ -1,10 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { Card, CardContent,Typography } from "@mui/material";
+import { Card, CardContent, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
-import CRegHome from "./CRegHome";
-
-
+import CRegHome from "./MenuCard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -24,8 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     width: "100%",
-  }
-  
+  },
 }));
 
 function Cinfo() {
@@ -45,23 +42,22 @@ function Cinfo() {
     <div className={classes.root}>
       <CRegHome />
       <div className={classes.contents}>
-      <Card className={classes.card}>
-        <CardContent className={classes.cardcontent}>
-          <Typography variant="h4" >
-            {course.title}
-          </Typography>
-          <Typography variant="body1" >
-            {course.description}
-          </Typography>
-          <Typography variant="body2">Instructor: {course.instructor}</Typography>
-          <Typography variant="body2">Start Date: {course.startDate}</Typography>
-          <Typography variant="body2">End Date: {course.endDate}</Typography>
-        </CardContent>
-      </Card>
+        <Card className={classes.card}>
+          <CardContent className={classes.cardcontent}>
+            <Typography variant="h4">{course.title}</Typography>
+            <Typography variant="body1">{course.description}</Typography>
+            <Typography variant="body2">
+              Instructor: {course.instructor}
+            </Typography>
+            <Typography variant="body2">
+              Start Date: {course.startDate}
+            </Typography>
+            <Typography variant="body2">End Date: {course.endDate}</Typography>
+          </CardContent>
+        </Card>
       </div>
     </div>
   );
 }
-
 
 export default Cinfo;

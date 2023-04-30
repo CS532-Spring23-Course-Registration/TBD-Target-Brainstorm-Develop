@@ -55,7 +55,7 @@ function App() {
                 element={<MajorRequirements user={user}/>}
               />
               <Route exact path="/cinfo/:id" element={<Cinfo />} />
-              <Route path="/grades" element={<CGrades />} />
+              <Route path="/grades" element={<CGrades user={user} />} />
             </>
           )}
         </Routes>

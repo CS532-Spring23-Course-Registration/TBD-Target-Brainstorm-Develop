@@ -161,7 +161,12 @@ const FacultyAndCourses = () => {
 
   return (
     <div>
-      <Box className={classes.root}>
+        <Box sx={{ml: 3, mt: 3, mb: 1 }}>
+          <Typography color="grey" variant="h5" align="left">
+            Faculty & Course Info
+          </Typography>
+        </Box>
+      <Box ml={4} className={classes.root}>
         <Card className={classes.optionsContainer}>
           <Typography variant="h6" component="div">
             Select an Option

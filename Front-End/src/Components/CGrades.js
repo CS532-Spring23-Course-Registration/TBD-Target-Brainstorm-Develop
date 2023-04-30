@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   AppBar,
   Toolbar,
@@ -27,10 +27,14 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import StudentGrades from './StudentGrades';
+import Cookies from 'js-cookie';
 
-function CourseGrades() {
+function CourseGrades(props) {
 
-    const [selectedOption, setSelectedOption] = useState(null);
+    const [selectedCourse, setSelectedCourse] = useState(null);
+
+    const userId = Cookies.get("user_id");
+    const sessionId = Cookies.get("session_id");
 
     const testData = [
       {
@@ -44,13 +48,39 @@ function CourseGrades() {
       }
     ];
 
+    useEffect(() => {
+      if (props.user.permission === 'faculty') {
+        fetch("http://127.0.0.1:5000/query", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            reportName: "courseGradesList",
+            facultyId: parseInt(userId),
+            sessionId: sessionId 
+          }),
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            console.log(data);
+          })
+          .catch((error) => console.log(error));
+      }
+    }, []);
+
+
+
+
 
 
     return (
       <div>
         <Container maxWidth="lg">
           <Box sx={{ mt: 4, mb: 4 }}>
-            <Typography variant="h4" align="left"> Course Grades </Typography>
+          <Typography color="grey" variant="h5" align="left">
+            Course Grades
+          </Typography>
           </Box>
           <Box display="flex">
             <Box display="flex" height="500px" width="150px" sx={{ overflowY: 'scroll', boxShadow: '2px 2px 4px rgba(0, 0, 0, 0.3)' }}>
@@ -59,7 +89,7 @@ function CourseGrades() {
                   <List>
                     {testData.map((item, index) => (
                       <div key={index}>
-                        <ListItem button onClick={() => setSelectedOption(item.name)}>
+                        <ListItem button onClick={() => setSelectedCourse(item.name)}>
                           <ListItemText primary={item.name} />
                         </ListItem>
                         {index !== testData.length - 1 && <Divider />}
