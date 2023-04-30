@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import {
   Typography,
@@ -8,7 +9,6 @@ import {
   Button,
   Card,
 } from "@mui/material";
-import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   box_container: {
@@ -32,21 +32,31 @@ const useStyles = makeStyles((theme) => ({
   submitButton: { marginTop: "20px" },
 }));
 
+
+
 function SignUp() {
+  const navigate = useNavigate();
+
   const classes = useStyles();
-  const [id, setId] = useState("");
   const [name, setName] = useState("");
   const [address, setAddress] = useState("");
   const [dateOfBirth, setDateOfBirth] = useState("");
   const [major, setMajor] = useState("");
   const [minor, setMinor] = useState("");
 
-  const handleSubmit = (event) => {
+  /* Limit input length of date */
+  const handleChange = (event) => {
+    const { value } = event.target;
+    if (value.length <= 10) {
+      setDateOfBirth(value);
+    }
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = {
       reportName: "student_info",
-      id: id,
       name: name,
       address: address,
       dateOfBirth: dateOfBirth,
@@ -54,15 +64,24 @@ function SignUp() {
       minor: minor,
     };
 
-    axios
-      .post("/api/signup", formData)
-      .then((response) => {
-        console.log(response);
-        window.location.href = "/";
-      })
-      .catch((error) => {
-        console.log(error);
-      });
+    // try {
+    //   const response = await fetch("http://127.0.0.1:5000/signup", {
+    //     method: "POST",
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //     body: JSON.stringify(formData),
+    //   });
+
+    //   if (response.status === 200) {
+    //     const data  = await response.json();
+    //     console.log(data);
+
+    //     navigate('/');
+    //   }
+    //   } catch (error) {
+    //     console.log(error);
+    //   }
   };
 
   return (
@@ -75,16 +94,6 @@ function SignUp() {
             </Typography>
           </Box>
           <form className={classes.form} onSubmit={handleSubmit}>
-            <Box className={classes.input}>
-              {" "}
-              <TextField
-                label="ID"
-                variant="outlined"
-                value={id}
-                onChange={(event) => setId(event.target.value)}
-              />
-            </Box>
-
             <Box className={classes.input}>
               <TextField
                 label="Name"
@@ -108,7 +117,7 @@ function SignUp() {
                 type="date"
                 value={dateOfBirth}
                 InputProps={{ className: classes.inputBox }}
-                onChange={(event) => setDateOfBirth(event.target.value)}
+                onChange={handleChange}
               />
             </Box>
             <Box className={classes.input}>
