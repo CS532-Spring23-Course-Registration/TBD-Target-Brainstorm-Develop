@@ -20,6 +20,7 @@ import {
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Cookies from "js-cookie";
+import PdfTable from "./PDF";
 
 const useStyles = makeStyles((theme) => ({
   leftColumn: {
@@ -77,6 +78,14 @@ const AdminPanel = () => {
       allowedAccess: true,
     },
   ];
+  const formatData = (data) => {
+    return data.map((item) => {
+      return {
+        label: `${item.name} (${item.jobTitle})`,
+        value: `Employee Number: ${item.employeeNumber} , Allowed Access: ${item.allowedAccess}`,
+      };
+    });
+  };
 
   const sessionId = Cookies.get("session_id");
   console.log("Session: " + sessionId);
@@ -172,6 +181,7 @@ const AdminPanel = () => {
             ))}
           </Paper>
         </Grid>
+        <PdfTable data={testData} formatData={formatData} />
       </Grid>
     </Container>
   );
