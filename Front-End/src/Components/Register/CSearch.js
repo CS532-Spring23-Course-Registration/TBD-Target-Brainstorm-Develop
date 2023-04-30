@@ -106,7 +106,7 @@ function CSearch() {
         course: searchQuery,
         reportFilters: reportFilter,
         department: departmentQuery,
-        studentId: studentId,
+        studentId: parseInt(studentId),
         sessionId: sessionId,
       }),
     })

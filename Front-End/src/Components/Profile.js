@@ -54,7 +54,7 @@ function Profile() {
         },
         body: JSON.stringify({ 
           reportName: "studentInfo",
-          studentId: studentId,
+          studentId: parseInt(studentId),
           sessionId: sessionId
          }),
       });
@@ -76,7 +76,7 @@ function Profile() {
     };
 
     fetchStudentData();
-  });
+  }, []);
 
   const renderOptionContent = () => {
     switch (selectedOption) {

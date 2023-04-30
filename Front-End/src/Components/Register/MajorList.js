@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 import CRegHome from "./CRegHome";
+import Cookies from 'js-cookie'
 
 const useStyles = makeStyles({
   root: {
@@ -15,8 +16,8 @@ const useStyles = makeStyles({
   },
 });
 
-const studentId = "test1";
-const sessionId = "test2";
+const studentId = Cookies.get("user_id");
+const sessionId = Cookies.get("session_id");
 
 function MajorList() {
   const classes = useStyles();
@@ -30,7 +31,7 @@ function MajorList() {
       body: JSON.stringify({
         reportName: "courses",
         reportFilter: "currentlyEnrolled",
-        studentId: studentId,
+        studentId: parseInt(studentId),
         sessionId: sessionId
       }),
     })

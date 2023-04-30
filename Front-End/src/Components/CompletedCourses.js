@@ -10,9 +10,39 @@ import {
     DialogContent,
     DialogTitle
 } from "@mui/material";
+import Cookies from 'js-cookie';
 
 function CompletedCourses(props) {
-    const [data, setData] = useState([]);
+    const [studentOutlineData, setStudentOutlineData] = useState([]);
+
+    const sessionId = Cookies.get('session_id');
+    const userId = Cookies.get('user_id');
+
+    useEffect(() => {
+
+        fetch("http://127.0.0.1:5000/query", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              reportName: "studentMajorOutline",
+              studentId: parseInt(userId),
+              sessionId: sessionId
+            }),
+          })
+            .then((response) => response.json())
+            .then((data) => {
+              console.log(data);
+              setStudentOutlineData(data);
+            })
+            .catch((error) => console.log(error));
+    }, []);
+
+
+
+
+
   
     return (
       <Box sx={{ maxHeight: '400px', overflowY: 'scroll' }}>

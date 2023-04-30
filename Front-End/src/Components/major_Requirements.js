@@ -66,7 +66,7 @@ function MajorRequirements(props) {
         },
         body: JSON.stringify({
           reportName: reportName,
-          studentId: userId,
+          userId: parseInt(userId),
           sessionId: sessionId
         }),
       })
@@ -112,6 +112,7 @@ function MajorRequirements(props) {
   const renderOptionContent = () => {
     switch (selectedOption) {
       case "Courses by Major":
+        //This whole block of HTML should be moved into its own component
         return (
           <div>
             <Container maxWidth="lg">

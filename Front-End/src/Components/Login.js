@@ -63,7 +63,7 @@ function Login(props) {
         console.log(data);
 
         Cookies.set("session_id", data.sessionId, { expires: 12 / 24, path: "/" });
-        Cookies.set("user_id", data.userId, {expires: 12/24, path:"/"});
+        Cookies.set("user_id", parseInt(data.userId), {expires: 12/24, path:"/"});
         Cookies.set("user_name", data.userName, {expires: 12/24, path: "/"});
 
         props.setUser({
