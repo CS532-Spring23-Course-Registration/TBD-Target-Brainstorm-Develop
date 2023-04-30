@@ -12,14 +12,30 @@ import {
   Button,
 } from "@mui/material";
 import InfoCard from "./InfoCard";
-import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
+import { PDFDocument, StandardFonts, rgb } from "pdf-lib";
+import PdfTable from "./PDF";
 
-function Profile(props) {
+function Profile() {
   const [selectedOption, setSelectedOption] = useState(null);
   const Pinfo = ["ID:", "Name:", "Date of Birth:", "Address:"];
   const [pValues, setPvalues] = useState({});
   const [studentData, setStudentData] = useState({});
+  const testData = {
+    id: "123",
+    name: "jon",
+    dob: "07/14",
+    address: "1111",
+  };
+
+  const formatTestData = (data) => {
+    return [
+      { label: "ID:", value: data.id },
+      { label: "Name:", value: data.name },
+      { label: "Date Of Birth:", value: data.dob },
+      { label: "Address:", value: data.address },
+    ];
+  };
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -49,7 +65,7 @@ function Profile(props) {
     };
 
     fetchStudentData();
-  }, []);
+  });
 
   const renderOptionContent = () => {
     switch (selectedOption) {
@@ -64,10 +80,6 @@ function Profile(props) {
     }
   };
 
-  const handleClick = () => {
-    props.updatePrintState(false);
-  };
-
   const options = ["Personal Information", "Academics", "Student Records"];
 
   return (
@@ -79,7 +91,7 @@ function Profile(props) {
           </Typography>
         </Box>
         <Box display="flex">
-          <Card sx={{ width: 400 }}>
+          <Card sx={{ width: "20%", height: "80%" }}>
             <CardContent>
               <List>
                 {options.map((option, index) => (
@@ -93,20 +105,13 @@ function Profile(props) {
               </List>
             </CardContent>
           </Card>
-          <Box flexGrow={1} ml={2}>
-            {renderOptionContent()}
+          <Box flexGrow={1} display="flex" flexDirection="column">
+            <Box flexGrow={1} ml={2}>
+              {renderOptionContent()}
+            </Box>
+            <PdfTable data={testData} formatData={formatTestData} />
           </Box>
         </Box>
-
-        <Button
-          variant="contained"
-          color="error"
-          component={Link}
-          to="/print"
-          onClick={handleClick}
-        >
-          Print Results
-        </Button>
       </Container>
     </div>
   );
