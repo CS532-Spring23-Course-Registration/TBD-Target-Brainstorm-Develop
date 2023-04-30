@@ -2,19 +2,16 @@ import secrets
 from datetime import timedelta
 
 import requests
-from flask import jsonify, session
+from flask import jsonify, session, current_app
 from flask_cors import CORS
 from werkzeug.routing import BuildError
 
 from app import create_app
 from app.models.app import *
 
-(app, db) = create_app()
-CORS(app)
+(app, cache, db) = create_app()
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
 
-@app.before_request
-def before_request():
-    app.permanent_session_lifetime = timedelta(minutes=10)
 
 # Define a function to generate a new session key using the secrets module
 def generate_session_key():
@@ -22,11 +19,12 @@ def generate_session_key():
 
 
 # Define a memoized function that retrieves or generates a session key for a user and caches it using Flask-Caching
+@cache.memoize(timeout=600)
 def get_user_session_key(user_id):
     session_key = generate_session_key()
-    session.clear()
-    # Store the session key in the cache with the user_id as the value
-    session[session_key] = user_id
+    # Store the session key in the cache with the user_id as the key
+    cache.set(session_key, user_id, timeout=600)
+
     return session_key
 
 
@@ -38,12 +36,13 @@ def login():
     with app.app_context():
         user = db.session.query(Users).filter_by(name=username, password=password).first()
         session_key = get_user_session_key(user.id)
-        return jsonify({'sessionId': session_key, \
-                        'userId': user.id, \
-                        'userName': user.name, \
-                        'permission': user.permissions}), 200
+        response = jsonify({'sessionId': session_key,
+                            'userId': user.id,
+                            'userName': user.name,
+                            'permission': user.permissions})
+        return response, 200
 
-
+@cache.memoize(timeout=2400)
 @app.route('/query', methods=['POST'])
 def query():
     content_type = request.headers.get('Content-Type')
@@ -53,11 +52,15 @@ def query():
         # Check that we received a sessionId with request
         session_key = request_json['sessionId']
         if not session_key:
-            return jsonify({'message': 'Session has expired'}), 440
+            return jsonify({'message': 'No session key found'}), 400
 
         # Validate session key
-        if not session[session_key]:
-            return jsonify({'message': 'Invalid session key'}), 401
+        user_id = cache.get(session_key)
+        if not user_id:
+            return jsonify({"error": "Session id has expired"}), 440
+        else:
+            # Reset session key timeout
+            cache.set(session_key, user_id, timeout=600)
 
         # Reroute report to appropriate endpoint
         report_endpoint_url = request.host_url[:-1] + app.url_for("reports." + request_json['reportName'])

@@ -12,6 +12,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.4.0",
     "html2canvas": "^1.4.1",
     "install": "^0.13.0",
     "js-cookie": "^3.0.1",
