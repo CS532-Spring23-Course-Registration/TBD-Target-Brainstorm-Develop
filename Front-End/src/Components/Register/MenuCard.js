@@ -1,9 +1,6 @@
 import { React } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
-import SearchIcon from "@mui/icons-material/Search";
-import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
-import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import { Card, Box, CardContent, List, ListItem, Divider } from "@mui/material";
 
 const useStyles = makeStyles({
@@ -16,7 +13,7 @@ const useStyles = makeStyles({
     left: "0",
     padding: "10px",
     boxSizing: "border-box",
-    marginLeft: "30px"
+    marginLeft: "30px",
   },
   link: {
     display: "flex",
@@ -36,36 +33,32 @@ const useStyles = makeStyles({
   },
 });
 
-function CRegHome() {
+function MenuCard({ content }) {
   const classes = useStyles();
 
   return (
     <div className={classes.root}>
-    <Box>
-      <Card>
+      <Box>
+        <Card>
           <CardContent>
             <List>
-              <ListItem>
-                <Link to="/search" className={classes.link}>
-                  <SearchIcon className={classes.icon} />
-                  Search Courses
-                </Link>
-              </ListItem>
-              <Divider />
-              <ListItem>
-                {" "}
-                <Link to="/majorlist" className={classes.link}>
-                  <LibraryBooksIcon className={classes.icon} />
-                  Currently Enrolled Courses
-                </Link>
-              </ListItem>
+              {content.map((item, index) => (
+                <div key={index}>
+                  <ListItem>
+                    <Link to={item.to} className={classes.link}>
+                      {item.icon}
+                      {item.text}
+                    </Link>
+                  </ListItem>
+                  {index !== content.length - 1 && <Divider />}
+                </div>
+              ))}
             </List>
           </CardContent>
         </Card>
-    </Box>
-
+      </Box>
     </div>
   );
 }
 
-export default CRegHome;
+export default MenuCard;

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import CRegHome from "./CRegHome";
 import { makeStyles } from "@mui/styles";
 import {
   Box,
@@ -11,11 +10,14 @@ import {
   FormControl,
   Select,
   MenuItem,
-  InputLabel
+  InputLabel,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import DisplaySearchedCourses from "./DisplaySearchedCourses";
+import SearchIcon from "@mui/icons-material/Search";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import MenuCard from "./MenuCard";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -73,6 +75,20 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Contents for menu card
+const content = [
+  {
+    text: "Search Courses",
+    to: "/search",
+    icon: <SearchIcon />,
+  },
+  {
+    text: "Currently Enrolled Courses",
+    to: "/majorlist",
+    icon: <LibraryBooksIcon />,
+  },
+];
+
 function CSearch() {
   const classes = useStyles();
 
@@ -115,7 +131,7 @@ function CSearch() {
         department: departmentQuery,
         studentId: parseInt(studentId),
         sessionId: sessionId,
-        courseSemester: semesterQuery + " " + yearQuery
+        courseSemester: semesterQuery + " " + yearQuery,
       }),
     });
 
@@ -142,7 +158,7 @@ function CSearch() {
 
   return (
     <div className={classes.root}>
-      <CRegHome />
+      <MenuCard content={content} />
       <div className={classes.contents}>
         <form className={classes.form}>
           <TextField
@@ -169,7 +185,7 @@ function CSearch() {
           </Box>
           <Box display="flex" width="40%" flexDirection="row">
             <Box width="100%" display="flex" justifyContent="center">
-              <FormControl sx={{ width: "75%"}}>
+              <FormControl sx={{ width: "75%" }}>
                 <InputLabel>Semester</InputLabel>
                 <Select
                   label="Semester"
@@ -183,7 +199,7 @@ function CSearch() {
               </FormControl>
             </Box>
             <Box width="100%" display="flex" justifyContent="center">
-              <FormControl sx={{ width: "75%" }} >
+              <FormControl sx={{ width: "75%" }}>
                 <InputLabel>Year</InputLabel>
                 <Select
                   label="Year"

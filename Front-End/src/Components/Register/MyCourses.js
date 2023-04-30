@@ -1,6 +1,6 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
-import CRegHome from "./CRegHome";
+import CRegHome from "./MenuCard";
 
 const useStyles = makeStyles({
   root: {
