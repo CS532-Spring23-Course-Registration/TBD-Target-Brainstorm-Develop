@@ -96,8 +96,8 @@ function Profile() {
   return (
     <div>
       <Container maxWidth="lg">
-        <Box sx={{ mt: 4, mb: 4 }}>
-          <Typography variant="h4" align="left">
+        <Box sx={{ ml: 2, mt: 4, mb: 4 }}>
+          <Typography color="grey" variant="h5" align="left">
             Profile
           </Typography>
         </Box>

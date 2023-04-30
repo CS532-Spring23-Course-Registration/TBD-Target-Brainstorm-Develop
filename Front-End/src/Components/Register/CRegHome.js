@@ -4,7 +4,7 @@ import { makeStyles } from "@mui/styles";
 import SearchIcon from "@mui/icons-material/Search";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
-import { Card, CardContent, List, ListItem, Divider } from "@mui/material";
+import { Card, Box, CardContent, List, ListItem, Divider } from "@mui/material";
 
 const useStyles = makeStyles({
   root: {
@@ -16,6 +16,7 @@ const useStyles = makeStyles({
     left: "0",
     padding: "10px",
     boxSizing: "border-box",
+    marginLeft: "30px"
   },
   link: {
     display: "flex",
@@ -40,26 +41,29 @@ function CRegHome() {
 
   return (
     <div className={classes.root}>
+    <Box>
       <Card>
-        <CardContent>
-          <List>
-            <ListItem>
-              <Link to="/search" className={classes.link}>
-                <SearchIcon className={classes.icon} />
-                Search Courses
-              </Link>
-            </ListItem>
-            <Divider />
-            <ListItem>
-              {" "}
-              <Link to="/majorlist" className={classes.link}>
-                <LibraryBooksIcon className={classes.icon} />
-                Currently Enrolled Courses
-              </Link>
-            </ListItem>
-          </List>
-        </CardContent>
-      </Card>
+          <CardContent>
+            <List>
+              <ListItem>
+                <Link to="/search" className={classes.link}>
+                  <SearchIcon className={classes.icon} />
+                  Search Courses
+                </Link>
+              </ListItem>
+              <Divider />
+              <ListItem>
+                {" "}
+                <Link to="/majorlist" className={classes.link}>
+                  <LibraryBooksIcon className={classes.icon} />
+                  Currently Enrolled Courses
+                </Link>
+              </ListItem>
+            </List>
+          </CardContent>
+        </Card>
+    </Box>
+
     </div>
   );
 }

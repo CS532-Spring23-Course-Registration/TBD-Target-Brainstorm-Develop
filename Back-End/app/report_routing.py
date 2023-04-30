@@ -5,7 +5,7 @@ from flask import Blueprint, request
 from flask import jsonify
 from jsonschema import validate, ValidationError
 
-# from app.models.reports.advisorStudentOutlines import AdvisorStudentOutlines
+from app.models.reports.advisorStudentOutlines import AdvisorStudentOutlines
 from app.models.reports.courseGradesList import CourseGradesList
 from app.models.reports.courseInfo import CourseInfo
 from app.models.reports.courses import Courses
