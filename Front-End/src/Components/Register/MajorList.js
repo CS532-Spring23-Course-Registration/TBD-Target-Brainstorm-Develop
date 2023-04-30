@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
-import CRegHome from "./CRegHome";
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
+import SearchIcon from "@mui/icons-material/Search";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import MenuCard from "./MenuCard";
 
 const useStyles = makeStyles({
   root: {
@@ -15,6 +17,20 @@ const useStyles = makeStyles({
     padding: "10px",
   },
 });
+
+// contents for menu card
+const content = [
+  {
+    text: "Search Courses",
+    to: "/search",
+    icon: <SearchIcon />,
+  },
+  {
+    text: "Currently Enrolled Courses",
+    to: "/majorlist",
+    icon: <LibraryBooksIcon />,
+  },
+];
 
 const studentId = Cookies.get("user_id");
 const sessionId = Cookies.get("session_id");
@@ -32,7 +48,7 @@ function MajorList() {
         reportName: "personalCourseReport",
         courseSemester: "Winter 2023",
         studentId: parseInt(studentId),
-        sessionId: sessionId
+        sessionId: sessionId,
       }),
     })
       .then((response) => response.json())
@@ -47,13 +63,9 @@ function MajorList() {
   //and creates a new array that stores classes that the student is 'Enrolled' in
   //Then print out that array of classes in a card list
 
-
-
-
-
   return (
     <div className={classes.root}>
-      <CRegHome />
+      <MenuCard content={content} />
       <div className={classes.contents}>MajorList</div>
     </div>
   );
