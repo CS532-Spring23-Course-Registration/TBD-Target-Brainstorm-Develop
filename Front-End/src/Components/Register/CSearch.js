@@ -10,6 +10,7 @@ import {
   ListItemText,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import Cookies from 'js-cookie';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -78,8 +79,10 @@ function CSearch() {
 
   const [click, setClick] = useState(false);
   const [data, setData] = useState(null);
-  const sessionId = "test";
-  const studentId = "test2";
+
+  const sessionId = Cookies.get("session_id");
+  const studentId = Cookies.get("user_id");
+
   // const [searchResults, setSearchResults] = useState([]);
   const Courses = [
     { name: "Course A", description: "This is course A" },

@@ -21,6 +21,13 @@ function Profile() {
   const Pinfo = ["ID:", "Name:", "Date of Birth:", "Address:"];
   const [pValues, setPvalues] = useState({});
   const [studentData, setStudentData] = useState({});
+
+  const sessionId = Cookies.get("session_id");
+  const studentId = Cookies.get("user_id");
+
+
+
+
   const testData = {
     id: "123",
     name: "jon",
@@ -45,7 +52,11 @@ function Profile() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ sessionId: session_key }),
+        body: JSON.stringify({ 
+          reportName: "studentInfo",
+          studentId: studentId,
+          sessionId: sessionId
+         }),
       });
 
       if (response.status === 401) {
