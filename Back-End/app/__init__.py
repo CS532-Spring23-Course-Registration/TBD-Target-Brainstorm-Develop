@@ -4,6 +4,7 @@ from datetime import timedelta
 from os import path
 
 from flask import Flask
+from flask_caching import Cache
 from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 
@@ -19,11 +20,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///' + os.path.join(basedir, DB_NAME)
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     app.config['SECRET_KEY'] = secrets.token_hex(16)  # Secret key used to sign session cookies
-    app.config['SESSION_PERMANENT'] = True
-    app.config['SESSION_TYPE'] = 'filesystem'
-    app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(minutes=10)
-
-    Session(app)
+    cache = Cache(app, config={'CACHE_TYPE': 'flask_caching.backends.SimpleCache'})  # Initialize Flask-Caching
     db = SQLAlchemy(app)
 
     app.register_blueprint(db_secrets, url_prefix='/')
@@ -34,4 +31,4 @@ def create_app():
             db.create_all()
             print('Created Database!')
 
-    return app, db
+    return app, cache, db

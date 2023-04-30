@@ -18,8 +18,8 @@ class FacultyInfo:
                     "specificFaculty"
                 ]
             },
-            "departmentId": {"type": "integer"},
-            "facultyId": {"type": "string"}
+            "department": {"type": "string"},
+            "faculty": {"type": "string"}
         },
         "required": ["sessionId", "reportFilters"]
     }
