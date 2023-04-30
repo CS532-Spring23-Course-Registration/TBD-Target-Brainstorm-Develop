@@ -4,6 +4,11 @@
 
 # Ignore the virtual environment folder
 env/
+instance/
+migrations/
+
+# Ignore the session id folder
+flask_session/
 
 # Ignore .DS_Store
 .DS_Store

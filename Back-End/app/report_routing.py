@@ -1,7 +1,11 @@
+import sqlite3
+from sqlite3 import DatabaseError
+
 from flask import Blueprint, request
 from flask import jsonify
 from jsonschema import validate, ValidationError
 
+from app.models.reports.advisorStudentOutlines import AdvisorStudentOutlines
 from app.models.reports.courseGradesList import CourseGradesList
 from app.models.reports.courseInfo import CourseInfo
 from app.models.reports.courses import Courses
@@ -12,7 +16,6 @@ from app.models.reports.personalCourseReport import PersonalCourseReport
 from app.models.reports.studentInfo import StudentInfo
 from app.models.reports.studentMajorOutline import StudentMajorOutline
 from app.models.reports.users import Users
-from app.models.reports.advisorStudentOutlines import AdvisorStudentOutlines
 
 reports = Blueprint('reports', __name__)
 
@@ -23,7 +26,11 @@ def getData(requestJson, reportToExecute):
         if errorsInJson is None:
             return reportToExecute.execute_query(requestJson)
     except ValidationError as e:
-        return jsonify({'error': e.message}), 401
+        return jsonify({'error': e.message})
+    except KeyError as e:
+        return jsonify({'error': "KeyError occurred with field " + str(e)})
+    except Exception as e:
+        return jsonify({'error': str(e)})
 
 
 @reports.route('/query/courseGradesList', methods=['POST'])
