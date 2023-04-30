@@ -8,6 +8,7 @@ colorama==0.4.6
 Flask==2.2.3
 Flask-Caching==2.0.2
 Flask-Cors==3.0.10
+Flask-Session==0.4.0
 Flask-SQLAlchemy==3.0.3
 greenlet==2.0.2
 idna==3.4

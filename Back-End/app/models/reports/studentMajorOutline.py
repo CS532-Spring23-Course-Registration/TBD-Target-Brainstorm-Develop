@@ -9,10 +9,10 @@ class StudentMajorOutline:
         "type": "object",
         "properties": {
             "reportName": {"type": "string", "const": "studentMajorOutline"},
-            "studentId": {"type": "integer"},
+            "userId": {"type": "integer"},
             "sessionId": {"type": "string"}
         },
-        "required": ["sessionId", "studentId"]
+        "required": ["sessionId", "userId"]
     }
 
     def execute_query(self, requestJson):

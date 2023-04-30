@@ -4,9 +4,10 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import { handleSubmit, handleMenuChange } from './helpers';
 import Cookies from 'js-cookie';
-import { handleGradeChange, handleNoteChange, handleGeneralNoteChange, renderOptionContent } from './helpers';
+import { handleGradeChange, handleNoteChange, handleGeneralNoteChange, updateSelectedItem, makeApiCall, getModifiedOptions } from './helpers';
 import { Box, TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, FormControl, InputLabel, Select, MenuItem, TextField, Typography } from '@mui/material';
-
+const { document } = window;
+import { BrowserRouter } from "react-router-dom";
 
 describe("helpers", () => {
   describe("updateAuthentication", () => {
@@ -122,35 +123,82 @@ describe('handleGeneralNoteChange', () => {
   });
 });
 
-describe('renderOptionContent', () => {
-  it('should render a table of students with grades and notes', () => {
-    const students = [
-      { id: '001', name: 'Student 1' },
-      { id: '002', name: 'Student 2' },
+// Tests for updateSelectedItem function
+test('updateSelectedItem returns the correct item when selectedItem is different from item', () => {
+  const setReportType = jest.fn();
+  const setReportParameter = jest.fn();
+  const selectedItem = "Courses";
+  const item = "Faculty";
+  expect(updateSelectedItem(item, selectedItem, setReportType, setReportParameter)).toBe(item);
+  expect(setReportType).toHaveBeenCalledWith("courseInfo");
+  expect(setReportParameter).toHaveBeenCalledWith("course");
+});
+
+test('updateSelectedItem returns the same item when selectedItem is the same as item', () => {
+  const setReportType = jest.fn();
+  const setReportParameter = jest.fn();
+  const selectedItem = "Courses";
+  const item = "Courses";
+  expect(updateSelectedItem(item, selectedItem, setReportType, setReportParameter)).toBe(item);
+  expect(setReportType).toHaveBeenCalledWith("facultyInfo");
+  expect(setReportParameter).toHaveBeenCalledWith("faculty");
+});
+
+// Tests for makeApiCall function
+test('makeApiCall returns the expected data when the API call is successful', async () => {
+  const mockResponse = { data: { result: "success" } };
+  global.fetch = jest.fn().mockImplementation(() =>
+    Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve(mockResponse),
+    })
+  );
+  const data = await makeApiCall("courseInfo", "allCoursesAllDepartments", "course", "math", "science", "123");
+  expect(data).toEqual(mockResponse.data);
+});
+
+test('makeApiCall returns null when the API call fails', async () => {
+  global.fetch = jest.fn().mockImplementation(() => Promise.reject("API call failed"));
+  const data = await makeApiCall("courseInfo", "allCoursesAllDepartments", "course", "math", "science", "123");
+  expect(data).toBeNull();
+});
+
+describe('getModifiedOptions', () => {
+  test('returns expected options for non-faculty and non-admin user', () => {
+    const permission = "student";
+    const expectedOptions = [
+      { title: "Profile", path: "/profile" },
+      { title: "Course Register", path: "/search" },
+      { title: "Major Requirements", path: "/Major-Requirements" },
+      { title: "Faculty And Course Information", path: "/faculty-and-course-info" }
     ];
-    const grades = ['A', 'B'];
-    const setGrades = jest.fn();
-    const notes = ['', ''];
-    const setNotes = jest.fn();
-    const generalNote = 'General note';
-    const setGeneralNote = jest.fn();
-    const handleGradeChangeMock = jest.fn();
-    const handleNoteChangeMock = jest.fn();
-    const handleGeneralNoteChangeMock = jest.fn();
-    const renderedComponent = render(
-      <div>{renderOptionContent(students, grades, notes, generalNote, handleGradeChangeMock, handleNoteChangeMock, handleGeneralNoteChangeMock)}</div>
-    );
-    const student1GradeSelect = renderedComponent.container.querySelector('#grade-select-0');
-    fireEvent.click(student1GradeSelect);
-    const gradeCOption = renderedComponent.getByRole('option', {name: 'C'});
-    fireEvent.click(gradeCOption);
-    expect(handleGradeChangeMock).toHaveBeenCalledWith(expect.any(Object), 0, grades, setGrades);
-    const student1NoteInput = renderedComponent.container.querySelector('input[type="text"]');
-    fireEvent.change(student1NoteInput, { target: { value: 'Some note' } });
-    expect(handleNoteChangeMock).toHaveBeenCalledWith(expect.any(Object), 0, notes, setNotes);
-    const generalNoteInput = renderedComponent.container.querySelector('textarea');
-    fireEvent.change(generalNoteInput, { target: { value: 'Some general note' } });
-    expect(handleGeneralNoteChangeMock).toHaveBeenCalledWith(expect.any(Object), generalNote, setGeneralNote);
-    expect(renderedComponent.container).toMatchSnapshot();
+    const modifiedOptions = getModifiedOptions(permission);
+    expect(modifiedOptions).toEqual(expectedOptions);
+  });
+
+  test('returns expected options for faculty user', () => {
+    const permission = "faculty";
+    const expectedOptions = [
+      { title: "Profile", path: "/profile" },
+      { title: "Course Register", path: "/search" },
+      { title: "Major Requirements", path: "/Major-Requirements" },
+      { title: "Faculty And Course Information", path: "/faculty-and-course-info" },
+      { title: "Course Grades", path: "/grades" }
+    ];
+    const modifiedOptions = getModifiedOptions(permission);
+    expect(modifiedOptions).toEqual(expectedOptions);
+  });
+
+  test('returns expected options for admin user', () => {
+    const permission = "admin";
+    const expectedOptions = [
+      { title: "Profile", path: "/profile" },
+      { title: "Course Register", path: "/search" },
+      { title: "Major Requirements", path: "/Major-Requirements" },
+      { title: "Faculty And Course Information", path: "/faculty-and-course-info" },
+      { title: "Course Grades", path: "/grades" }
+    ];
+    const modifiedOptions = getModifiedOptions(permission);
+    expect(modifiedOptions).toEqual(expectedOptions);
   });
 });
