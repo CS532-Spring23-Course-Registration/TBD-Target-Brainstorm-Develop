@@ -11,7 +11,7 @@ function PdfTable({ data, formatData }) {
     const { width, height } = page.getSize();
 
     const formattedData = formatData(data);
-    const cellWidth = width / 2;
+    const cellWidth = width / 3;
     const cellHeight = 25;
     const textHeight = 14;
     let x = 50;
