@@ -39,9 +39,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     padding: "20px",
     width: "75%",
-    border: "1px solid",
     borderRadius: "5px",
-    boxShadow: `1px 1px 1px`,
+    boxShadow: `0px 0px 5px 2px rgba(0, 0, 0, 0.25)`,
   },
   input: {
     margin: "10px",
