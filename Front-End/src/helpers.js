@@ -144,5 +144,3 @@ export const getModifiedOptions = (permission) => {
 
   return options;
 }
-
-
