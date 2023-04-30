@@ -118,7 +118,7 @@ function MajorRequirements(props) {
               <Box>
                 <Card>
                   <CardContent sx={{ display: "flex", flexDirection: "row" }}>
-                    <Box border="1px solid red" sx={{ display: "flex", flexDirection: "column", alignItems: "center", mr: 2, width: isStudent ? "75%" : "100%" }}>
+                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mr: 2, width: isStudent ? "75%" : "100%" }}>
                       <TextField
                         variant="outlined"
                         margin="normal"
@@ -187,7 +187,7 @@ function MajorRequirements(props) {
       "Student Outlines"
     ];
   }
-  
+
   return (
     <div>
       <Container maxWidth="lg">
