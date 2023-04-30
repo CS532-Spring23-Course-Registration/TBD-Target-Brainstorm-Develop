@@ -75,6 +75,21 @@ def query():
         return jsonify({'message': 'Content-Type not supported!'}), 401
 
 
+@app.route('/signup', methods=['POST'])
+def signup():
+    name = request.json.get('name')
+    phone_number = 'placeholder'
+    address = request.json.get('address')
+    dob = request.json.get('dateOfBirth')
+    major = request.json.get('major')
+    minor = request.json.get('minor')
+    
+    with app.app_context():
+        s = Student.create(name, phone_number, address, dob, major, minor)
+        return jsonify({'id': s.id, \
+                        'student_name' : s.name}), 200
+
+
 # Define the PUT endpoint that requires a valid session key
 @app.route('/', methods=['PUT'])
 def put():

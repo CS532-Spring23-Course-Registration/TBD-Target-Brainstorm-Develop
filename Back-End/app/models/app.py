@@ -6,12 +6,7 @@ from datetime import datetime
 from sqlalchemy.orm import sessionmaker
 import random
 
-# Can be removed after testing #
-app = Flask(__name__)
-db_path = os.path.join(os.path.dirname(__file__), '..', 'database', 'registration.db')
-app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{db_path}'
-# Init database
-db = SQLAlchemy(app)
+db = SQLAlchemy()
 
 # Function to generate a random 4-digit ID number #
 def generate_id():
@@ -24,7 +19,6 @@ class Student(db.Model):
     name = db.Column(db.String(100), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False)
     address = db.Column(db.String(100), nullable=False)
-    # Possible convert to DateTime rather than string
     dob = db.Column(db.Date, nullable=False)
     major = db.Column(db.String(100), nullable=False)
     minor = db.Column(db.String(100), nullable=True)
@@ -44,11 +38,11 @@ class Student(db.Model):
     @classmethod
     def create(cls, name, phone_number, address, dob, major, minor=None):
         s = Student(name=name, phone_number=phone_number,
-                    address=address, dob=dob, major=major, minor=minor)
+                    address=address, dob=datetime.fromisoformat(dob), major=major, minor=minor)
         db.session.add(s)
         db.session.commit()
 
-        return print("Student %s created with ID %d" % (name, s.id))
+        return s
 
 
 class StudentGrades(db.Model):
@@ -509,7 +503,3 @@ class CourseByOutline(db.Model):
         db.session.commit()
         
         return print("Course ID %d added to outline ID %d" % (course_id, outline_id))
-
-# Create registration.db, can be removed after testing #
-with app.app_context():
-    db.create_all()
