@@ -12,8 +12,10 @@ from app.models.reports.personalCourseReport import PersonalCourseReport
 from app.models.reports.studentInfo import StudentInfo
 from app.models.reports.studentMajorOutline import StudentMajorOutline
 from app.models.reports.users import Users
+from app.models.reports.advisorStudentOutlines import AdvisorStudentOutlines
 
 reports = Blueprint('reports', __name__)
+
 
 def getData(requestJson, reportToExecute):
     try:
@@ -23,41 +25,54 @@ def getData(requestJson, reportToExecute):
     except ValidationError as e:
         return jsonify({'error': e.message}), 401
 
+
 @reports.route('/query/courseGradesList', methods=['POST'])
 def courseGradesList():
     return getData(request.get_json(), CourseGradesList())
+
 
 @reports.route('/query/courseInfo', methods=['POST'])
 def courseInfo():
     return getData(request.get_json(), CourseInfo())
 
+
 @reports.route('/query/courses', methods=['POST'])
 def courses():
     return getData(request.get_json(), Courses())
+
 
 @reports.route('/query/coursesByMajor', methods=['POST'])
 def coursesByMajor():
     return getData(request.get_json(), CoursesByMajor())
 
+
 @reports.route('/query/facultyInfo', methods=['POST'])
 def facultyInfo():
     return getData(request.get_json(), FacultyInfo())
+
 
 @reports.route('/query/gradeStatistics', methods=['POST'])
 def gradeStatistics():
     return getData(request.get_json(), GradeStatistics())
 
+
 @reports.route('/query/personalCourseReport', methods=['POST'])
 def personalCourseReport():
     return getData(request.get_json(), PersonalCourseReport())
+
 
 @reports.route('/query/studentInfo', methods=['POST'])
 def studentInfo():
     return getData(request.get_json(), StudentInfo())
 
+
 @reports.route('/query/studentMajorOutline', methods=['POST'])
 def studentMajorOutline():
     return getData(request.get_json(), StudentMajorOutline())
+
+@reports.route('/query/advisorStudentOutlines', methods=['POST'])
+def advisorStudentOutlines():
+    return getData(request.get_json(), AdvisorStudentOutlines())
 
 @reports.route('/query/users', methods=['POST'])
 def users():

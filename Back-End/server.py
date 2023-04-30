@@ -1,16 +1,20 @@
-import requests
 import secrets
+from datetime import timedelta
 
-from flask import jsonify
+import requests
+from flask import jsonify, session
 from flask_cors import CORS
 from werkzeug.routing import BuildError
 
 from app import create_app
 from app.models.app import *
 
-(app, cache, db) = create_app()
+(app, db) = create_app()
 CORS(app)
 
+@app.before_request
+def before_request():
+    app.permanent_session_lifetime = timedelta(minutes=10)
 
 # Define a function to generate a new session key using the secrets module
 def generate_session_key():
@@ -18,11 +22,11 @@ def generate_session_key():
 
 
 # Define a memoized function that retrieves or generates a session key for a user and caches it using Flask-Caching
-@cache.memoize(timeout=6000)
 def get_user_session_key(user_id):
     session_key = generate_session_key()
-    # Store the session key in the cache with the user_id as the key
-    cache.set(session_key, user_id)
+    session.clear()
+    # Store the session key in the cache with the user_id as the value
+    session[session_key] = user_id
     return session_key
 
 
@@ -39,6 +43,7 @@ def login():
                         'userName': user.name, \
                         'permission': user.permissions}), 200
 
+
 @app.route('/query', methods=['POST'])
 def query():
     content_type = request.headers.get('Content-Type')
@@ -48,11 +53,10 @@ def query():
         # Check that we received a sessionId with request
         session_key = request_json['sessionId']
         if not session_key:
-            return jsonify({'message': 'Session key is missing'}), 401
+            return jsonify({'message': 'Session has expired'}), 440
 
         # Validate session key
-        user_id = cache.get(session_key)
-        if not user_id:
+        if not session[session_key]:
             return jsonify({'message': 'Invalid session key'}), 401
 
         # Reroute report to appropriate endpoint
@@ -105,7 +109,7 @@ def catch_server_errors(e):
 
 def generate_test_session_key(user_id):
     session_key = generate_session_key()
-    cache.set(session_key, user_id)
+    session[session_key] = user_id
     return session_key
 
 
