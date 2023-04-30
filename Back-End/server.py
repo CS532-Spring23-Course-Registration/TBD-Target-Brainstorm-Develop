@@ -61,8 +61,13 @@ def query():
 
         # Reroute report to appropriate endpoint
         report_endpoint_url = request.host_url[:-1] + app.url_for("reports." + request_json['reportName'])
-        data_response = requests.post(report_endpoint_url, json=request_json)
-        return data_response.json(), 200
+        data_response = requests.post(report_endpoint_url, json=request_json).json()
+
+        # If error occur, return error details
+        if "error" in data_response:
+            return data_response, 401
+        else:
+            return data_response, 200
     else:
         return jsonify({'message': 'Content-Type not supported!'}), 401
 

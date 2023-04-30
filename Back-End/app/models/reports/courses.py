@@ -1,4 +1,4 @@
-from flask import current_app as app, jsonify
+from flask import current_app as app
 from sqlalchemy import text
 
 from app.models.app import *
@@ -17,12 +17,10 @@ class Courses:
                     "allClassesByDepartment",
                     "openClassesByDepartment",
                     "openClassesAllDepartments",
-                    "allClassesAllDepartments",
-                    "currentlyEnrolled"
+                    "allClassesAllDepartments"
                 ]
             },
             "department": {"type": "string"},
-            "studentId": {"type": "integer"},
             "courseSemester": {"type": "string"}
         },
         "required": ["sessionId", "reportFilters", "courseSemester"]
@@ -45,7 +43,7 @@ def get_departments(report_type, requestJson):
         department_list = []
         # Get the department list
         base_department_query = "select * from departments"
-        if "AllDepartments"in report_type or "currentlyEnrolled" in report_type:
+        if "AllDepartments" in report_type:
             department_list = db.session.execute(text(base_department_query + ";")).all()
         elif "ByDepartment" in report_type:
             department = requestJson["department"]
@@ -55,14 +53,12 @@ def get_departments(report_type, requestJson):
             else:
                 single_department_query += "'" + department + "'"
             department_list = db.session.execute(text(single_department_query + ";")).all()
-
         return department_list
 
 
 def get_courses(department_list, report_type, requestJson):
     with app.app_context():
         courses_by_department = []
-        student_id = requestJson["studentId"]
 
         # Get the course list for the departments requested
         department_id_list = [str(department[0]) for department in department_list]
@@ -71,13 +67,7 @@ def get_courses(department_list, report_type, requestJson):
                              " cps.max_seats, cps.seats_available, department_id from courses c" \
                              " inner join coursepersemester cps on c.id = cps.course_id" \
                              " inner join faculty f on cps.faculty_id = f.id" \
-
-        # If a studentId is specified, filter down to courses only that student's enrolled in
-        if student_id != 0:
-            base_courses_query += " inner join enrollment e on cps.id = e.course_sem_id" \
-
-        # Add department and semester filters
-        base_courses_query + " where department_id in" \
+                             " where department_id in" \
                              " (" + ",".join(department_id_list) + ")" \
                              " and cps.course_semester like" \
                              " '%" + requestJson["courseSemester"] + "%'"
@@ -87,9 +77,6 @@ def get_courses(department_list, report_type, requestJson):
         elif "openClasses" in report_type:
             open_classes_query = base_courses_query + " and seats_available != 0;"
             courses_by_department = db.session.execute(text(open_classes_query)).all()
-        elif "currentlyEnrolled" in report_type:
-            currently_enrolled_query = base_courses_query + " and e.student_id = " + str(student_id) + ";"
-            courses_by_department = db.session.execute(text(currently_enrolled_query)).all()
 
         return courses_by_department
 
