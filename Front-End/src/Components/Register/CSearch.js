@@ -4,15 +4,11 @@ import {
   Box,
   TextField,
   Button,
-  List,
-  ListItem,
-  ListItemText,
   FormControl,
   Select,
   MenuItem,
   InputLabel,
 } from "@mui/material";
-import { Link } from "react-router-dom";
 import Cookies from "js-cookie";
 import DisplaySearchedCourses from "./DisplaySearchedCourses";
 import SearchIcon from "@mui/icons-material/Search";
@@ -98,8 +94,6 @@ function CSearch() {
   const [reportFilter, setReportFilter] = useState();
   const [semesterQuery, setSemesterQuery] = useState("Fall");
   const [yearQuery, setYearQuery] = useState(2023);
-
-  const [click, setClick] = useState(false);
   const [returnedCourses, setReturnedCourses] = useState(null);
 
   const sessionId = Cookies.get("session_id");

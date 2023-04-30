@@ -13,12 +13,11 @@ import {
   Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 
 import CourseOutlineHistory from "./CourseOutlineHistory";
 import CompletedCourses from "./CompletedCourses";
 import StudentOutlines from "./StudentOutlines";
-
 
 function MajorRequirements(props) {
   const [selectedOption, setSelectedOption] = useState("Courses by Major");
@@ -37,75 +36,73 @@ function MajorRequirements(props) {
 
   const testData = [
     {
-      name: 'test1'
+      name: "test1",
     },
     {
-      name: 'test2'
+      name: "test2",
     },
     {
-      name: 'test3'
-    }
+      name: "test3",
+    },
   ];
 
   //Preloads the information of the user on this page.
   //If a student, gets information regarding their outline
-  //If a faculty, gets information of their students 
+  //If a faculty, gets information of their students
   useEffect(() => {
     var reportName = "";
     if (props.user.permission === "student") {
       reportName = "studentMajorOutline";
-
     } else {
       reportName = "advisorStudentOutlines";
     }
 
-      fetch("http://127.0.0.1:5000/query", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          reportName: reportName,
-          userId: parseInt(userId),
-          sessionId: sessionId
-        }),
+    fetch("http://127.0.0.1:5000/query", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        reportName: reportName,
+        userId: parseInt(userId),
+        sessionId: sessionId,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setUserData(data);
       })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          setUserData(data);
-        })
-        .catch((error) => console.log(error));
-    }, []);
+      .catch((error) => console.log(error));
+  }, []);
 
-    //Handle the submit of the course outline general search button
-    const handleSubmit = () => {
-      fetch("http://127.0.0.1:5000/query", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          reportName: "coursesByMajor",
-          major: majorQuery,
-          sessionId: sessionId
-        }),
+  //Handle the submit of the course outline general search button
+  const handleSubmit = () => {
+    fetch("http://127.0.0.1:5000/query", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        reportName: "coursesByMajor",
+        major: majorQuery,
+        sessionId: sessionId,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        setOutlineData(data);
       })
-        .then((response) => response.json())
-        .then((data) => {
-          console.log(data);
-          setOutlineData(data);
-        })
-        .catch((error) => console.log(error));
-    }
+      .catch((error) => console.log(error));
+  };
 
-    //If you are a student, your course outline will be fetched when you click on this page
-    //Instead of making another API call to get your information, this boolean should
-    //simply decide whether your courses get displayed or not
-    const handleDisplayStudentOutline = () => {
-      setDisplayStudentOutline(true);
-    }
-
+  //If you are a student, your course outline will be fetched when you click on this page
+  //Instead of making another API call to get your information, this boolean should
+  //simply decide whether your courses get displayed or not
+  const handleDisplayStudentOutline = () => {
+    setDisplayStudentOutline(true);
+  };
 
   //Different pages on right side for which button you select
   //Pages should probably be transfered into their own components
@@ -119,7 +116,15 @@ function MajorRequirements(props) {
               <Box>
                 <Card>
                   <CardContent sx={{ display: "flex", flexDirection: "row" }}>
-                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center", mr: 2, width: isStudent ? "75%" : "100%" }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        mr: 2,
+                        width: isStudent ? "75%" : "100%",
+                      }}
+                    >
                       <TextField
                         variant="outlined"
                         margin="normal"
@@ -127,35 +132,47 @@ function MajorRequirements(props) {
                         placeholder="Search Majors"
                         InputLabelProps={{ shrink: true }}
                         onChange={(e) => setMajorQuery(e.target.value)}
-                        sx={{width: "85%"}}
+                        sx={{ width: "85%" }}
                       />
                       <Button
                         variant="contained"
                         color="error"
                         size="small"
                         sx={{ mt: 2, width: "25%" }}
-                        onClick={() => {handleSubmit()}}
+                        onClick={() => {
+                          handleSubmit();
+                        }}
                       >
                         Search
                       </Button>
                     </Box>
                     {isStudent ? (
-                      <Box sx={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-                      <Button
-                        variant="contained"
-                        color="error"
-                        size="small"
-                        sx={{ width: "75%", height: "45%", mt: 2, mb: 1 }}
-                        onClick={() => {handleDisplayStudentOutline()}}
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                        }}
                       >
-                        Display Your Courses
-                      </Button>
-                      <Box sx={{
-                        typography: "subtitle2"
-                      }}>
-                        [User's Major]
+                        <Button
+                          variant="contained"
+                          color="error"
+                          size="small"
+                          sx={{ width: "75%", height: "45%", mt: 2, mb: 1 }}
+                          onClick={() => {
+                            handleDisplayStudentOutline();
+                          }}
+                        >
+                          Display Your Courses
+                        </Button>
+                        <Box
+                          sx={{
+                            typography: "subtitle2",
+                          }}
+                        >
+                          [User's Major]
+                        </Box>
                       </Box>
-                    </Box>
                     ) : null}
                   </CardContent>
                 </Card>
@@ -164,11 +181,11 @@ function MajorRequirements(props) {
           </div>
         );
       case "Completed Courses":
-        return <CompletedCourses data={testData}/>;
+        return <CompletedCourses data={testData} />;
       case "Course Outline History":
-        return <CourseOutlineHistory data={testData}/> ;
+        return <CourseOutlineHistory data={testData} />;
       case "Student Outlines":
-        return <StudentOutlines data={testData}/>;          
+        return <StudentOutlines data={testData} />;
       default:
         return null;
     }
@@ -180,25 +197,22 @@ function MajorRequirements(props) {
     options = [
       "Courses by Major",
       "Completed Courses",
-      "Course Outline History"
+      "Course Outline History",
     ];
   } else {
-    options = [
-      "Courses by Major",
-      "Student Outlines"
-    ];
+    options = ["Courses by Major", "Student Outlines"];
   }
 
   return (
     <div>
       <Container maxWidth="lg">
-        <Box sx={{ml: 1, mt: 3, mb: 3 }}>
+        <Box sx={{ ml: 1, mt: 3, mb: 3 }}>
           <Typography color="grey" variant="h5" align="left">
             Major Requirements
           </Typography>
         </Box>
         <Box display="flex">
-          <Card>
+          <Card sx={{ height: "150px" }}>
             <CardContent>
               <List>
                 {options.map((option, index) => (

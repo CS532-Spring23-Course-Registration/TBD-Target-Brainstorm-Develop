@@ -13,8 +13,43 @@ import {
 import InfoCard from "./InfoCard";
 import Cookies from "js-cookie";
 import PdfTable from "./PDF";
+import { makeStyles } from "@mui/styles";
+
+const useStyles = makeStyles((theme) => ({
+  title: {
+    margin: "20px 0",
+  },
+  root: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    boxSizing: "border-box",
+    width: "80%",
+    justifyContent: "space-between",
+  },
+  leftColumn: {
+    width: "min-content",
+    height: "fit-content",
+    marginRight: "50px",
+  },
+  rightColumn: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+  },
+  card: {
+    width: "90%",
+    marginBottom: "20px",
+  },
+  listItem: {
+    cursor: "pointer",
+  },
+}));
 
 function Profile() {
+  const classes = useStyles();
   const [selectedOption, setSelectedOption] = useState(null);
   // label for the card
   const Pinfo = [
@@ -110,37 +145,39 @@ function Profile() {
         return <InfoCard labels={Pinfo} values={pValues} />;
     }
   };
-
   return (
     <div>
-      <Container maxWidth="lg">
-        {/* Title */}
-        <Box sx={{ ml: 2, mt: 4, mb: 4 }}>
+      <Container>
+        <Box className={classes.title}>
           <Typography color="grey" variant="h5" align="left">
             Profile
           </Typography>
         </Box>
-        <Box display="flex">
-          {/* Left Column */}
-          <Card sx={{ width: "40%", height: "80%" }}>
-            <CardContent>
-              <List>
-                {options.map((option, index) => (
-                  <div key={index}>
-                    <ListItem onClick={() => setSelectedOption(option)}>
-                      <ListItemText primary={option} />
-                    </ListItem>
-                    {index !== options.length - 1 && <Divider />}
-                  </div>
-                ))}
-              </List>
-            </CardContent>
-          </Card>
-          {/* Right Column */}
-          <Box flexGrow={1} display="flex" flexDirection="column">
-            <Box flexGrow={1} ml={2}>
-              {renderOptionContent()}
-            </Box>
+        <Box className={classes.root}>
+          <Box>
+            <Card className={classes.leftColumn}>
+              <CardContent>
+                <List>
+                  {options.map((option, index) => (
+                    <div key={index}>
+                      <ListItem
+                        className={classes.listItem}
+                        onClick={() => setSelectedOption(option)}
+                      >
+                        <ListItemText primary={option} />
+                      </ListItem>
+                      {index !== options.length - 1 && <Divider />}
+                    </div>
+                  ))}
+                </List>
+              </CardContent>
+            </Card>
+          </Box>
+
+          <Box className={classes.rightColumn}>
+            <Card className={classes.card}>
+              <Box>{renderOptionContent()}</Box>
+            </Card>
             <PdfTable data={pdfData} formatData={formatTestData} />
           </Box>
         </Box>
