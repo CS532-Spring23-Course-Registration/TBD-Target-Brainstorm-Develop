@@ -20,9 +20,15 @@ import CGrades from "./Components/CGrades";
 import AdminPanel from "./Components/AdminPanel";
 
 function App() {
+  // const [user, setUser] = useState({
+  //   auth: false,
+  //   permission: "",
+  //   id: ""
+  // });
+
   const [user, setUser] = useState({
-    auth: false,
-    permission: "",
+    auth: true,
+    permission: "admin",
     id: ""
   });
 

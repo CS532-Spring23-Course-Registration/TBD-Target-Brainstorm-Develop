@@ -50,7 +50,9 @@ function StudentOutlines(props) {
             </DialogContent>
           </Dialog>
         )}
+        
       </Box>
+      
     );
   }
 

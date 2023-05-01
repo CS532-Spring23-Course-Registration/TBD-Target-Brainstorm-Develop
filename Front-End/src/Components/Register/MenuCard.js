@@ -1,6 +1,10 @@
 import { React } from "react";
 import { Link } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
+import SearchIcon from "@mui/icons-material/Search";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import HelpButton from "./HelpButton";
 import { Card, Box, CardContent, List, ListItem, Divider } from "@mui/material";
 
 const useStyles = makeStyles({

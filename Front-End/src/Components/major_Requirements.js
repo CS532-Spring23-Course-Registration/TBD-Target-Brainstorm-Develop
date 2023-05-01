@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import HelpButton from "./Register/HelpButton";
 import {
   Typography,
   Container,
@@ -231,6 +232,7 @@ function MajorRequirements(props) {
           </Box>
         </Box>
       </Container>
+      <HelpButton selectedOption={selectedOption} />
     </div>
   );
 }

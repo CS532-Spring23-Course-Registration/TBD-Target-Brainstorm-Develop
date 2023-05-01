@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import HelpButton from "./Register/HelpButton";
 import {
   Button,
   List,
@@ -64,6 +65,7 @@ const FacultyAndCourses = () => {
   const sessionId = Cookies.get("session_id");
 
   const [selectedItem, setSelectedItem] = useState("Courses");
+  const selectedOption = selectedItem; // added this for the HelpButton Component
 
   //States for the search boxes
   const [searchQuery, setSearchQuery] = useState("");
@@ -215,6 +217,7 @@ const FacultyAndCourses = () => {
           </Box>
         </div>
       </Box>
+      <HelpButton selectedOption={selectedOption} />
     </div>
   );
 };

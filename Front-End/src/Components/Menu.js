@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Toolbar, Button, Typography } from "@mui/material";
+import { AppBar, Toolbar, Button, Typography} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 import { Link } from "react-router-dom";
@@ -22,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 function Menu(props) {
   const classes = useStyles();
   var permissionCheck = false;
+
 
   const handleLogout = (event) => {
     const cookies = Object.keys(Cookies.get());
