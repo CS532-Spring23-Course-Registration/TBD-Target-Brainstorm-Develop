@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    marginBottom: "75px"
   },
   title: {
     flexGrow: 1,
@@ -46,7 +47,7 @@ function Menu(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="error">
+      <AppBar color="error">
         <Toolbar className={classes.toolbar}>
           <Typography variant="h6">Course Registration</Typography>
           <Button variant="contained" color="error" component={Link} to="/">

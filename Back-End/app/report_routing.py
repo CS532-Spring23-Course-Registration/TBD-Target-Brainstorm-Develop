@@ -1,6 +1,3 @@
-import sqlite3
-from sqlite3 import DatabaseError
-
 from flask import Blueprint, request
 from flask import jsonify
 from jsonschema import validate, ValidationError
@@ -15,7 +12,7 @@ from app.models.reports.gradeStatistics import GradeStatistics
 from app.models.reports.personalCourseReport import PersonalCourseReport
 from app.models.reports.studentInfo import StudentInfo
 from app.models.reports.studentMajorOutline import StudentMajorOutline
-from app.models.reports.users import Users
+from app.models.reports.user import User
 
 reports = Blueprint('reports', __name__)
 
@@ -83,4 +80,4 @@ def advisorStudentOutlines():
 
 @reports.route('/query/users', methods=['POST'])
 def users():
-    return getData(request.get_json(), Users())
+    return getData(request.get_json(), User())

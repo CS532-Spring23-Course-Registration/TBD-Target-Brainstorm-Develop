@@ -10,6 +10,7 @@ import {
   Box,
   Card,
   Divider,
+  CardContent,
 } from "@mui/material";
 import Cookies from "js-cookie";
 import { makeStyles } from "@mui/styles";
@@ -19,16 +20,13 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "row",
     alignItems: "flex-start",
-    position: "fixed",
     padding: "10px",
     boxSizing: "border-box",
     width: "80%",
-    left: "0",
   },
   contents: {
     display: "flex",
     padding: "10px",
-    marginLeft: "200px",
     width: "100%",
     alignItems: "center",
     justifyContent: "center",
@@ -66,7 +64,6 @@ const useStyles = makeStyles((theme) => ({
 const FacultyAndCourses = () => {
   const sessionId = Cookies.get("session_id");
 
-  
   const [selectedItem, setSelectedItem] = useState("Courses");
   const selectedOption = selectedItem; // added this for the HelpButton Component
 
@@ -163,26 +160,25 @@ const FacultyAndCourses = () => {
 
   return (
     <div>
-        <Box sx={{ml: 3, mt: 3, mb: 1 }}>
-          <Typography color="grey" variant="h5" align="left">
-            Faculty & Course Info
-          </Typography>
-        </Box>
-      <Box ml={4} className={classes.root}>
-        <Card className={classes.optionsContainer}>
-          <Typography variant="h6" component="div">
-            Select an Option
-          </Typography>
-          <List>
-            {options.map((option, index) => (
-              <div key={index}>
-                <ListItem onClick={() => handleListItemClick(option)}>
-                  <ListItemText primary={option} />
-                </ListItem>
-                <Divider />
-              </div>
-            ))}
-          </List>
+      <Box sx={{ ml: 3, mt: 3, mb: 1 }}>
+        <Typography color="grey" variant="h5" align="left">
+          Faculty & Course Info
+        </Typography>
+      </Box>
+      <Box className={classes.root}>
+        <Card sx={{ width: "200px", height: "200px", marginRight: "100px" }}>
+          <CardContent>
+            <List>
+              {options.map((option, index) => (
+                <div key={index}>
+                  <ListItem onClick={() => handleListItemClick(option)}>
+                    <ListItemText primary={option} />
+                  </ListItem>
+                  {index !== options.length - 1 && <Divider />}
+                </div>
+              ))}
+            </List>
+          </CardContent>
         </Card>
         <div className={classes.contents}>
           <Box className={classes.searchContainer}>

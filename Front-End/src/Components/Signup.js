@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import {
   Typography,
@@ -8,7 +9,6 @@ import {
   Button,
   Card,
 } from "@mui/material";
-import axios from "axios";
 
 const useStyles = makeStyles((theme) => ({
   box_container: {
@@ -32,37 +32,94 @@ const useStyles = makeStyles((theme) => ({
   submitButton: { marginTop: "20px" },
 }));
 
-function SignUp() {
-  const classes = useStyles();
-  const [id, setId] = useState("");
-  const [name, setName] = useState("");
-  const [address, setAddress] = useState("");
-  const [dateOfBirth, setDateOfBirth] = useState("");
-  const [major, setMajor] = useState("");
-  const [minor, setMinor] = useState("");
 
-  const handleSubmit = (event) => {
+function SignUp() {
+  const navigate = useNavigate();
+  const classes = useStyles();
+  const [fields, setFields] = useState({
+    name: "",
+    phoneNumber: "",
+    address: "",
+    dateOfBirth: "",
+    major: "",
+    minor: "",
+  });
+
+  const [errors, setErrors] = useState({
+    name: false,
+    phoneNumber: false,
+    address: false,
+    dateOfBirth: false,
+    major: false,
+    minor: false,
+  });
+
+  /* Limit input length of date */
+  const handleDate = (event) => {
+    const { name, value } = event.target;
+    if (value.length <= 10) {
+      setFields( {...fields, dateOfBirth: value });
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [name]: value === "",
+      }));
+    }
+  };
+
+  /* Only accept numeric values in Phone Number field */
+  const handleNumber = (event) => {
+    const { name, value } = event.target;
+    setFields( {...fields, phoneNumber: value.replace(/\D/g, "") });
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: value.length !== 11,
+    }));
+  }
+
+  /* Triggers error if a specified required field has no values */
+  const handleRequiredFields = (event) => {
+    const { name, value } = event.target;
+    setFields((prevFields) => ({
+      ...prevFields,
+      [name]: value,
+    }));
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [name]: value === "",
+    }));
+  };
+
+  const handleSubmit = async (event) => {
     event.preventDefault();
 
     const formData = {
       reportName: "student_info",
-      id: id,
-      name: name,
-      address: address,
-      dateOfBirth: dateOfBirth,
-      major: major,
-      minor: minor,
+      name: fields.name,
+      phoneNumber: fields.phoneNumber,
+      address: fields.address,
+      dateOfBirth: fields.dateOfBirth,
+      major: fields.major,
+      minor: fields.minor,
     };
 
-    axios
-      .post("/api/signup", formData)
-      .then((response) => {
-        console.log(response);
-        window.location.href = "/";
-      })
-      .catch((error) => {
-        console.log(error);
+    try {
+      const response = await fetch("http://127.0.0.1:5000/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
       });
+
+      if (response.status === 200) {
+        const data  = await response.json();
+        console.log(data);
+
+        navigate('/');
+      }
+      } catch (error) {
+        console.log(error);
+      }
   };
 
   return (
@@ -76,55 +133,78 @@ function SignUp() {
           </Box>
           <form className={classes.form} onSubmit={handleSubmit}>
             <Box className={classes.input}>
-              {" "}
-              <TextField
-                label="ID"
-                variant="outlined"
-                value={id}
-                onChange={(event) => setId(event.target.value)}
-              />
-            </Box>
-
-            <Box className={classes.input}>
               <TextField
                 label="Name"
+                name="name"
                 variant="outlined"
-                value={name}
-                onChange={(event) => setName(event.target.value)}
+                value={fields.name}
+                onChange={handleRequiredFields}
+                required
+                error={errors.name}
+                helperText={errors.name ? "Name field is required" : ""}
+              />
+            </Box>
+            <Box className={classes.input}>
+              <TextField
+                label="Phone number"
+                name="phoneNumber"
+                variant="outlined"
+                value={fields.phoneNumber}
+                inputProps={{ 
+                  maxLength: 11,
+                  inputMode: "numeric",
+                  pattern: "[0-9]*",
+                }}
+                onChange={handleNumber}
+                required
+                error={errors.phoneNumber}
+                helperText={errors.phoneNumber ? "11 digit phone number is required" : ""}
               />
             </Box>
             <Box className={classes.input}>
               <TextField
                 label="Address"
+                name="address"
                 variant="outlined"
-                value={address}
-                onChange={(event) => setAddress(event.target.value)}
+                value={fields.address}
+                onChange={handleRequiredFields}
+                required
+                error={errors.address}
+                helperText={errors.address ? "Address field is required" : ""}
               />
             </Box>
             <Box className={classes.input}>
               <TextField
                 label="Date of Birth"
+                name="dateOfBirth"
                 variant="outlined"
                 type="date"
-                value={dateOfBirth}
+                value={fields.dateOfBirth}
                 InputProps={{ className: classes.inputBox }}
-                onChange={(event) => setDateOfBirth(event.target.value)}
+                onChange={handleDate}
+                required
+                error={errors.dateOfBirth}
+                helperText={errors.dateOfBirth ? "Field is required" : ""}
               />
             </Box>
             <Box className={classes.input}>
               <TextField
                 label="Major"
+                name="major"
                 variant="outlined"
-                value={major}
-                onChange={(event) => setMajor(event.target.value)}
+                value={fields.major}
+                onChange={handleRequiredFields}
+                required
+                error={errors.major}
+                helperText={errors.major ? "Field is required" : ""}
               />
             </Box>
             <Box className={classes.input}>
               <TextField
                 label="Minor"
+                name="minor"
                 variant="outlined"
-                value={minor}
-                onChange={(event) => setMinor(event.target.value)}
+                onChange={handleRequiredFields}  
               />
             </Box>
             <Box className={classes.submitButton}>
