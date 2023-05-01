@@ -51,7 +51,6 @@ class CourseInfo:
         "required": ["sessionId", "reportFilters"],
         "dependentSchemas": {
             "specificCourse": {"required": ["course"]},
-            "allCoursesAllDepartments": {"required": ["department"]},
             "allCoursesByDepartment": {"required": ["department"]}
         }
     }
