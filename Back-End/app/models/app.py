@@ -1,13 +1,12 @@
 import os
-
-from flask import Flask, render_template, request
-from flask_sqlalchemy import SQLAlchemy
-from datetime import datetime
-from sqlalchemy.orm import sessionmaker
 import random
 from flask_migrate import Migrate
+from datetime import datetime
+from flask import Flask, jsonify
+from flask_sqlalchemy import SQLAlchemy
 
 db = SQLAlchemy()
+
 
 # Function to generate a random 4-digit ID number #
 def generate_id():
@@ -25,13 +24,13 @@ class Student(db.Model):
     minor = db.Column(db.String(100), nullable=True)
 
     outline = db.relationship('ProgramOutline', backref='student')
-    
+
     grades = db.relationship('StudentGrades', backref='student')
     misc_notes = db.relationship('StudentMiscNotes', backref='student')
 
     # Many-to-Many
-    enrolled_courses = db.relationship('CoursePerSemester', secondary='enrollment', back_populates='students', overlaps='enrolled_courses,student')
-
+    enrolled_courses = db.relationship('CoursePerSemester', secondary='enrollment', back_populates='students',
+                                       overlaps='enrolled_courses,student')
 
     # Function to create a student in table
     # Ex. Student.create('Robert', '85851112222', '555 Main St', date(1998,6,27), 'Computer Science')
@@ -50,34 +49,42 @@ class StudentGrades(db.Model):
     __tablename__ = 'studentgrades'
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
-    course_sem_id = db.Column(db.Integer, db.ForeignKey('coursepersemester.id'), nullable=False) # Coursepersemester foreign key
+    course_sem_id = db.Column(db.Integer, db.ForeignKey('coursepersemester.id'),
+                              nullable=False)  # Coursepersemester foreign key
     grade = db.Column(db.String(2), nullable=False)
     earned_credits = db.Column(db.Integer, nullable=False)
     course_notes = db.Column(db.String, nullable=True)
-    
-    
+
     @classmethod
     def add_grade_for_student(cls, student_id, course_sem_id, grade, earned_credits, course_notes=None):
         q_student = Student.query.filter_by(id=student_id).first()
         q_course = CoursePerSemester.query.filter_by(id=course_sem_id).first()
-        
-        if (q_student == None):
-            return print('Student not found with ID %d.' % student_id)
 
-        if (q_course == None):
-            return print('CoursePerSemester ID %d not found.' % course_sem_id)
+        if q_student is None:
+            return jsonify({"error": "Student not found with ID {:n}.".format(student_id)})
+
+        if q_course is None:
+            return jsonify({"error": "CoursePerSemester ID {:n} not found.".format(course_sem_id)})
 
         # Detect duplicate grade entry for specified course #
         q_grades = StudentGrades.query.filter_by(student_id=student_id, course_sem_id=course_sem_id).first()
-        if (q_grades != None):
-            return print("Duplicate found: Student ID %d already has an entry for CoursePerSemester ID %d." % (student_id, q_grades.course_sem_id))
+        if q_grades is not None:
+            return jsonify({"error": "Duplicate found: Student ID {:n} already has an "
+                                     "entry for CoursePerSemester ID {:n}.".format(student_id,
+                                                                                   q_grades.course_sem_id)
+                            })
 
-
-        g = StudentGrades(student_id=student_id, course_sem_id=course_sem_id, grade=grade, earned_credits=earned_credits, course_notes=course_notes)
+        g = StudentGrades(student_id=student_id, course_sem_id=course_sem_id, grade=grade,
+                          earned_credits=earned_credits, course_notes=course_notes)
         db.session.add(g)
         db.session.commit()
 
-        return print("Grade %s added to student %s ID %d for course %s ID %d in semester %s." % (grade, q_student.name, q_student.id, q_course.name, q_course.id, q_course.course_semester))
+        return jsonify({"message": "Grade {} added to student {} ID {:n} "
+                                   "for course {} ID {:n} in "
+                                   "semester {}.".format(grade, q_student.name,
+                                                         q_student.id, q_course.name,
+                                                         q_course.id, q_course.course_semester)
+                        })
 
 
 class StudentMiscNotes(db.Model):
@@ -92,15 +99,15 @@ class StudentMiscNotes(db.Model):
     def create_note(cls, student_id, editor_id, description):
         q = Student.query.filter_by(id=student_id).first()
 
-        if (q != None):
+        if q is not None:
             mn = StudentMiscNotes(student_id=student_id,
                                   editor_id=editor_id, description=description)
             db.session.add(mn)
             db.session.commit()
 
-            return print("Note created for student %s." % q.name)
+            return jsonify({"message": "Note created for student {:s}.".format(q.name)})
         else:
-            return print('Student not found with ID %d.' % student_id)
+            return jsonify({"error": "Student not found with ID {:n}.".format(student_id)})
 
 
 class Faculty(db.Model):
@@ -115,12 +122,11 @@ class Faculty(db.Model):
 
     teaching_departments = db.relationship('FacultyTeachingDepartments', backref='faculty')  # One to Many
     note_edits = db.relationship('StudentMiscNotes', backref='editor')
-    
+
     # One to many for coursepersemester, receive the faculty's current courses taught
     courses = db.relationship('CoursePerSemester', backref='faculty')
     programs_advising = db.relationship('ProgramAdvisors', backref='faculty')
     outlines_approved = db.relationship('ProgramOutline', backref='approver')
-    
 
     # Function to create a faculty member in table. Prints error if the assigned_department ID is not within Departments database
     # Ex. Faculty.create('name','title','phone','H-246','5')
@@ -129,16 +135,16 @@ class Faculty(db.Model):
         # Query if department is valid
         q = Departments.query.filter_by(id=assigned_department).first()
 
-        if (q != None):
+        if q is not None:
             f = Faculty(name=name, position_title=position_title, phone_number=phone_number,
                         office_number=office_number, office_hours=office_hours, assigned_department=assigned_department)
 
             db.session.add(f)
             db.session.commit()
 
-            return print("Faculty member %s created with ID %d" % (name, f.id))
+            return jsonify({"message": "Faculty member {:s} created with ID {:n}".format(name, f.id)})
         else:
-            return print("Department ID %s not found." % assigned_department)
+            return jsonify({"error": "Department ID {:s} not found.".format(assigned_department)})
 
 
 class FacultyTeachingDepartments(db.Model):
@@ -156,23 +162,24 @@ class FacultyTeachingDepartments(db.Model):
         d = Departments.query.filter_by(id=department_id).first()
 
         # If department query returns no values
-        if (d == None):
-            return print("Invalid department ID.")
+        if d is None:
+            return jsonify({"error": "Invalid department ID."})
 
         # If faculty query returns values
-        if (f != None):
+        if f is not None:
             for t in f.teaching_departments:
-                if (t.id == d.id):
-                    # Print error if department_id is already within faculty's teaching departments
-                    return print("Department %s is already added to faculty member %s." % (d.name, f.name))
+                if t.id == d.id:
+                    # Return error if department_id is already within faculty's teaching departments
+                    return jsonify({"error": "Department {:s} is already "
+                                             "added to faculty member {:s}.".format(d.name, f.name)
+                                    })
 
-            ft = FacultyTeachingDepartments(
-                faculty_id=f.id, department_id=d.id)
+            ft = FacultyTeachingDepartments(faculty_id=f.id, department_id=d.id)
             db.session.add(ft)
             db.session.commit()
-            return print("Successfully added %s to Faculty member %s." % (d.name, f.name))
+            return jsonify({"message": "Successfully added {:s} to Faculty member {:s}.".format(d.name, f.name)})
         else:
-            return print("Invalid faculty ID.")
+            return jsonify({"error": "Invalid faculty ID."})
 
 
 class Users(db.Model):
@@ -187,14 +194,13 @@ class Users(db.Model):
     # Ex. Users.create('name', 'passwordhash','jobtitle','admin')
     @classmethod
     def create(cls, name, password, job_title, permissions):
-
         # TODO - Add catch for duplicate name?
 
         u = Users(name=name, password=password, job_title=job_title, permissions=permissions)
         db.session.add(u)
         db.session.commit()
 
-        return print("User %s created with ID %d" % (name, u.id))
+        return jsonify({"message": "User {:s} created with ID {:n}".format(name, u.id)})
 
     # def get_user_by_username(name):
     #     Session = sessionmaker(bind=db.engine)
@@ -202,6 +208,7 @@ class Users(db.Model):
     #     user = session.query(Users).filter_by(name=name).first()
     #     session.close()
     #     return
+
 
 class Departments(db.Model):
     __tablename__ = 'departments'
@@ -218,15 +225,15 @@ class Departments(db.Model):
     def add(cls, name):
         q = Departments.query.filter_by(name=name).first()
 
-        if (q != None):
-            if (q.name == name):
-                return print("Duplicate department found with ID %d." % q.id)
+        if q is not None:
+            if q.name == name:
+                return jsonify({"error": "Duplicate department found with ID {:n}.".format(q.id)})
 
         d = Departments(name=name)
         db.session.add(d)
         db.session.commit()
 
-        return print("Department %s created with ID %d" % (name, d.id))
+        return jsonify({"message": "Department {:s} created with ID {:n}.".format(name, d.id)})
 
 
 class Courses(db.Model):
@@ -240,8 +247,6 @@ class Courses(db.Model):
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)
 
     programs_included = db.relationship('ProgramCourses', backref='course')
-    
-
 
     # Function to add a course to the Courses table. If external course is True, description can contain information about accredited university.
     # Ex. Courses.add('MATH151', 'Calculus 2', 3.0, '3')
@@ -250,15 +255,15 @@ class Courses(db.Model):
         # Query if department ID is valid
         q = Departments.query.filter_by(id=department_id).first()
 
-        if (q == None):
-            return print("Department not found with given ID.")
+        if q is None:
+            return jsonify({"error": "Department not found with given ID."})
 
         c = Courses(title=title, name=name, description=description, is_external_course=is_external_course,
                     num_units=num_units, department_id=department_id)
         db.session.add(c)
         db.session.commit()
 
-        return print("Course %s added with id %d" % (name, c.id))
+        return jsonify({"message": "Course {:s} added with id {:n}.".format(name, c.id)})
 
 
 class CoursePerSemester(db.Model):
@@ -268,17 +273,17 @@ class CoursePerSemester(db.Model):
     title = db.Column(db.String, nullable=False)
     name = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=True)
-    
+
     course_semester = db.Column(db.String(20), nullable=False)
     faculty_id = db.Column(db.Integer, db.ForeignKey('faculty.id'), nullable=False)  # Faculty foreign key
     course_date_time = db.Column(db.String, nullable=False)  # Format Ex. MW 1200-1315
-    course_location = db.Column(db.String(20), nullable=False) # 'Online' or Campus room number
+    course_location = db.Column(db.String(20), nullable=False)  # 'Online' or Campus room number
     max_seats = db.Column(db.Integer, nullable=False)  # 4 digit number
     seats_available = db.Column(db.Integer, nullable=False)  # 4 digit number
 
     students = db.relationship('Student', secondary='enrollment', back_populates='enrolled_courses', viewonly=True)
     grades = db.relationship('StudentGrades', backref='course_sem')
-    
+
     # many to one to Courses
     course = db.relationship('Courses', backref='coursepersemester', viewonly=True)
 
@@ -287,34 +292,36 @@ class CoursePerSemester(db.Model):
     # Ex. CoursePerSemester.add_course_to_semester(1,2023,'Fall',3,1,'W 1200-1315', 'Online', 20, 11)
 
     @classmethod
-    def add_course_to_semester(cls, course_id, course_semester, faculty_id, course_date_time, course_location, max_seats, seats_available):
+    def add_course_to_semester(cls, course_id, course_semester, faculty_id, course_date_time, course_location,
+                               max_seats, seats_available):
         q_course = Courses.query.filter_by(id=course_id).first()
         q_faculty = Faculty.query.filter_by(id=faculty_id).first()
 
-        if (q_course == None):
-            return print("Course ID %d not found." % course_id)
-        if (q_faculty == None):
-            return print("Faculty ID %d not found." % faculty_id)
+        if q_course is None:
+            return jsonify({"error": "Course ID {:n} not found.".format(course_id)})
+        if q_faculty is None:
+            return jsonify({"error": "Faculty ID {:n} not found.".format(faculty_id)})
 
         # Detect duplicates within given semester
-        q_c = CoursePerSemester.query.filter_by(
-            course_id=course_id, course_semester=course_semester).first()
+        q_c = CoursePerSemester.query.filter_by(course_id=course_id, course_semester=course_semester).first()
 
-        if (q_c != None):
-            return print("Duplicate course found within given semester: %s." % (course_semester))
+        if q_c is not None:
+            return jsonify({"error": "Duplicate course found within given semester: {:s}.".format(course_semester)})
 
         # max_seats and seats_available validation
-        if (max_seats < seats_available):
-            return print("max_seats inputted is less than seats_available.")
+        if max_seats < seats_available:
+            return jsonify({"error": "max_seats inputted is less than seats_available."})
 
-        c = CoursePerSemester(course_id=course_id, title=q_course.title, name=q_course.name, description=q_course.description,
-                                course_semester=course_semester, faculty_id=faculty_id, 
-                                course_date_time=course_date_time, course_location=course_location, max_seats=max_seats, seats_available=seats_available)
+        c = CoursePerSemester(course_id=course_id, title=q_course.title, name=q_course.name,
+                              description=q_course.description,
+                              course_semester=course_semester, faculty_id=faculty_id,
+                              course_date_time=course_date_time, course_location=course_location, max_seats=max_seats,
+                              seats_available=seats_available)
 
         db.session.add(c)
         db.session.commit()
 
-        return print("Added course %s to %s semester." % (q_course.name, course_semester))
+        return jsonify({"message": "Added course {:s} to {:s} semester.".format(q_course.name, course_semester)})
 
 
 class Enrollment(db.Model):
@@ -333,15 +340,62 @@ class Enrollment(db.Model):
     @classmethod
     def add_student_to_course(cls, student_id, course_sem_id):
         q = Enrollment.query.filter_by(student_id=student_id, course_sem_id=course_sem_id).first()
+        q2 = StudentGrades.query.filter_by(student_id=student_id, course_sem_id=course_sem_id).first()
+        course = CoursePerSemester.query.filter_by(id=course_sem_id).first()
 
-        if (q != None):
-            return print("Student ID %d is already enrolled for CoursePerSemester ID %d" % (student_id, course_sem_id))
+        if q is not None and q2 is not None:
+            return jsonify({"error": "Student ID {:n} is already enrolled"
+                                     " for CoursePerSemester ID {:n}"
+                           .format(student_id, course_sem_id)
+                            })
+        elif course.seats_available == 0:
+            return jsonify({"error": "Class {:n} is already full".format(course_sem_id)})
 
+        # Create new Enrollment table entry
         enroll = Enrollment(student_id=student_id, course_sem_id=course_sem_id)
+
+        # Decrease amount of seats available in class
+        course.seats_available -= 1
+
+        # Add StudentGrades entry
+        commit_response = StudentGrades.add_grade_for_student(student_id, course_sem_id, "IP", 0).get_json()
+
+        if 'error' in commit_response:
+            db.session.rollback()
+            return commit_response
+
         db.session.add(enroll)
         db.session.commit()
 
-        return print("Student ID %d has successfully enrolled for CoursePerSemester ID %d." % (student_id, course_sem_id))
+        return jsonify({"message": "Student ID {:n} has successfully enrolled for "
+                                   "CoursePerSemester ID {:n}.".format(student_id, course_sem_id)
+                        })
+
+    @classmethod
+    def drop_student_from_course(cls, student_id, course_sem_id):
+        q = Enrollment.query.filter_by(student_id=student_id, course_sem_id=course_sem_id).first()
+        q2 = StudentGrades.query.filter_by(student_id=student_id, course_sem_id=course_sem_id).first()
+        course = CoursePerSemester.query.filter_by(id=course_sem_id).first()
+
+        if q is None and q2 is None:
+            return jsonify({"error": "Can't drop Student ID {:n} "
+                                     "from CoursePerSemester ID {:n} as "
+                                     "they are not currently enrolled in that course."
+                           .format(student_id, course_sem_id)
+                            })
+
+        # Delete student from Enrollment and StudentGrades table
+        Enrollment.query.filter_by(student_id=student_id, course_sem_id=course_sem_id).delete()
+        StudentGrades.query.filter_by(student_id=student_id, course_sem_id=course_sem_id).delete()
+
+        # Increase amount of seats available in class
+        course.seats_available += 1
+
+        db.session.commit()
+
+        return jsonify({"message": "Student ID {:n} has been successfully removed from "
+                                   "CoursePerSemester ID {:n}.".format(student_id, course_sem_id)
+                        })
 
 
 class CoursePrerequisites(db.Model):
@@ -358,14 +412,14 @@ class CoursePrerequisites(db.Model):
     @classmethod
     def add_course_prereq(cls, course_id, prereq_id):
         q_prereq = CoursePrerequisites.query.filter_by(course_id=course_id, prereq_id=prereq_id).first()
-        
+
         if (q_prereq != None):
-            return print("Duplicate prerequisite course found for course ID %d." % course_id)
-            
+            return jsonify({"error": "Duplicate prerequisite course found for course ID {:n}.".format(course_id)})
+
         prereq = CoursePrerequisites(course_id=course_id, prereq_id=prereq_id)
         db.session.add(prereq)
         db.session.commit()
-        return print("Prerequisite course ID %d added to course ID %d." % (prereq_id, course_id))
+        return jsonify({"message": "Prerequisite course ID {:n} added to course ID {:n}.".format(prereq_id, course_id)})
 
 
 class Programs(db.Model):
@@ -375,22 +429,21 @@ class Programs(db.Model):
     department_id = db.Column(db.Integer, db.ForeignKey('departments.id'), nullable=False)  # Departments foreign key
     num_units = db.Column(db.Integer, nullable=False)
 
-    courses = db.relationship('ProgramCourses', backref='program')         # One to Many
-    advisors = db.relationship('ProgramAdvisors', backref='program')       # One to Many
-
+    courses = db.relationship('ProgramCourses', backref='program')  # One to Many
+    advisors = db.relationship('ProgramAdvisors', backref='program')  # One to Many
 
     @classmethod
     def create(cls, name, department_id, num_units):
         q_department = Departments.query.filter_by(id=department_id).first()
-        
-        if (q_department == None):
-            return print("Department ID %d not found." % department_id)
-        
+
+        if q_department is None:
+            return jsonify({"error": "Department ID {:n} not found.".format(department_id)})
+
         p = Programs(name=name, department_id=department_id, num_units=num_units)
         db.session.add(p)
         db.session.commit()
-        
-        return print("Program name %s created with ID %d" % (p.name, p.id))
+
+        return jsonify({"message": "Program name {} created with ID {:n}".format(p.name, p.id)})
 
 
 class ProgramCourses(db.Model):
@@ -407,15 +460,14 @@ class ProgramCourses(db.Model):
         q = ProgramCourses.query.filter_by(
             program_id=program_id, course_id=course_id).first()
 
-        if (q != None):
-            return print("Course ID %d is already within program ID %d." % (course_id, program_id))
+        if q is not None:
+            return jsonify({"error": "Course ID {:n} is already within program ID {:n}.".format(course_id, program_id)})
 
-        a = ProgramCourses(program_id=program_id,
-                           course_id=course_id, is_required=is_required)
+        a = ProgramCourses(program_id=program_id, course_id=course_id, is_required=is_required)
         db.session.add(a)
         db.session.commit()
 
-        return print("Course ID %d added to program ID %d." % (course_id, program_id))
+        return jsonify({"message": "Course ID {:n} added to program ID {:n}.".format(course_id, program_id)})
 
 
 class ProgramAdvisors(db.Model):
@@ -429,14 +481,14 @@ class ProgramAdvisors(db.Model):
         q = ProgramAdvisors.query.filter_by(
             program_id=program_id, faculty_id=faculty_id).first()
 
-        if (q != None):
-            return print("Faculty ID %d already exists for program ID %d." % (faculty_id, program_id))
+        if q is not None:
+            return jsonify({'error': 'Faculty ID {} already exists for program ID {}.'.format(faculty_id, program_id)})
 
         p = ProgramAdvisors(program_id=program_id, faculty_id=faculty_id)
         db.session.add(p)
         db.session.commit()
 
-        return print("Successfully added faculty ID %d to program ID %d." % (faculty_id, program_id))
+        return jsonify({'message': 'Successfully added faculty ID {} to program ID {}.'.format(faculty_id, program_id)})
 
 
 class ProgramOutline(db.Model):
@@ -445,7 +497,8 @@ class ProgramOutline(db.Model):
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
     program_id = db.Column(db.Integer, db.ForeignKey('programs.id'), nullable=False)  # Programs foreign key
     version_number = db.Column(db.Integer, nullable=False)
-    course_status = db.Column(db.String, nullable=True) # "Approved", "Dropped", "Waived". If "Approved", cannot be deleted BUT can be modified
+    course_status = db.Column(db.String,
+                              nullable=True)  # "Approved", "Dropped", "Waived". If "Approved", cannot be deleted BUT can be modified
     change_date = db.Column(db.DateTime, default=datetime.utcnow)
     approver_id = db.Column(db.Integer, db.ForeignKey('faculty.id'), nullable=False)  # Faculty foreign key
 
@@ -453,54 +506,57 @@ class ProgramOutline(db.Model):
 
     # StudentGrades can query for the courses that are already completed for the student
     # Can be compared with ProgramCourses to find what courses are still required
-    
+
     @classmethod
     def create(cls, student_id, program_id, version_number, approver_id):
         q_program = Programs.query.filter_by(id=program_id).first()
         q_student = Student.query.filter_by(id=student_id).first()
-        
-        if (q_program == None):
-            return print("Program ID %d not found." % program_id)
-        
-        if (q_student == None):
-            return print("Student ID %d not found." % student_id)
-        
-        outline = ProgramOutline(student_id=student_id, program_id=program_id, version_number=version_number, approver_id=approver_id)
+
+        if q_program is None:
+            return jsonify({"error": "Program ID {} not found.".format(program_id)})
+
+        if q_student is None:
+            return jsonify({"error": "Student ID {} not found.".format(student_id)})
+
+        outline = ProgramOutline(student_id=student_id, program_id=program_id, version_number=version_number,
+                                 approver_id=approver_id)
         db.session.add(outline)
         db.session.commit()
-        
-        return print("Program outline for student ID %d created with ID %d" % (student_id, outline.id))
+
+        return jsonify({"message": "Program outline for student ID {} "
+                                   "created with ID {}".format(student_id, outline.id)
+                        })
 
 
 class CourseByOutline(db.Model):
     __tablename__ = 'coursebyoutline'
     id = db.Column(db.Integer, primary_key=True)
-    outline_id = db.Column(db.Integer, db.ForeignKey('programoutline.id'), nullable=False) # Foreign key to reference list of program courses
+    outline_id = db.Column(db.Integer, db.ForeignKey('programoutline.id'),
+                           nullable=False)  # Foreign key to reference list of program courses
     course_id = db.Column(db.Integer, db.ForeignKey('programcourses.course_id'), nullable=False)
 
     course = db.relationship('ProgramCourses', backref='outlines_present')
     program_outline = db.relationship('ProgramOutline', backref='courses')
 
-
     @classmethod
     def add_course_to_outline(cls, outline_id, course_id):
         q_outline = ProgramOutline.query.filter_by(id=outline_id).first()
         q_course = ProgramCourses.query.filter_by(course_id=course_id).first()
-        
-        if (q_outline == None):
-            return print("ProgramOutline ID %d not found." % outline_id)
-        
-        if (q_course == None):
-            return print("Course ID %d not found within program courses." % course_id)
-        
-        # Detect duplicate course in outline
+
+        if q_outline is None:
+            return jsonify({'error': 'ProgramOutline ID {} not found.'.format(outline_id)})
+
+        if q_course is None:
+            return jsonify({'error': 'Course ID {} not found within program courses.'.format(course_id)})
+
         q_outline_courses = CourseByOutline.query.filter_by(outline_id=outline_id, course_id=course_id).first()
-        if (q_outline_courses != None):
-            return print("Course ID %d has already been added to outline ID %d." % (course_id, outline_id))
-        
-        
+        if q_outline_courses is not None:
+            return jsonify({'error': 'Course ID {} has already '
+                                     'been added to outline ID {}.'.format(course_id, outline_id)
+                            })
+
         c = CourseByOutline(outline_id=outline_id, course_id=course_id)
         db.session.add(c)
         db.session.commit()
-        
-        return print("Course ID %d added to outline ID %d" % (course_id, outline_id))
+
+        return jsonify({'message': 'Course ID {} added to outline ID {}.'.format(course_id, outline_id)})

@@ -14,7 +14,7 @@ class CourseGradesList:
         "required": ["sessionId", "course"]
     }
 
-    def executeQuery(self, requestJson):
+    def execute_query(self, requestJson):
         with app.app_context():
             return jsonify({"message": "We're here"})
 
