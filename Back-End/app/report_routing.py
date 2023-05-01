@@ -1,6 +1,3 @@
-import sqlite3
-from sqlite3 import DatabaseError
-
 from flask import Blueprint, request
 from flask import jsonify
 from jsonschema import validate, ValidationError

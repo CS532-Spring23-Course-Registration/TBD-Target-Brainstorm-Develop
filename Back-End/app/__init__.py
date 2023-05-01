@@ -1,13 +1,12 @@
 import os
 import secrets
-from datetime import timedelta
 from os import path
 
 from flask import Flask
 from flask_caching import Cache
-from flask_session import Session
 from flask_sqlalchemy import SQLAlchemy
 
+from .update_routing import updates
 from .report_routing import reports
 from .views.db_secrets import db_secrets
 
@@ -28,6 +27,7 @@ def create_app():
 
     app.register_blueprint(db_secrets, url_prefix='/')
     app.register_blueprint(reports, url_prefix='/')
+    app.register_blueprint(updates, url_prefix='/')
 
     with app.app_context():
         if not path.exists('app/' + DB_NAME):
