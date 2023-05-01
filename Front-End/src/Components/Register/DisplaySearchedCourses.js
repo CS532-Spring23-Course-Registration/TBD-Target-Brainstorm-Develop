@@ -33,15 +33,17 @@ function DisplaySearchedCourses(props) {
       setOpen(false);
     };
 
-    const handleSubmit = () => {
+    const handleAddClass = (selectedItem) => {
+
       fetch("http://127.0.0.1:5000/update", {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          reportName: "registerForCourse",
-          courseSemester: "Winter 2023",
+          updateType: "registerForCourse",
+          courseSemester: selectedItem.courseSemester,
+          courseId: selectedItem.courseId,
           studentId: parseInt(userId),
           sessionId: sessionId,
         }),
@@ -54,29 +56,6 @@ function DisplaySearchedCourses(props) {
         .catch((error) => console.log(error));
     }
   
-  // useEffect(() => {
-  //   fetch("http://127.0.0.1:5000/query", {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json",
-  //     },
-  //     body: JSON.stringify({
-  //       reportName: "personalCourseReport",
-  //       courseSemester: "Winter 2023",
-  //       studentId: parseInt(studentId),
-  //       sessionId: sessionId,
-  //     }),
-  //   })
-  //     .then((response) => response.json())
-  //     .then((data) => {
-  //       // setData(data);
-  //       console.log(data);
-  //     })
-  //     .catch((error) => console.log(error));
-  // }, []);
-
-
-
 
     return (
       <Box display="flex" mt={2} justifyContent="center" sx={{ padding: "10px", width: "85%", boxShadow: "inset 0px 0px 5px 2px rgba(0, 0, 0, 0.25)", borderRadius: "10px" }}>
@@ -133,7 +112,7 @@ function DisplaySearchedCourses(props) {
                 </Box>
               </DialogContent>
               <DialogActions sx={{display: "flex", flexDirection: "row", justifyContent: "space-around", mb: "15px"}}>
-                <Button variant="contained" color="error" >Add Class</Button>
+                <Button variant="contained" color="error" onClick={() => handleAddClass(selectedItem)}>Add Class</Button>
                 <Button onClick={handleClose} variant="outline">Close</Button>
               </DialogActions>
             </Dialog>
