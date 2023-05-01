@@ -327,7 +327,7 @@ function SignUp() {
               //onChange={}
               variant="outlined"
               style={{minWidth: 200 }}
-              required
+              required={selectedOption === "faculty"}
               >
                 {departments.map((department) => (
                   <MenuItem value={department}>{department}</MenuItem>
