@@ -9,6 +9,10 @@ import {
   Button,
   Card,
 } from "@mui/material";
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import InputLabel from '@mui/material/InputLabel';
 
 const useStyles = makeStyles((theme) => ({
   box_container: {
@@ -36,6 +40,13 @@ const useStyles = makeStyles((theme) => ({
 function SignUp() {
   const navigate = useNavigate();
   const classes = useStyles();
+
+  const [selectedOption, setSelectedOption] = useState("");
+  const handleOption = (event) => {
+    setSelectedOption(event.target.value);
+  };
+
+
   const [fields, setFields] = useState({
     name: "",
     phoneNumber: "",
@@ -131,7 +142,32 @@ function SignUp() {
               Register User
             </Typography>
           </Box>
+
           <form className={classes.form} onSubmit={handleSubmit}>
+
+          <Box className={classes.input}>
+            <TextField
+              select
+              label="Select User Type"
+              name="userType"
+              value={selectedOption}
+              onChange={handleOption}
+              variant="outlined"
+              style={{minWidth: 200 }}
+              required
+              >      
+              <MenuItem value="" divider selected></MenuItem>        
+              <MenuItem value="admin" divider>Admin</MenuItem>
+              <MenuItem value="faculty" divider>Faculty</MenuItem>
+              <MenuItem value="student" divider>Student</MenuItem>
+              <MenuItem value="gradstudent" divider>Graduate Student</MenuItem>
+            </TextField>
+          </Box>
+
+          {selectedOption === '' && (
+            <div></div>
+          )}
+
             <Box className={classes.input}>
               <TextField
                 label="Name"
