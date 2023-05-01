@@ -31,9 +31,9 @@ class StudentInfo:
 
 
 def create_response_json(course_data, student_data):
-    student_data_fiels = ["id", "name", "phoneNumber", "address", "dateOfBirth", "major", "minor"]
+    student_data_fields = ["id", "name", "phoneNumber", "address", "dateOfBirth", "major", "minor"]
     course_data_fields = ["id", "name", "title", "grade", "is_external_course"]
-    response = {student_data_fiels[x]: student_data[x] for x in range(len(student_data))}
+    response = {student_data_fields[x]: student_data[x] for x in range(len(student_data))}
     course_list = [{course_data_fields[x]: course[x] for x in range(len(course))} for course in course_data]
     response["courses"] = course_list
     return response
