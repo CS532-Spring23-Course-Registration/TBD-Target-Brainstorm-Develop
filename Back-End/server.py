@@ -68,7 +68,9 @@ def query():
             return jsonify({'message': 'No session key found'}), 400
 
         # Validate session key
-        validate_session_key(session_key)
+        validation_response = validate_session_key(session_key)
+        if validation_response is not None:
+            return validation_response
 
         # Reroute report to appropriate endpoint
         report_endpoint_url = request.host_url[:-1] + app.url_for("reports." + request_json['reportName'])
@@ -114,7 +116,9 @@ def update():
             return jsonify({'message': 'No session key found'}), 400
 
         # Validate session key
-        # validate_session_key(session_key)
+        validation_response = validate_session_key(session_key)
+        if validation_response is not None:
+            return validation_response
 
         # Reroute report to appropriate endpoint
         update_endpoint_url = request.host_url[:-1] + app.url_for("updates." + request_json['updateType'])
