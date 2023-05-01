@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CRegHome from "./CRegHome";
+import HelpButton from "./HelpButton";
 import { makeStyles } from "@mui/styles";
 import {
   Box,
@@ -186,6 +187,8 @@ function CSearch() {
             ))}
           </List>
         )}
+
+        <HelpButton selectedOption= "Search Courses" />
       </div>
     </div>
   );

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { makeStyles } from "@mui/styles";
 import CRegHome from "./CRegHome";
 import Cookies from 'js-cookie'
+import HelpButton from "./HelpButton";
 
 const useStyles = makeStyles({
   root: {
@@ -47,6 +48,7 @@ function MajorList() {
     <div className={classes.root}>
       <CRegHome />
       <div className={classes.contents}>MajorList</div>
+      <HelpButton selectedOption="Currently Enrolled Courses" />
     </div>
   );
 }

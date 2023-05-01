@@ -1,7 +1,6 @@
 import React from "react";
 import { makeStyles } from "@mui/styles";
 import CRegHome from "./CRegHome";
-
 const useStyles = makeStyles({
   root: {
     display: "flex",

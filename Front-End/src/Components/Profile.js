@@ -10,6 +10,9 @@ import {
   ListItemText,
   Divider,
   Button,
+  Dialog,
+  DialogContent,
+  DialogTitle,
 } from "@mui/material";
 import InfoCard from "./InfoCard";
 import Cookies from "js-cookie";
@@ -25,6 +28,17 @@ function Profile() {
   const sessionId = Cookies.get("session_id");
   const studentId = Cookies.get("user_id");
 
+  // Added For the Help-Function Const state variable
+  const [helpDialogOpen, setHelpDialogOpen] = useState(false);
+
+  // supporting functions that will help handle the Help Button 
+  const handleHelpClick = () => {
+    setHelpDialogOpen(true);
+  };
+  
+  const handleHelpClose = () => {
+    setHelpDialogOpen(false);
+  };
 
 
 
@@ -91,6 +105,20 @@ function Profile() {
     }
   };
 
+  // This was added since it can be used by the incoprating it to the function above which allows is to press help when one of the options above are selected and it will return the text below
+  // const renderHelpContent = () => {
+  //   switch (renderOptionContent) {
+  //     case 'Personal Information':
+  //       return "This tab displays the student's personal information.";
+  //     case 'Academics':
+  //       return "This tab shows the student's academic information.";
+  //     case 'Student Records':
+  //       return "This tab contains the student's records.";
+  //     default:
+  //       return '';
+  //   }
+  // };
+
   const options = ["Personal Information", "Academics", "Student Records"];
 
   return (
@@ -123,6 +151,41 @@ function Profile() {
             <PdfTable data={testData} formatData={formatTestData} />
           </Box>
         </Box>
+
+        <Box sx={{ position: "fixed", right: 16, bottom: 16 }}>
+          <Button variant="contained" color="error" onClick={handleHelpClick}>
+            Help
+          </Button>
+        </Box>
+        {/* <Dialog open={helpDialogOpen} onClose={handleHelpClose}>
+          <DialogTitle>Help</DialogTitle>
+          <DialogContent>
+            <Typography>{renderHelpContent()}</Typography>
+          </DialogContent>
+        </Dialog> */}
+        <Dialog open={helpDialogOpen} onClose={handleHelpClose}>
+          <DialogTitle>Help</DialogTitle>
+          <DialogContent>
+            <List>
+              <ListItem>
+                <Typography>
+                  <strong>Personal Information:</strong> This tab displays the student's personal information.
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography>
+                  <strong>Academics:</strong> This tab shows the student's academic information.
+                </Typography>
+              </ListItem>
+              <ListItem>
+                <Typography>
+                  <strong>Student Records:</strong> This tab contains the student's records.
+                </Typography>
+              </ListItem>
+            </List>
+          </DialogContent>
+        </Dialog>
+
       </Container>
     </div>
   );
