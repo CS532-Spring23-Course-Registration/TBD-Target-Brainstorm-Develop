@@ -90,6 +90,13 @@ def signup():
                         'student_name' : s.name}), 200
 
 
+@app.route('/departments', methods=['GET'])
+def get_departments():
+    dep = Departments.query.all()
+    departments = [department.name for department in dep]
+    return jsonify(departments)
+
+
 # Define the PUT endpoint that requires a valid session key
 @app.route('/', methods=['PUT'])
 def put():
