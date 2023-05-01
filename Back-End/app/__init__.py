@@ -5,6 +5,7 @@ from os import path
 from flask import Flask
 from flask_caching import Cache
 from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 
 from .update_routing import updates
 from .report_routing import reports
@@ -34,4 +35,6 @@ def create_app():
             db.create_all()
             print('Created Database!')
 
-    return app, cache, db
+    migrate = Migrate(app, db)
+
+    return app, cache, db, migrate

@@ -6,11 +6,12 @@ from flask import jsonify, session, current_app, request
 from flask_cors import CORS
 from requests import JSONDecodeError
 from werkzeug.routing import BuildError
+from flask_migrate import Migrate
 
 from app import create_app
 from app.models.app import *
 
-(app, cache, db) = create_app()
+(app, cache, db, migrate) = create_app()
 CORS(app, resources={r"/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
 
 

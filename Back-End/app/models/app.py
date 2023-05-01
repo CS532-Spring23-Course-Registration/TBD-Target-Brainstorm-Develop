@@ -4,6 +4,7 @@ from flask_migrate import Migrate
 from datetime import datetime
 from flask import Flask, jsonify
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import text
 
 db = SQLAlchemy()
 
@@ -496,10 +497,6 @@ class ProgramOutline(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, db.ForeignKey('student.id'), nullable=False)
     program_id = db.Column(db.Integer, db.ForeignKey('programs.id'), nullable=False)  # Programs foreign key
-    version_number = db.Column(db.Integer, nullable=False)
-    course_status = db.Column(db.String,
-                              nullable=True)  # "Approved", "Dropped", "Waived". If "Approved", cannot be deleted BUT can be modified
-    change_date = db.Column(db.DateTime, default=datetime.utcnow)
     approver_id = db.Column(db.Integer, db.ForeignKey('faculty.id'), nullable=False)  # Faculty foreign key
 
     program = db.relationship('Programs', backref='outlines')
@@ -508,7 +505,7 @@ class ProgramOutline(db.Model):
     # Can be compared with ProgramCourses to find what courses are still required
 
     @classmethod
-    def create(cls, student_id, program_id, version_number, approver_id):
+    def create(cls, student_id, program_id, approver_id):
         q_program = Programs.query.filter_by(id=program_id).first()
         q_student = Student.query.filter_by(id=student_id).first()
 
@@ -518,8 +515,7 @@ class ProgramOutline(db.Model):
         if q_student is None:
             return jsonify({"error": "Student ID {} not found.".format(student_id)})
 
-        outline = ProgramOutline(student_id=student_id, program_id=program_id, version_number=version_number,
-                                 approver_id=approver_id)
+        outline = ProgramOutline(student_id=student_id, program_id=program_id, approver_id=approver_id)
         db.session.add(outline)
         db.session.commit()
 
@@ -534,9 +530,46 @@ class CourseByOutline(db.Model):
     outline_id = db.Column(db.Integer, db.ForeignKey('programoutline.id'),
                            nullable=False)  # Foreign key to reference list of program courses
     course_id = db.Column(db.Integer, db.ForeignKey('programcourses.course_id'), nullable=False)
+    course_status = db.Column(db.String, nullable=False, default="Waiting Approval")  # "Approved", "Dropped", "Waived". If "Approved", cannot be deleted BUT can be modified
+    change_date = db.Column(db.DateTime(timezone=True), server_default=text("(now() at time zone 'pst')"))
+    previous_version = db.Column(db.Integer, default=0)
 
     course = db.relationship('ProgramCourses', backref='outlines_present')
     program_outline = db.relationship('ProgramOutline', backref='courses')
+
+    @classmethod
+    def change_course_status(cls, outline_id, course_id, new_status):
+        q_outline = ProgramOutline.query.filter_by(id=outline_id).first()
+        q_course = ProgramCourses.query.filter_by(course_id=course_id).all()
+        q_outline_courses = CourseByOutline.query \
+                                           .filter_by(course_id=course_id, outline_id=outline_id) \
+                                           .order_by(CourseByOutline.id.desc()) \
+                                           .all()
+
+        if q_outline is None:
+            return jsonify({'error': 'ProgramOutline ID {} not found.'.format(outline_id)})
+
+        if q_course is None:
+            return jsonify({'error': 'Course ID {} not found within program courses.'.format(course_id)})
+
+        if q_outline_courses is None:
+            return jsonify({'error': 'Course ID {} is not currently in outline. '
+                                     'Please add to outline before trying to change '
+                                     'status.'.format(course_id)})
+
+        for course_index in range(len(q_outline_courses[:-1])):
+            course = q_outline_courses[course_index]
+            previous_version = q_outline_courses[course_index + 1]
+            course.previous_version = previous_version.id
+
+        last_course_change = q_outline_courses[0]
+        new_status = CourseByOutline(outline_id=outline_id, course_id=course_id,
+                                     course_status=new_status, previous_version=last_course_change.id)
+
+        db.session.add(new_status)
+        db.session.commit()
+        return jsonify({'message': 'Successfully change status of Course ID {} '
+                                   'from outline ID {} to {} .'.format(course_id, outline_id, new_status)})
 
     @classmethod
     def add_course_to_outline(cls, outline_id, course_id):
