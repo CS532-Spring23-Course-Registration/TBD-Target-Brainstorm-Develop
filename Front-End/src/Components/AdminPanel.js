@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Card,
   FormControl,
@@ -17,6 +17,9 @@ import {
   TableHead,
   TableRow,
   Button,
+  CardHeader,
+  Typography,
+  TextField,
 } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import Cookies from "js-cookie";
@@ -32,7 +35,6 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "grey",
     padding: "2px",
     height: "100%",
-    border: "1px solid blue",
   },
   userTable: {
     marginBottom: "40px",
@@ -42,12 +44,11 @@ const useStyles = makeStyles((theme) => ({
   },
   rightColumn: {
     flex: "1 1 80%",
-    padding: "2px",
+    padding: "2px"
   },
   card: {
     padding: "10px",
-    margin: "10px",
-    backgroundColor: "grey",
+    margin: "10px"
   },
 }));
 
@@ -55,6 +56,9 @@ const AdminPanel = () => {
   const classes = useStyles();
   const [users, setUsers] = useState([]);
   const [menuSelect, setMenuSelect] = useState("user");
+  const [newPassword, setNewPassword] = useState("");
+
+
   const testData = [
     {
       id: 1,
@@ -78,6 +82,9 @@ const AdminPanel = () => {
       allowedAccess: true,
     },
   ];
+
+  const passwordRef = useRef(null);
+
   const formatData = (data) => {
     return data.map((item) => {
       return {
@@ -89,6 +96,13 @@ const AdminPanel = () => {
 
   const sessionId = Cookies.get("session_id");
   console.log("Session: " + sessionId);
+
+  const handleChangePassword = (user) => {
+    console.log('User');
+    console.log(user);
+    console.log('Password');
+    console.log(passwordRef.current.value);
+  }
 
   const handleSubmit = async () => {
     try {
@@ -170,18 +184,40 @@ const AdminPanel = () => {
         </Grid>
         {/* Right Column */}
         <Grid item xs={12} md={9}>
-          <Paper className={classes.rightColumn}>
+          <Paper className={classes.rightColumn} sx={{ height: "700px", overflowY: "scroll"}}>
             {testData.map((user) => (
-              <Box key={user.id} className={classes.card}>
-                <h2>{user.name}</h2>
-                <p>Employee Number: {user.employeeNumber}</p>
-                <p>Job Title: {user.jobTitle}</p>
-                <p>Allowed Access: {user.allowedAccess ? "Yes" : "No"}</p>
+              <Box m={3}>
+                <Card>
+                  <CardContent>
+                    <Box key={user.id} height="100px" width="100%" display="flex">
+                      <Box display="flex" flexDirection="column" alignContent="center" width="50%">
+                        <Typography variant="h5">{user.name}</Typography>
+                        <Typography variant="caption">Employee Number: {user.employeeNumber}</Typography>
+                        <Typography variant="caption">Job Title: {user.jobTitle}</Typography>
+                        <Typography variant="caption">Allowed Access: {user.allowedAccess ? "Yes" : "No"}</Typography>
+                      </Box>
+                      <Box display="flex" flexDirection="row" width="50%" alignItems="center" justifyContent="space-evenly">
+                          <form onSubmit={() => handleChangePassword(user)}>
+                            <TextField required size="small" label="New Password" inputRef={passwordRef}/>
+                            <Button 
+                              size="small" 
+                              variant="contained" 
+                              color="error" 
+                              onClick={() => handleChangePassword(user)}
+                              sx={{ height: "50%", width: "30%" }}
+                              >
+                                Change Password
+                            </Button>
+                          </form>
+                      </Box>
+                    </Box>
+                  </CardContent>
+                </Card>
               </Box>
             ))}
           </Paper>
+          <PdfTable data={testData} formatData={formatData}/>
         </Grid>
-        <PdfTable data={testData} formatData={formatData} />
       </Grid>
     </Container>
   );
