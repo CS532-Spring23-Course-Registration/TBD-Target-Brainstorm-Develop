@@ -12,12 +12,17 @@ import {
     DialogActions
 } from "@mui/material";
 
+import Cookies from 'js-cookie';
+
 function DisplaySearchedCourses(props) {
     const [data, setData] = useState([]);
     const [selectedItem, setSelectedItem] = useState(null);
     const [open, setOpen] = useState(false);
     var courses = [];
-    
+    const userId = Cookies.get("user_id");
+    const sessionId = Cookies.get("session_id");
+
+
     const handleClick = item => {
       setSelectedItem(item);
       setOpen(true);
@@ -27,21 +32,49 @@ function DisplaySearchedCourses(props) {
       setSelectedItem(null);
       setOpen(false);
     };
+
+    const handleSubmit = () => {
+      fetch("http://127.0.0.1:5000/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          reportName: "registerForCourse",
+          courseSemester: "Winter 2023",
+          studentId: parseInt(userId),
+          sessionId: sessionId,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          // setData(data);
+          console.log(data);
+        })
+        .catch((error) => console.log(error));
+    }
   
-    // useEffect(() => {
-    //   props.returnedCourses.forEach((item) => {
-    //     var newCourse = {
-    //       department: item.name
-    //     }
+  // useEffect(() => {
+  //   fetch("http://127.0.0.1:5000/query", {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       reportName: "personalCourseReport",
+  //       courseSemester: "Winter 2023",
+  //       studentId: parseInt(studentId),
+  //       sessionId: sessionId,
+  //     }),
+  //   })
+  //     .then((response) => response.json())
+  //     .then((data) => {
+  //       // setData(data);
+  //       console.log(data);
+  //     })
+  //     .catch((error) => console.log(error));
+  // }, []);
 
-    //     item.coursesInDepartment.forEach((courseItem) => {
-    //       newCourse[]
-    //     });
-    //   });
-
-
-
-    // }, []);
 
 
 
@@ -100,7 +133,7 @@ function DisplaySearchedCourses(props) {
                 </Box>
               </DialogContent>
               <DialogActions sx={{display: "flex", flexDirection: "row", justifyContent: "space-around", mb: "15px"}}>
-                <Button variant="contained" color="error">Add Class</Button>
+                <Button variant="contained" color="error" >Add Class</Button>
                 <Button onClick={handleClose} variant="outline">Close</Button>
               </DialogActions>
             </Dialog>
