@@ -70,12 +70,28 @@ function DisplaySearchedCourses(props) {
             <Dialog open={open} onClose={handleClose}>
               <DialogContent>
                 <Box width="400px" height="500px" display="flex" flexDirection="column">
-                  <Box display="flex" flexDirection="column" justifyContent="center" alignItems="center" width="100%" height="20%">
-                    <Typography align="center" variant="h4">{selectedItem.name}</Typography>
+                  <Box display="flex" border="1px solid grey" flexDirection="column" justifyContent="center" alignItems="center" width="100%" height="20%">
+                    <Typography align="center" variant="h4" sx={{ overflowY: "scroll"}}>{selectedItem.name}</Typography>
                   </Box>
-                  <Box display="flex" flexDirection="row" width="100%" height="80%">
-                    <Box display="flex" flexDirection="column" width="50%" height="100%" border="1px solid blue">
-                      
+                  <Typography align="center" variant="subtitle1">{selectedItem.title}</Typography>
+                  <Box display="flex" flexDirection="row" width="100%" height="80%" mt={3}>
+                    <Box display="flex" flexDirection="column" width="50%" height="100%">
+                    <Box display="flex" width="100%" m={1}>
+                      <Typography variant="body1" sx={{ textDecoration: 'underline' }}>Location:</Typography>
+                      <Typography variant="body1" ml={1}>{selectedItem.courseLocation}</Typography>
+                    </Box>
+                    <Box display="flex" width="100%" m={1}>
+                      <Typography variant="body1" sx={{ textDecoration: 'underline' }}>Time: </Typography>
+                      <Typography variant="body1" ml={1}>{selectedItem.courseDateTime}</Typography>
+                    </Box>
+                    <Box display="flex" width="100%" m={1}>
+                      <Typography variant="body1" sx={{ textDecoration: 'underline' }}>Prof: </Typography>
+                      <Typography variant="body1" ml={1}>{selectedItem.instructorName}</Typography>
+                    </Box>
+                    <Box display="flex" width="100%" m={1}>
+                      <Typography variant="body1" sx={{ textDecoration: 'underline' }}>Seats: </Typography>
+                      <Typography variant="body1" ml={1}>{selectedItem.seatsAvailable} / {selectedItem.maxSeats}</Typography>
+                    </Box>
                     </Box>
                     <Box display="flex" flexDirection="column" width="50%" height="100%" border="1px solid grey" sx={{ overflowY: "scroll" }}>
                       <Typography m={1} variant="body2">{selectedItem.description}</Typography>
