@@ -5,6 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 from sqlalchemy.orm import sessionmaker
 import random
+from flask_migrate import Migrate
 
 db = SQLAlchemy()
 
@@ -52,11 +53,11 @@ class StudentGrades(db.Model):
     course_sem_id = db.Column(db.Integer, db.ForeignKey('coursepersemester.id'), nullable=False) # Coursepersemester foreign key
     grade = db.Column(db.String(2), nullable=False)
     earned_credits = db.Column(db.Integer, nullable=False)
-    course_notes = db.Column(db.String(), nullable=True)
+    course_notes = db.Column(db.String, nullable=True)
     
     
     @classmethod
-    def add_grade_for_student(cls, student_id, course_sem_id, grade, earned_credits):
+    def add_grade_for_student(cls, student_id, course_sem_id, grade, earned_credits, course_notes=None):
         q_student = Student.query.filter_by(id=student_id).first()
         q_course = CoursePerSemester.query.filter_by(id=course_sem_id).first()
         
@@ -72,7 +73,7 @@ class StudentGrades(db.Model):
             return print("Duplicate found: Student ID %d already has an entry for CoursePerSemester ID %d." % (student_id, q_grades.course_sem_id))
 
 
-        g = StudentGrades(student_id=student_id, course_sem_id=course_sem_id, grade=grade, earned_credits=earned_credits)
+        g = StudentGrades(student_id=student_id, course_sem_id=course_sem_id, grade=grade, earned_credits=earned_credits, course_notes=course_notes)
         db.session.add(g)
         db.session.commit()
 
