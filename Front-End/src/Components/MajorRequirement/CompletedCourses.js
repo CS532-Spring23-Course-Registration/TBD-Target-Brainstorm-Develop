@@ -19,7 +19,6 @@ function CompletedCourses(props) {
     const userId = Cookies.get('user_id');
 
     useEffect(() => {
-
         fetch("http://127.0.0.1:5000/query", {
             method: "POST",
             headers: {
@@ -27,7 +26,7 @@ function CompletedCourses(props) {
             },
             body: JSON.stringify({
               reportName: "studentMajorOutline",
-              studentId: parseInt(userId),
+              userId: parseInt(userId),
               sessionId: sessionId
             }),
           })

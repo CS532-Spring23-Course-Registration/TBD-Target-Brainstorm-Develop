@@ -32,7 +32,6 @@ function CourseGrades(props) {
   ];
 
   useEffect(() => {
-    if (props.user.permission === "faculty") {
       fetch("http://127.0.0.1:5000/query", {
         method: "POST",
         headers: {
@@ -41,6 +40,7 @@ function CourseGrades(props) {
         body: JSON.stringify({
           reportName: "courseGradesList",
           facultyId: parseInt(userId),
+          courseSemester: "Spring 2023",
           sessionId: sessionId,
         }),
       })
@@ -49,7 +49,6 @@ function CourseGrades(props) {
           console.log(data);
         })
         .catch((error) => console.log(error));
-    }
   }, []);
 
   return (

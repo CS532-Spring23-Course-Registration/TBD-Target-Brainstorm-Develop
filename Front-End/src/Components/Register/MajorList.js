@@ -1,10 +1,14 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
 import Cookies from "js-cookie";
 import HelpButton from "./HelpButton";
 import SearchIcon from "@mui/icons-material/Search";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import MenuCard from "./MenuCard";
+import DisplayCurrentlyEnrolled from "./DisplayCurrentlyEnrolled";
+import {
+  Box
+} from "@mui/material";
 
 const useStyles = makeStyles({
   root: {
@@ -38,6 +42,7 @@ const sessionId = Cookies.get("session_id");
 
 function MajorList() {
   const classes = useStyles();
+  const [returnedCourses, setReturnedCourses] = useState(null);
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/query", {
@@ -47,14 +52,14 @@ function MajorList() {
       },
       body: JSON.stringify({
         reportName: "personalCourseReport",
-        courseSemester: "Winter 2023",
+        courseSemester: "Fall 2023",
         studentId: parseInt(studentId),
         sessionId: sessionId,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        // setData(data);
+        setReturnedCourses(data);
         console.log(data);
       })
       .catch((error) => console.log(error));
@@ -65,11 +70,17 @@ function MajorList() {
   //Then print out that array of classes in a card list
 
   return (
-    <div className={classes.root}>
-      <MenuCard content={content} />
-      <div className={classes.contents}>MajorList</div>
+    <Box display="flex" flexDirection="row" width="100%">
+      <Box width="20%" height="300px" display="flex">
+        <MenuCard content={content} />
+      </Box>
+      <Box width="80%" display="flex" justifyContent="center">
+        {returnedCourses ? (
+          <DisplayCurrentlyEnrolled returnedCourses={returnedCourses}/>
+        ) : null }
+      </Box>
       <HelpButton selectedOption="Currently Enrolled Courses" />
-    </div>
+    </Box>
   );
 }
 
