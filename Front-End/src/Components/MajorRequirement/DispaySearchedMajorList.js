@@ -25,14 +25,10 @@ function DispaySearchedMajorList(props) {
     setOpen(false);
   };
 
-  const majorList = props.returnedLists?.majorList || [
-    { majorName: "No major found" },
-  ];
-
   return (
     <Box mt={3} display="flex" flexDirection="column" alignItems="center">
       <Typography color="grey" variant="h5">
-        {majorList[0].majorName}
+        Results"
       </Typography>
 
       <Box
