@@ -4,13 +4,13 @@ from sqlalchemy import func
 from app.models.app import *
 
 
-def create_response_json(joining_ids, major_completed_units, required_courses, course_prerequisites):
+def create_response_json(major_department, major_completed_units, required_courses, course_prerequisites):
     # Declare fields for object mapping
     response_top_fields = ["majorTitle", "departmentId", "departmentName"]
     outline_history_fields = ["courseId", "courseTitle", "changeDate", "status"]
     course_fields = ["courseId", "courseTitle", "changeDate", "status", "courseName", "is_required"]
 
-    response = {key: val for key, val in zip(response_top_fields, joining_ids[1:-2])}
+    response = {key: val for key, val in zip(response_top_fields, major_department)}
     response["studentOutline"] = {"majorCompletedUnits": major_completed_units[0],
                                   "requiredCourses": [],
                                   "electiveCourses": []}
@@ -68,8 +68,7 @@ class StudentMajorOutline:
         with app.app_context():
             # Get all the querying elements
             student_id = requestJson["userId"]
-            joining_ids = db.session.query(Student.id, Student.major, Departments.id,
-                                           Departments.name, ProgramOutline.id) \
+            major_department = db.session.query(Student.major, Departments.id, Departments.name) \
                 .join(ProgramOutline, Student.id == ProgramOutline.student_id) \
                 .join(Programs, ProgramOutline.program_id == Programs.id) \
                 .join(Departments, Programs.department_id == Departments.id) \
@@ -104,4 +103,4 @@ class StudentMajorOutline:
                 .filter(CoursePrerequisites.course_id.in_(course_ids)) \
                 .all()
 
-            return create_response_json(joining_ids, major_completed_units, required_courses, course_prerequisites)
+            return create_response_json(major_department, major_completed_units, required_courses, course_prerequisites)
