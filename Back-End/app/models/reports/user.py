@@ -5,7 +5,8 @@ from app.models.app import *
 
 def create_response_json(user_list):
     user_list_fields = ["userId", "username", "jobTitle", "permissions"]
-    return {"userList": {key: val for key, val in zip(user_list_fields, user)} for user in user_list}
+    user_list = [{key: val for key, val in zip(user_list_fields, user)} for user in user_list]
+    return {"userList": user_list}
 
 
 class User:
