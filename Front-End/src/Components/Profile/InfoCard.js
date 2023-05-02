@@ -18,7 +18,7 @@ function InfoCard({ labels, values }) {
                 <Typography variant="h6">{label}</Typography>
               </Grid>
               <Grid item xs={9}>
-                <Typography>{values[index]}</Typography>
+                <Typography textAlign="center">{values[index]}</Typography>
               </Grid>
             </Grid>
           ))}
