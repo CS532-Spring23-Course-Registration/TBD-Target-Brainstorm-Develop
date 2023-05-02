@@ -63,7 +63,7 @@ function CourseGrades(props) {
         <Box display="flex">
           <Box
             display="flex"
-            height="500px"
+            height="200px"
             width="150px"
             sx={{
               overflowY: "scroll",

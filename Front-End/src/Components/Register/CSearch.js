@@ -220,7 +220,7 @@ function CSearch() {
           <DisplaySearchedCourses returnedCourses={returnedCourses} />
         )}
 
-        <HelpButton selectedOption= "Search Courses" />
+        <HelpButton selectedOption="Search Courses" />
       </div>
     </div>
   );
