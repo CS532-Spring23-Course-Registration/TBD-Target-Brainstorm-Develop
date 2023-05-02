@@ -15,7 +15,7 @@ import Cinfo from "./Components/Register/Cinfo";
 import Navigation from "./Components/Navigation";
 import Profile from "./Components/Profile";
 import Signup from "./Components/Signup";
-import MajorRequirements from "./Components/major_Requirements";
+import MajorRequirements from "./Components/MajorRequirement/major_Requirements";
 import CGrades from "./Components/CGrades";
 import AdminPanel from "./Components/AdminPanel";
 
@@ -27,9 +27,15 @@ function App() {
   // });
 
   const [user, setUser] = useState({
+<<<<<<< Updated upstream
     auth: true,
     permission: "admin",
     id: ""
+=======
+    auth: false,
+    permission: "",
+    id: "",
+>>>>>>> Stashed changes
   });
 
   return (
@@ -58,7 +64,7 @@ function App() {
               <Route path="/profile" element={<Profile />} />
               <Route
                 path="/Major-Requirements"
-                element={<MajorRequirements user={user}/>}
+                element={<MajorRequirements user={user} />}
               />
               <Route exact path="/cinfo/:id" element={<Cinfo />} />
               <Route path="/grades" element={<CGrades user={user} />} />

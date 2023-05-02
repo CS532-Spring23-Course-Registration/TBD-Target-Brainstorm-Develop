@@ -102,23 +102,25 @@ const FacultyAndCourses = () => {
 
   //Function for making API call when the submit button is pressed
   const handleSubmit = async () => {
-    try {
-      const response = await fetch("http://127.0.0.1:5000/query", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          reportName: reportType,
-          reportFilters: reportFilters,
-          [reportParameter]: searchQuery,
-          department: departmentQuery,
-          sessionId: sessionId,
-        }),
-      });
+    const response = await fetch("http://127.0.0.1:5000/query", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        reportName: reportType,
+        reportFilters: reportFilters,
+        [reportParameter]: searchQuery,
+        department: departmentQuery,
+        sessionId: sessionId,
+      }),
+    });
+
+    if (response.status === 401) {
+      console.log("Authentication Failed.");
+    } else if (response.status === 200) {
+      console.log("Successful query.");
       const data = await response.json();
-    } catch (error) {
-      console.log(error);
     }
   };
 
