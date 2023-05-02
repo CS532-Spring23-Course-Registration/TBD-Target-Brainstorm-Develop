@@ -16,8 +16,9 @@ import {
 } from "@mui/material";
 import InfoCard from "./InfoCard";
 import Cookies from "js-cookie";
-import PdfTable from "./PDF";
+import PdfTable from "../PDF";
 import { makeStyles } from "@mui/styles";
+import AcademicRecord from "./AcademicRecord";
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -28,12 +29,13 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "row",
     alignItems: "flex-start",
     boxSizing: "border-box",
-    width: "80%",
+    width: "100%",
     justifyContent: "space-between",
   },
+
   leftColumn: {
-    width: "min-content",
-    height: "fit-content",
+    width: "200px",
+    height: "100%",
     marginRight: "50px",
   },
   rightColumn: {
@@ -41,10 +43,10 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
+    width: "1000px",
   },
   card: {
-    width: "90%",
+    width: "100%",
     marginBottom: "20px",
   },
   listItem: {
@@ -68,7 +70,6 @@ function Profile() {
     "Major:",
     "Minor",
   ];
-  const Cinfo = ["Courses:"];
   const [selectedOption, setSelectedOption] = useState(null);
   // Added For the Help-Function Const state variable
   const [helpDialogOpen, setHelpDialogOpen] = useState(false);
@@ -91,7 +92,19 @@ function Profile() {
 
   // format for the pdf generator
   const formatTestData = (data) => {
+    const courseLabels = data.courses.map((course) => {
+      return {
+        label: course.title + ":   " + course.name,
+        value:
+          "                     " +
+          course.grade +
+          "                           " +
+          "4",
+      };
+    });
+
     return [
+      { label: "PERSONAL INFOMATION", value: " " },
       { label: "ID:", value: data.ID },
       { label: "Name:", value: data.Name },
       { label: "Date Of Birth:", value: data.DateOfBirth },
@@ -99,6 +112,13 @@ function Profile() {
       { label: "Phone Number:", value: data.PhoneNumber },
       { label: "Major:", value: data.Major },
       { label: "Minor:", value: data.Minor },
+      { label: "ACADEMIC RECORDS", value: " " },
+      { label: "Currently Enrolled Courses:", value: " " },
+      {
+        label: "Course ID:" + "   " + "Course Title",
+        value: "                   " + "Grade" + "                   " + "Unit",
+      },
+      ...courseLabels,
     ];
   };
 
@@ -131,6 +151,7 @@ function Profile() {
           PhoneNumber: data.phoneNumber,
           Major: data.major,
           Minor: data.minor,
+          courses: data.courses,
         };
 
         // data passed for the card
@@ -161,7 +182,7 @@ function Profile() {
       case "Personal Information":
         return <InfoCard labels={Pinfo} values={pValues} />;
       case "Academics":
-        return <InfoCard labels={Cinfo} values={cValues} />;
+        return <AcademicRecord values={cValues} />;
       default:
         return <InfoCard labels={Pinfo} values={pValues} />;
     }
@@ -190,7 +211,7 @@ function Profile() {
           </Typography>
         </Box>
         <Box className={classes.root}>
-          <Box>
+          <Box width={"200px"} height={"200px"} mr={5}>
             <Card className={classes.leftColumn}>
               <CardContent>
                 <List>

@@ -22,7 +22,28 @@ function PdfTable({ data, formatData }) {
 
     formattedData.forEach(({ label, value }) => {
       if (value) {
-        page.drawText(label, { x, y, size: textHeight, font: timesRomanFont });
+        const labelLines = [];
+        let currentLine = "";
+        for (let i = 0; i < label.length; i++) {
+          if (currentLine.length >= 30) {
+            labelLines.push(currentLine);
+            currentLine = "";
+          }
+          currentLine += label.charAt(i);
+        }
+        labelLines.push(currentLine);
+
+        let lineY = y;
+        labelLines.forEach((line) => {
+          page.drawText(line, {
+            x,
+            y: lineY,
+            size: textHeight,
+            font: timesRomanFont,
+          });
+          lineY -= textHeight + 2;
+        });
+
         page.drawText(value, {
           x: x + cellWidth,
           y,
@@ -30,7 +51,7 @@ function PdfTable({ data, formatData }) {
           font: timesRomanFont,
         });
 
-        const underlineY = y - 5;
+        const underlineY = lineY + textHeight - 5;
         page.drawRectangle({
           x,
           y: underlineY,
@@ -40,7 +61,8 @@ function PdfTable({ data, formatData }) {
           fillOpacity: 1,
         });
 
-        y -= cellHeight + 20;
+        const labelHeight = labelLines.length * (textHeight + 2);
+        y -= Math.max(labelHeight, cellHeight) + 20;
       }
     });
 

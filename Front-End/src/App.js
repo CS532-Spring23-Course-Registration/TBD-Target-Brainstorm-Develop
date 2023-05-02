@@ -12,7 +12,7 @@ import FacultyAndCourses from "./Components/FacultyAndCourses/FacultyAndCourses"
 import CSearch from "./Components/Register/CSearch";
 import MajorList from "./Components/Register/MajorList";
 import Navigation from "./Components/Navigation";
-import Profile from "./Components/Profile";
+import Profile from "./Components/Profile/Profile";
 import Signup from "./Components/Signup";
 import MajorRequirements from "./Components/MajorRequirement/major_Requirements";
 import CGrades from "./Components/CGrades";

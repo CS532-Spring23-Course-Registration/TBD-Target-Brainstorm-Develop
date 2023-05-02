@@ -80,10 +80,6 @@ function MajorRequirements(props) {
 
   //Handle the submit of the course outline general search button
   const handleSubmit = async (event) => {
-    if (!majorQuery) {
-      alert("Please enter a major to search for.");
-      return;
-    }
     const response = await fetch("http://127.0.0.1:5000/query", {
       method: "POST",
       headers: {
@@ -128,7 +124,7 @@ function MajorRequirements(props) {
         return (
           <div>
             <Container maxWidth="lg">
-              <Box>
+              <Box width={"800px"}>
                 <Card>
                   <CardContent sx={{ display: "flex", flexDirection: "row" }}>
                     <Box
@@ -231,7 +227,7 @@ function MajorRequirements(props) {
         </Box>
         <Box display="flex">
           <Box width={"200px"} height={"150px"} mr={5}>
-            <Card>
+            <Card sx={{ width: "200px", height: "100%" }}>
               <CardContent>
                 <List>
                   {options.map((option, index) => (
