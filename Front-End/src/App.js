@@ -27,15 +27,9 @@ function App() {
   // });
 
   const [user, setUser] = useState({
-<<<<<<< Updated upstream
-    auth: true,
-    permission: "admin",
-    id: ""
-=======
     auth: false,
     permission: "",
     id: "",
->>>>>>> Stashed changes
   });
 
   return (

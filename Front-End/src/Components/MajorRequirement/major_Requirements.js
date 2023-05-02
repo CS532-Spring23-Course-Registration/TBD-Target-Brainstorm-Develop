@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import HelpButton from "./Register/HelpButton";
 import {
   Typography,
   Container,
@@ -20,6 +19,7 @@ import CourseOutlineHistory from "./CourseOutlineHistory";
 import CompletedCourses from "./CompletedCourses";
 import StudentOutlines from "./StudentOutlines";
 import DispaySearchedMajorList from "./DispaySearchedMajorList";
+import HelpButton from "../Register/HelpButton";
 
 function MajorRequirements(props) {
   const [selectedOption, setSelectedOption] = useState("Courses by Major");

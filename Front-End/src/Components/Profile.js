@@ -58,6 +58,9 @@ function Profile() {
   const Pinfo = ["ID:", "Name:", "Date of Birth:", "Address:"];
   const [pValues, setPvalues] = useState({});
   const [studentData, setStudentData] = useState({});
+  const [cValues, setCvalues] = useState({});
+  const [pdfData, setPDF] = useState({});
+  const Cinfo = ["Courses"];
 
   const sessionId = Cookies.get("session_id");
   const studentId = Cookies.get("user_id");
@@ -65,16 +68,14 @@ function Profile() {
   // Added For the Help-Function Const state variable
   const [helpDialogOpen, setHelpDialogOpen] = useState(false);
 
-  // supporting functions that will help handle the Help Button 
+  // supporting functions that will help handle the Help Button
   const handleHelpClick = () => {
     setHelpDialogOpen(true);
   };
-  
+
   const handleHelpClose = () => {
     setHelpDialogOpen(false);
   };
-
-
 
   const testData = {
     id: "123",
@@ -95,11 +96,6 @@ function Profile() {
       { label: "Minor:", value: data.Minor },
     ];
   };
-  const [cValues, setCvalues] = useState({});
-  const [pValues, setPvalues] = useState({});
-  const [pdfData, setPDF] = useState({});
-  const sessionId = Cookies.get("session_id");
-  const studentId = Cookies.get("user_id");
 
   useEffect(() => {
     const fetchStudentData = async () => {
@@ -180,8 +176,6 @@ function Profile() {
   //   }
   // };
 
-  const options = ["Personal Information", "Academics", "Student Records"];
-
   return (
     <div>
       <Container>
@@ -236,23 +230,25 @@ function Profile() {
             <List>
               <ListItem>
                 <Typography>
-                  <strong>Personal Information:</strong> This tab displays the student's personal information.
+                  <strong>Personal Information:</strong> This tab displays the
+                  student's personal information.
                 </Typography>
               </ListItem>
               <ListItem>
                 <Typography>
-                  <strong>Academics:</strong> This tab shows the student's academic information.
+                  <strong>Academics:</strong> This tab shows the student's
+                  academic information.
                 </Typography>
               </ListItem>
               <ListItem>
                 <Typography>
-                  <strong>Student Records:</strong> This tab contains the student's records.
+                  <strong>Student Records:</strong> This tab contains the
+                  student's records.
                 </Typography>
               </ListItem>
             </List>
           </DialogContent>
         </Dialog>
-
       </Container>
     </div>
   );
