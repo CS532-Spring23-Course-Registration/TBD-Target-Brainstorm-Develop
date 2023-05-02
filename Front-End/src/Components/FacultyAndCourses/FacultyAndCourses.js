@@ -153,8 +153,6 @@ const FacultyAndCourses = () => {
 
   const classes = useStyles();
 
-  console.log(searchQuery);
-
   return (
     <div>
       <Box sx={{ ml: 3, mt: 3, mb: 1 }}>
