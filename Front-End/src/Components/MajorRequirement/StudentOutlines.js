@@ -31,7 +31,7 @@ function StudentOutlines(props) {
       setSelectedItem(null);
       setOpen(false);
     };
-  
+    
     return (
       <Box sx={{ maxHeight: '400px', overflowY: 'scroll' }}>
         {props.data.map(item => (

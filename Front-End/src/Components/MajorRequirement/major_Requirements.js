@@ -199,11 +199,11 @@ function MajorRequirements(props) {
           </div>
         );
       case "Completed Courses":
-        return <CompletedCourses data={testData} />;
+        return <CompletedCourses data={testData} userData={userData}/>;
       case "Course Outline History":
-        return <CourseOutlineHistory data={testData} />;
+        return <CourseOutlineHistory data={testData} userData={userData}/>;
       case "Student Outlines":
-        return <StudentOutlines data={testData} />;
+        return <StudentOutlines data={testData} userData={userData}/>;
       default:
         return null;
     }

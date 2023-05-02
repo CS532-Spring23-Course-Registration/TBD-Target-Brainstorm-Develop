@@ -11,7 +11,6 @@ import Menu from "./Components/Menu";
 import FacultyAndCourses from "./Components/FacultyAndCourses/FacultyAndCourses";
 import CSearch from "./Components/Register/CSearch";
 import MajorList from "./Components/Register/MajorList";
-import Cinfo from "./Components/Register/Cinfo";
 import Navigation from "./Components/Navigation";
 import Profile from "./Components/Profile";
 import Signup from "./Components/Signup";
@@ -50,7 +49,6 @@ function App() {
                 path="/faculty-and-course-info"
                 element={<FacultyAndCourses />}
               />
-              <Route path="/courseinfo" element={<Cinfo />} />
               <Route
                 path="/"
                 element={<Navigation permission={user.permission} />}
@@ -60,7 +58,6 @@ function App() {
                 path="/Major-Requirements"
                 element={<MajorRequirements user={user} />}
               />
-              <Route exact path="/cinfo/:id" element={<Cinfo />} />
               <Route path="/grades" element={<CGrades user={user} />} />
             </>
           )}

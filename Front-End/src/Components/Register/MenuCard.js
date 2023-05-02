@@ -14,10 +14,10 @@ const useStyles = makeStyles({
     width: "200px",
     height: "100%",
     position: "fixed",
-    left: "0",
+    left: "1rem",
     padding: "10px",
     boxSizing: "border-box",
-    marginLeft: "30px",
+    marginLeft: "20px",
   },
   link: {
     display: "flex",
@@ -41,7 +41,7 @@ function MenuCard({ content }) {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
+    <Box className={classes.root}>
       <Box>
         <Card>
           <CardContent>
@@ -61,7 +61,7 @@ function MenuCard({ content }) {
           </CardContent>
         </Card>
       </Box>
-    </div>
+    </Box>
   );
 }
 
