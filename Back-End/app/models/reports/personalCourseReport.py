@@ -115,5 +115,12 @@ def create_response_json(department_list, course_list, prerequisites_list):
         else:
             department["coursesInDepartment"] = ["None"]
 
+    # Remove empty departments before returning json
+    new_department_list = []
+    for department in response["departments"]:
+        if department["coursesInDepartment"][0] != "None":
+            new_department_list.append(department)
+
+    response["departments"] = new_department_list
     return response
 

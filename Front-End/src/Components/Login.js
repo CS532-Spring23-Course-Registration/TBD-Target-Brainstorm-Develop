@@ -32,7 +32,11 @@ const useStyles = makeStyles((theme) => ({
   }
 }));
 
+
+
 function Login(props) {
+
+  
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -63,7 +67,7 @@ function Login(props) {
         console.log(data);
 
         Cookies.set("session_id", data.sessionId, { expires: 12 / 24, path: "/" });
-        Cookies.set("user_id", data.userId, {expires: 12/24, path:"/"});
+        Cookies.set("user_id", parseInt(data.userId), {expires: 12/24, path:"/"});
         Cookies.set("user_name", data.userName, {expires: 12/24, path: "/"});
 
         props.setUser({
@@ -77,6 +81,7 @@ function Login(props) {
       console.log(error);
     }
   };
+
 
   return (
     <div>

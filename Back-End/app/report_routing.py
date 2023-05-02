@@ -26,6 +26,9 @@ def getData(requestJson, reportToExecute):
         return jsonify({'error': e.message})
     except KeyError as e:
         return jsonify({'error': "KeyError occurred with field " + str(e)})
+    except TypeError as e:
+        return jsonify({'error': "There may be a missing database relationship in report " + requestJson["reportName"],
+                        'errorDetails': str(e)})
     except Exception as e:
         return jsonify({'error': str(e)})
 
