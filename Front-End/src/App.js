@@ -8,7 +8,7 @@ import React, { useState } from "react";
 
 import Login from "./Components/Login";
 import Menu from "./Components/Menu";
-import FacultyAndCourses from "./Components/FacultyAndCourses";
+import FacultyAndCourses from "./Components/FacultyAndCourses/FacultyAndCourses";
 import CSearch from "./Components/Register/CSearch";
 import MajorList from "./Components/Register/MajorList";
 import Cinfo from "./Components/Register/Cinfo";

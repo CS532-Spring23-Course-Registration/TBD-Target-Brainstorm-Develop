@@ -54,17 +54,22 @@ const useStyles = makeStyles((theme) => ({
 
 function Profile() {
   const classes = useStyles();
-  const [selectedOption, setSelectedOption] = useState(null);
-  const Pinfo = ["ID:", "Name:", "Date of Birth:", "Address:"];
   const [pValues, setPvalues] = useState({});
-  const [studentData, setStudentData] = useState({});
   const [cValues, setCvalues] = useState({});
   const [pdfData, setPDF] = useState({});
-  const Cinfo = ["Courses"];
-
   const sessionId = Cookies.get("session_id");
   const studentId = Cookies.get("user_id");
-
+  const Pinfo = [
+    "ID:",
+    "Name:",
+    "Date of Birth:",
+    "Address:",
+    "Phone Number:",
+    "Major:",
+    "Minor",
+  ];
+  const Cinfo = ["Courses:"];
+  const [selectedOption, setSelectedOption] = useState(null);
   // Added For the Help-Function Const state variable
   const [helpDialogOpen, setHelpDialogOpen] = useState(false);
 
