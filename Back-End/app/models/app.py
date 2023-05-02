@@ -10,13 +10,20 @@ db = SQLAlchemy()
 
 
 # Function to generate a random 4-digit ID number #
-def generate_id():
-    return random.randint(1000, 9999)
+def generate_id(min, max):
+    return random.randint(min, max)
+
+def generate_username(name):
+    firstLetter = name.split()[0][0]
+    lastName = name.split()[1]
+    randNum = str(random.randint(0, 999))
+    
+    return ''.join([firstLetter, lastName, randNum]).lower()
 
 
 class Student(db.Model):
     __tablename__ = 'student'
-    id = db.Column(db.Integer, primary_key=True, default=generate_id)
+    id = db.Column(db.Integer, primary_key=True, default=generate_id(10000, 14000))
     name = db.Column(db.String(100), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False)
     address = db.Column(db.String(100), nullable=False)
@@ -113,7 +120,7 @@ class StudentMiscNotes(db.Model):
 
 class Faculty(db.Model):
     __tablename__ = 'faculty'
-    id = db.Column(db.Integer, primary_key=True, default=generate_id)
+    id = db.Column(db.Integer, primary_key=True, default=generate_id(15000, 19000))
     name = db.Column(db.String(100), nullable=False)
     position_title = db.Column(db.String(50), nullable=False)
     phone_number = db.Column(db.String(20), nullable=False)
@@ -185,7 +192,7 @@ class FacultyTeachingDepartments(db.Model):
 
 class Users(db.Model):
     __tablename__ = 'users'
-    id = db.Column(db.Integer, primary_key=True, default=generate_id)
+    id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     job_title = db.Column(db.String(50), nullable=False)
@@ -202,6 +209,32 @@ class Users(db.Model):
         db.session.commit()
 
         return jsonify({"message": "User {:s} created with ID {:n}".format(name, u.id)})
+    
+    @classmethod
+    def create_from_id(cls, id, password):
+        # TODO - Add catch for duplicate name?
+
+        q = Faculty.query.filter_by(id=id).first()
+        s = Student.query.filter_by(id=id).first()
+        users = Users.query.filter_by(id=id).first()
+        
+        if (users != None):
+            return jsonify({"message": "ID {:n} already within Users.".format(id)})
+        
+        if (q == None and s == None):
+            return jsonify({"message": "ID {:n} not found in Faculty and Student.".format(id)})
+        elif (q == None and s != None):
+            u = Users(id=id, name=generate_username(s.name), password=password, job_title='student', permissions='student')
+        elif (q != None and s == None):
+            u = Users(id=id, name=generate_username(q.name), password=password, job_title=q.position_title, permissions='faculty')
+        else:
+            return jsonify({"message": "ID {:n} is a duplicate in Faculty and Student".format(id)})
+        
+        
+        db.session.add(u)
+        db.session.commit()
+
+        return jsonify({"message": "User {:s} created with ID {:n}".format(u.name, u.id)})
 
     # def get_user_by_username(name):
     #     Session = sessionmaker(bind=db.engine)
