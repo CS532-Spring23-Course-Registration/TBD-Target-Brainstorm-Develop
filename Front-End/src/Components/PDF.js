@@ -21,25 +21,49 @@ function PdfTable({ data, formatData }) {
     const underlineHeight = 1;
 
     formattedData.forEach(({ label, value }) => {
-      page.drawText(label, { x, y, size: textHeight, font: timesRomanFont });
-      page.drawText(value, {
-        x: x + cellWidth,
-        y,
-        size: textHeight,
-        font: timesRomanFont,
-      });
+      if (value) {
+        const labelLines = [];
+        let currentLine = "";
+        for (let i = 0; i < label.length; i++) {
+          if (currentLine.length >= 30) {
+            labelLines.push(currentLine);
+            currentLine = "";
+          }
+          currentLine += label.charAt(i);
+        }
+        labelLines.push(currentLine);
 
-      const underlineY = y - 5;
-      page.drawRectangle({
-        x,
-        y: underlineY,
-        width: underlineWidth,
-        height: underlineHeight,
-        color: rgb(0, 0, 0),
-        fillOpacity: 1,
-      });
+        let lineY = y;
+        labelLines.forEach((line) => {
+          page.drawText(line, {
+            x,
+            y: lineY,
+            size: textHeight,
+            font: timesRomanFont,
+          });
+          lineY -= textHeight + 2;
+        });
 
-      y -= cellHeight + 20;
+        page.drawText(value, {
+          x: x + cellWidth,
+          y,
+          size: textHeight,
+          font: timesRomanFont,
+        });
+
+        const underlineY = lineY + textHeight - 5;
+        page.drawRectangle({
+          x,
+          y: underlineY,
+          width: underlineWidth,
+          height: underlineHeight,
+          color: rgb(0, 0, 0),
+          fillOpacity: 1,
+        });
+
+        const labelHeight = labelLines.length * (textHeight + 2);
+        y -= Math.max(labelHeight, cellHeight) + 20;
+      }
     });
 
     const pdfBytes = await pdfDoc.save();
@@ -48,7 +72,6 @@ function PdfTable({ data, formatData }) {
     );
     window.open(pdfUrl);
   };
-
   return <Button onClick={generatePdf}>Generate PDF</Button>;
 }
 

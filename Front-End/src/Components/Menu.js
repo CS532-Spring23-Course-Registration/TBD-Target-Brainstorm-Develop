@@ -1,5 +1,5 @@
 import React from "react";
-import { AppBar, Toolbar, Button, Typography } from "@mui/material";
+import { AppBar, Toolbar, Button, Typography} from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 import { Link } from "react-router-dom";
@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    marginBottom: "75px"
   },
   title: {
     flexGrow: 1,
@@ -21,6 +22,7 @@ const useStyles = makeStyles((theme) => ({
 function Menu(props) {
   const classes = useStyles();
   var permissionCheck = false;
+
 
   const handleLogout = (event) => {
     const cookies = Object.keys(Cookies.get());
@@ -45,7 +47,7 @@ function Menu(props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="error">
+      <AppBar color="error">
         <Toolbar className={classes.toolbar}>
           <Typography variant="h6">Course Registration</Typography>
           <Button variant="contained" color="error" component={Link} to="/">

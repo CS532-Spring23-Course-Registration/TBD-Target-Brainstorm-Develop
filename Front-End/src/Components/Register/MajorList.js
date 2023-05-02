@@ -1,6 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@mui/styles";
-import CRegHome from "./CRegHome";
+import Cookies from "js-cookie";
+import HelpButton from "./HelpButton";
+import SearchIcon from "@mui/icons-material/Search";
+import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
+import MenuCard from "./MenuCard";
+import DisplayCurrentlyEnrolled from "./DisplayCurrentlyEnrolled";
+import {
+  Box
+} from "@mui/material";
 
 const useStyles = makeStyles({
   root: {
@@ -15,11 +23,26 @@ const useStyles = makeStyles({
   },
 });
 
-const studentId = "test1";
-const sessionId = "test2";
+// contents for menu card
+const content = [
+  {
+    text: "Search Courses",
+    to: "/search",
+    icon: <SearchIcon />,
+  },
+  {
+    text: "Currently Enrolled Courses",
+    to: "/majorlist",
+    icon: <LibraryBooksIcon />,
+  },
+];
+
+const studentId = Cookies.get("user_id");
+const sessionId = Cookies.get("session_id");
 
 function MajorList() {
   const classes = useStyles();
+  const [returnedCourses, setReturnedCourses] = useState(null);
 
   useEffect(() => {
     fetch("http://127.0.0.1:5000/query", {
@@ -28,25 +51,36 @@ function MajorList() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        reportName: "courses",
-        reportFilter: "currentlyEnrolled",
-        studentId: studentId,
-        sessionId: sessionId
+        reportName: "personalCourseReport",
+        courseSemester: "Fall 2023",
+        studentId: parseInt(studentId),
+        sessionId: sessionId,
       }),
     })
       .then((response) => response.json())
       .then((data) => {
-        // setData(data);
+        setReturnedCourses(data);
         console.log(data);
       })
       .catch((error) => console.log(error));
   }, []);
 
+  //Need to add a function here that loops through all returned elements,
+  //and creates a new array that stores classes that the student is 'Enrolled' in
+  //Then print out that array of classes in a card list
+
   return (
-    <div className={classes.root}>
-      <CRegHome />
-      <div className={classes.contents}>MajorList</div>
-    </div>
+    <Box display="flex" flexDirection="row" width="100%">
+      <Box width="20%" height="300px" display="flex">
+        <MenuCard content={content} />
+      </Box>
+      <Box width="80%" display="flex" justifyContent="center">
+        {returnedCourses ? (
+          <DisplayCurrentlyEnrolled returnedCourses={returnedCourses}/>
+        ) : null }
+      </Box>
+      <HelpButton selectedOption="Currently Enrolled Courses" />
+    </Box>
   );
 }
 

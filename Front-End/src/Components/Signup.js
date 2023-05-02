@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import {
@@ -9,6 +9,7 @@ import {
   Button,
   Card,
 } from "@mui/material";
+import MenuItem from '@mui/material/MenuItem';
 
 const useStyles = makeStyles((theme) => ({
   box_container: {
@@ -32,27 +33,79 @@ const useStyles = makeStyles((theme) => ({
   submitButton: { marginTop: "20px" },
 }));
 
-
 function SignUp() {
   const navigate = useNavigate();
   const classes = useStyles();
-  const [fields, setFields] = useState({
+
+  const [departments, setDepartments] = useState([]);
+  
+  /* Get list of departments, need to make route */
+  useEffect(() => {
+    fetch("http://127.0.0.1:3000/departments", {
+      method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        }
+    })
+    .then(response => response.json())
+    .then(data =>setDepartments(data));
+  });
+  console.log(departments)
+
+  const initialFields = {
     name: "",
+    password: "",
+    jobTitle: "",
+
+    officeNumber: "",
+    officeHours: "",
+    assignedDepartment: "",
+    
     phoneNumber: "",
     address: "",
     dateOfBirth: "",
     major: "",
     minor: "",
-  });
+  }
 
-  const [errors, setErrors] = useState({
+  const [fields, setFields] = useState(initialFields);
+
+  const resetFields = () => {
+    setFields({ ...initialFields })
+  };
+
+  const initialErrors = {
     name: false,
+    password: false,
+    jobTitle: false,
+
+    officeNumber: false,
+    officeHours: false,
+    assignedDepartment: false,
+
     phoneNumber: false,
     address: false,
     dateOfBirth: false,
     major: false,
     minor: false,
-  });
+  }
+
+  const [errors, setErrors] = useState(initialErrors);
+
+  const resetErrors = () => {
+    setErrors({ ...initialErrors})
+  };
+
+  const [selectedOption, setSelectedOption] = useState("");
+  const handleOption = (event) => {
+    const { value } = event.target;
+    setSelectedOption(value);
+    resetFields();
+    resetErrors();
+    if (value === "student" || value === "gradstudent") {
+      setFields( {...fields, jobTitle: value });
+    }
+  };
 
   /* Limit input length of date */
   const handleDate = (event) => {
@@ -95,6 +148,14 @@ function SignUp() {
     const formData = {
       reportName: "student_info",
       name: fields.name,
+      password: fields.password,
+      jobTitle: fields.jobTitle,
+      permissions: fields.permissions,
+
+      officeNumber: fields.officeNumber,
+      officeHours: fields.officeHours,
+      assignedDepartment: fields.assignedDepartment,
+
       phoneNumber: fields.phoneNumber,
       address: fields.address,
       dateOfBirth: fields.dateOfBirth,
@@ -102,8 +163,9 @@ function SignUp() {
       minor: fields.minor,
     };
 
+    /* Send formData, maybe PUT routing */
     try {
-      const response = await fetch("http://127.0.0.1:5000/signup", {
+      const response = await fetch("http://127.0.0.1:3000/signup", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -124,14 +186,35 @@ function SignUp() {
 
   return (
     <Box className={useStyles.box_container} mt={10}>
-      <Container maxWidth="sm">
+      <Container maxWidth="sm" >
         <Card variant="outlined" color="error">
           <Box sx={{ mt: 8, mb: 4 }}>
             <Typography variant="h4" align="center">
               Register User
             </Typography>
           </Box>
+
           <form className={classes.form} onSubmit={handleSubmit}>
+
+          <Box className={classes.input}>
+            <TextField
+              select
+              label="Select User Type"
+              name="userType"
+              value={selectedOption}
+              onChange={handleOption}
+              variant="outlined"
+              style={{minWidth: 200 }}
+              required
+              >
+              <MenuItem value="select"></MenuItem>        
+              <MenuItem value="admin" divider>Admin</MenuItem>
+              <MenuItem value="faculty" divider>Faculty</MenuItem>
+              <MenuItem value="student" divider>Student</MenuItem>
+              <MenuItem value="gradstudent" divider>Graduate Student</MenuItem>
+            </TextField>
+          </Box>
+    
             <Box className={classes.input}>
               <TextField
                 label="Name"
@@ -143,7 +226,31 @@ function SignUp() {
                 error={errors.name}
                 helperText={errors.name ? "Name field is required" : ""}
               />
-            </Box>
+              </Box>
+              <Box className={classes.input}>
+              <TextField
+                label="Password"
+                name="password"
+                variant="outlined"
+                value={fields.password}
+                onChange={handleRequiredFields}
+                required
+                error={errors.password}
+                helperText={errors.password ? "Password field is required" : ""}
+              />
+              </Box>
+              <Box className={classes.input}>
+              <TextField
+                label="Job Title"
+                name="jobTitle"
+                variant="outlined"
+                value={fields.jobTitle}
+                onChange={handleRequiredFields}
+                required
+                error={errors.jobTitle}
+                helperText={errors.jobTitle ? "Job title field is required" : ""}
+              />
+              </Box>
             <Box className={classes.input}>
               <TextField
                 label="Phone number"
@@ -156,10 +263,57 @@ function SignUp() {
                   pattern: "[0-9]*",
                 }}
                 onChange={handleNumber}
-                required
+                required={selectedOption !== "admin"}
                 error={errors.phoneNumber}
+                disabled={selectedOption === "admin"}
                 helperText={errors.phoneNumber ? "11 digit phone number is required" : ""}
               />
+            </Box>
+            <Box className={classes.input}>
+              <TextField
+                label="Office Number"
+                name="officeNumber"
+                variant="outlined"
+                value={fields.officeNumber}
+                onChange={handleRequiredFields}
+                required={selectedOption === "faculty"}
+                error={errors.officeNumber}
+                disabled={ selectedOption !== "faculty" }
+                helperText={errors.address ? "Address field is required" : ""}
+              />
+            </Box>
+            <Box className={classes.input}>
+              <TextField
+                label="Office Hours"
+                name="officeHours"
+                variant="outlined"
+                value={fields.officeNumber}
+                onChange={handleRequiredFields}
+                required={selectedOption === "faculty"}
+                error={errors.officeNumber}
+                disabled={ selectedOption !== "faculty" }
+                helperText={errors.address ? "Address field is required" : ""}
+              />
+            </Box>
+            
+            <Box className={classes.input}>
+              <TextField
+              select
+              label="Assigned Department"
+              name="assignedDepartment"
+              value={fields.assignedDepartment}
+              //onChange={}
+              variant="outlined"
+              style={{minWidth: 200 }}
+              required={selectedOption === "faculty"}
+              disabled={ selectedOption !== "faculty" }
+              error={errors.assignedDepartment}
+              >
+                {departments.map((department) => (
+                  <MenuItem value={department}>{department}</MenuItem>
+                ))}
+
+            </TextField>
             </Box>
             <Box className={classes.input}>
               <TextField
@@ -168,8 +322,9 @@ function SignUp() {
                 variant="outlined"
                 value={fields.address}
                 onChange={handleRequiredFields}
-                required
+                required={selectedOption !== "admin" && selectedOption !== "faculty"}
                 error={errors.address}
+                disabled={ ((selectedOption !== "student") && (selectedOption !== "gradstudent")) }
                 helperText={errors.address ? "Address field is required" : ""}
               />
             </Box>
@@ -182,8 +337,9 @@ function SignUp() {
                 value={fields.dateOfBirth}
                 InputProps={{ className: classes.inputBox }}
                 onChange={handleDate}
-                required
+                required={selectedOption === "student"}
                 error={errors.dateOfBirth}
+                disabled={ ((selectedOption !== "student") && (selectedOption !== "gradstudent")) }
                 helperText={errors.dateOfBirth ? "Field is required" : ""}
               />
             </Box>
@@ -194,8 +350,9 @@ function SignUp() {
                 variant="outlined"
                 value={fields.major}
                 onChange={handleRequiredFields}
-                required
+                required={selectedOption === "student" || selectedOption === "gradstudent"}
                 error={errors.major}
+                disabled={ ((selectedOption !== "student") && (selectedOption !== "gradstudent")) }
                 helperText={errors.major ? "Field is required" : ""}
               />
             </Box>
@@ -204,6 +361,7 @@ function SignUp() {
                 label="Minor"
                 name="minor"
                 variant="outlined"
+                disabled={ ((selectedOption !== "student") && (selectedOption !== "gradstudent")) }
                 onChange={handleRequiredFields}  
               />
             </Box>
