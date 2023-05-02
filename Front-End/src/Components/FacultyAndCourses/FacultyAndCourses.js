@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import HelpButton from "./Register/HelpButton";
+import HelpButton from "../Register/HelpButton";
 import {
   Button,
   List,
@@ -14,6 +14,8 @@ import {
 } from "@mui/material";
 import Cookies from "js-cookie";
 import { makeStyles } from "@mui/styles";
+import DispaySearchedFaculty from "./DispaySearchedFaculty";
+import DispaySearchedCourses from "./DispaySearchedCourses";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -40,7 +42,6 @@ const useStyles = makeStyles((theme) => ({
     padding: "20px",
   },
   searchContainer: {
-    margin: "20px",
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -63,20 +64,18 @@ const useStyles = makeStyles((theme) => ({
 
 const FacultyAndCourses = () => {
   const sessionId = Cookies.get("session_id");
-
   const [selectedItem, setSelectedItem] = useState("Courses");
   const selectedOption = selectedItem; // added this for the HelpButton Component
-
   //States for the search boxes
   const [searchQuery, setSearchQuery] = useState("");
   const [departmentQuery, setDepartmentQuery] = useState("");
-
   //Params for requests
   const [reportType, setReportType] = useState("courseInfo");
   const [reportParameter, setReportParameter] = useState("course");
   const [reportFilters, setReportFilters] = useState(
     "allFacultyAllDepartments"
   );
+  const [returnedLists, setReturnedLists] = useState(null);
 
   //Updates the state when user clicks an option from the side menu
   const handleListItemClick = (item) => {
@@ -84,9 +83,11 @@ const FacultyAndCourses = () => {
     if (selectedItem !== "Courses") {
       setReportType("courseInfo");
       setReportParameter("course");
+      setReturnedLists(null);
     } else {
       setReportType("facultyInfo");
       setReportParameter("faculty");
+      setReturnedLists(null);
     }
   };
 
@@ -102,6 +103,7 @@ const FacultyAndCourses = () => {
 
   //Function for making API call when the submit button is pressed
   const handleSubmit = async () => {
+    const param = reportParameter;
     const response = await fetch("http://127.0.0.1:5000/query", {
       method: "POST",
       headers: {
@@ -116,11 +118,16 @@ const FacultyAndCourses = () => {
       }),
     });
 
-    if (response.status === 401) {
+    if (searchQuery === "" && departmentQuery === "") {
+      alert(
+        "There was an error with your search. Please try with valid courses or a department name."
+      );
+    } else if (response.status === 401) {
       console.log("Authentication Failed.");
     } else if (response.status === 200) {
       console.log("Successful query.");
       const data = await response.json();
+      setReturnedLists(data);
     }
   };
 
@@ -160,6 +167,8 @@ const FacultyAndCourses = () => {
 
   const classes = useStyles();
 
+  console.log(searchQuery);
+
   return (
     <div>
       <Box sx={{ ml: 3, mt: 3, mb: 1 }}>
@@ -168,20 +177,23 @@ const FacultyAndCourses = () => {
         </Typography>
       </Box>
       <Box className={classes.root}>
-        <Card sx={{ width: "200px", height: "200px", marginRight: "100px" }}>
-          <CardContent>
-            <List>
-              {options.map((option, index) => (
-                <div key={index}>
-                  <ListItem onClick={() => handleListItemClick(option)}>
-                    <ListItemText primary={option} />
-                  </ListItem>
-                  {index !== options.length - 1 && <Divider />}
-                </div>
-              ))}
-            </List>
-          </CardContent>
-        </Card>
+        <Box width={"200px"} height={"150px"} mr={"100px"}>
+          <Card sx={{ width: "200px", height: "100%" }}>
+            <CardContent>
+              <List>
+                {options.map((option, index) => (
+                  <div key={index}>
+                    <ListItem onClick={() => handleListItemClick(option)}>
+                      <ListItemText primary={option} />
+                    </ListItem>
+                    {index !== options.length - 1 && <Divider />}
+                  </div>
+                ))}
+              </List>
+            </CardContent>
+          </Card>
+        </Box>
+
         <div className={classes.contents}>
           <Box className={classes.searchContainer}>
             <Box className={classes.searchContainer}>
@@ -219,6 +231,13 @@ const FacultyAndCourses = () => {
           </Box>
         </div>
       </Box>
+      {(returnedLists !== null && selectedOption === "Faculty" && (
+        <DispaySearchedFaculty returnedLists={returnedLists} />
+      )) ||
+        (returnedLists !== null && selectedOption === "Courses" && (
+          <DispaySearchedCourses returnedLists={returnedLists} />
+        ))}
+
       <HelpButton selectedOption={selectedOption} />
     </div>
   );

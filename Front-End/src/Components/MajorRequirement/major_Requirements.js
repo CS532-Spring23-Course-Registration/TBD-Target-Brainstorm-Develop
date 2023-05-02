@@ -12,7 +12,6 @@ import {
   ListItemText,
   Divider,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
 import CourseOutlineHistory from "./CourseOutlineHistory";

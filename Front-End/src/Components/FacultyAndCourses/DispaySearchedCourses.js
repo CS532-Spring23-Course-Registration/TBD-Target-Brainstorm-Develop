@@ -10,7 +10,9 @@ import {
   DialogActions,
 } from "@mui/material";
 
-function DispaySearchedMajorList(props) {
+import Cookies from "js-cookie";
+
+function DispaySearchedCourses(props) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [open, setOpen] = useState(false);
 
@@ -25,14 +27,14 @@ function DispaySearchedMajorList(props) {
     setOpen(false);
   };
 
-  const majorList = props.returnedLists?.majorList || [
-    { majorName: "No major found" },
+  const departmentList = props.returnedLists?.departmentList || [
+    { departmentName: "No major found" },
   ];
 
   return (
     <Box mt={3} display="flex" flexDirection="column" alignItems="center">
       <Typography color="grey" variant="h5">
-        {majorList[0].majorName}
+        {departmentList[0].departmentName}
       </Typography>
 
       <Box
@@ -42,7 +44,7 @@ function DispaySearchedMajorList(props) {
         border="1px solid red"
         sx={{
           padding: "10px",
-          width: "100%",
+          width: "80%",
           boxShadow: "inset 0px 0px 5px 2px rgba(0, 0, 0, 0.25)",
           borderRadius: "10px",
         }}
@@ -55,10 +57,10 @@ function DispaySearchedMajorList(props) {
             overflowY: "scroll",
           }}
         >
-          {props.returnedLists.majorList.map((item) =>
-            item.requiredCourses.map((courseItem) => (
+          {props.returnedLists.departmentList.map((item) =>
+            item.courseList.map((courseItem) => (
               <Card
-                key={`${item.majorId}-${courseItem.courseId}`}
+                key={`${item.departmentId}-${courseItem.courseId}`}
                 sx={{
                   mb: 2,
                   "&:hover": { bgcolor: "#f5f5f5" },
@@ -125,7 +127,7 @@ function DispaySearchedMajorList(props) {
                     </Typography>
                   </Box>
                   <Typography align="center" variant="subtitle1">
-                    {selectedItem.courseTitle}
+                    {selectedItem.courseTitle} Unit:
                   </Typography>
 
                   <Box
@@ -167,4 +169,4 @@ function DispaySearchedMajorList(props) {
   );
 }
 
-export default DispaySearchedMajorList;
+export default DispaySearchedCourses;
