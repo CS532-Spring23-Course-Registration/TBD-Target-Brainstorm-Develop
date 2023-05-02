@@ -25,16 +25,11 @@ function DispaySearchedFaculty(props) {
     setOpen(false);
   };
 
-  const departmentList = props.returnedLists?.departmentList || [
-    { departmentName: "No major found" },
-  ];
-
   return (
     <Box mt={3} display="flex" flexDirection="column" alignItems="center">
       <Typography color="grey" variant="h5">
-        {departmentList[0].departmentName}
+        Results
       </Typography>
-
       <Box
         display="flex"
         mt={1}

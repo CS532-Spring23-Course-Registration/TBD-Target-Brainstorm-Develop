@@ -76,7 +76,7 @@ const AdminPanel = () => {
     },
     {
       id: 3,
-      name: "Bob",
+      name: "Jake",
       employeeNumber: 789,
       jobTitle: "Manager",
       allowedAccess: true,
@@ -196,8 +196,8 @@ const AdminPanel = () => {
                         <Typography variant="caption">Job Title: {user.jobTitle}</Typography>
                         <Typography variant="caption">Allowed Access: {user.allowedAccess ? "Yes" : "No"}</Typography>
                       </Box>
-                      <Box display="flex" flexDirection="row" width="50%" alignItems="center" justifyContent="space-evenly">
-                          <form onSubmit={() => handleChangePassword(user)}>
+                      <Box display="flex" flexDirection="row" width="50%" alignItems="center" border="1px solid green" justifyContent="space-around">
+                          <form border="1px solid blue" onSubmit={() => handleChangePassword(user)}>
                             <TextField required size="small" label="New Password" inputRef={passwordRef}/>
                             <Button 
                               size="small" 
