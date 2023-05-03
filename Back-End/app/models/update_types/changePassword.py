@@ -5,7 +5,7 @@ from app.models.app import *
 
 class ChangePassword:
     validationSchema = {
-        "title": "registerForCourse",
+        "title": "changePassword",
         "type": "object",
         "properties": {
             "updateType": {"type": "string", "const": "changePassword"},

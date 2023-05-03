@@ -96,6 +96,7 @@ class StudentMajorOutline:
                 .all()
 
             course_ids = [ids[0] for ids in required_courses]
+
             # Get prerequs for each course type
             course_prerequisites = db.session.query(CoursePrerequisites.course_id, Courses.title) \
                 .select_from(CoursePrerequisites) \
