@@ -37,14 +37,20 @@ const content = [
   },
 ];
 
-const studentId = Cookies.get("user_id");
-const sessionId = Cookies.get("session_id");
 
 function MajorList() {
   const classes = useStyles();
   const [returnedCourses, setReturnedCourses] = useState(null);
 
+  const studentId = Cookies.get("user_id");
+  const sessionId = Cookies.get("session_id");
+
+
+
   useEffect(() => {
+
+    console.log("Currently Enrolled Call");
+
     fetch("http://127.0.0.1:5000/query", {
       method: "POST",
       headers: {
