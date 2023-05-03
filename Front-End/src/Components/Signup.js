@@ -38,8 +38,8 @@ function SignUp(props) {
   const classes = useStyles();
 
   const [departments, setDepartments] = useState([]);
-  var isFaculty = false;
-  var isStudent = false;
+  const [isFaculty, setIsFaculty] = useState(false);
+  const [isStudent, setIsStudent] = useState(false);
 
   /* Get list of departments, need to make route */
   useEffect(() => {
@@ -105,9 +105,14 @@ function SignUp(props) {
     setSelectedOption(event.target.value);
 
     if (event.target.value === "faculty") {
-      isFaculty = true;
+      setIsFaculty(true);
+      setIsStudent(false);
     } else if (event.target.value === "student" || event.target.value === "gradstudent") {
-      isStudent = true;
+      setIsStudent(true);
+      setIsFaculty(false);
+    } else {
+      setIsFaculty(false);
+      setIsStudent(false);
     }
 
 
@@ -262,121 +267,135 @@ function SignUp(props) {
                 helperText={errors.jobTitle ? "Job title field is required" : ""}
               />
               </Box>
-            <Box className={classes.input}>
-              <TextField
-                label="Phone number"
-                name="phoneNumber"
-                variant="outlined"
-                value={fields.phoneNumber}
-                inputProps={{ 
-                  maxLength: 11,
-                  inputMode: "numeric",
-                  pattern: "[0-9]*",
-                }}
-                onChange={handleNumber}
-                required={selectedOption !== "admin"}
-                error={errors.phoneNumber}
-                disabled={selectedOption === "admin"}
-                helperText={errors.phoneNumber ? "11 digit phone number is required" : ""}
-              />
-            </Box>
-            <Box className={classes.input}>
-              <TextField
-                label="Office Number"
-                name="officeNumber"
-                variant="outlined"
-                value={fields.officeNumber}
-                onChange={handleRequiredFields}
-                required={selectedOption === "faculty"}
-                error={errors.officeNumber}
-                disabled={ selectedOption !== "faculty" }
-                helperText={errors.address ? "Address field is required" : ""}
-              />
-            </Box>
-            <Box className={classes.input}>
-              <TextField
-                label="Office Hours"
-                name="officeHours"
-                variant="outlined"
-                value={fields.officeNumber}
-                onChange={handleRequiredFields}
-                required={selectedOption === "faculty"}
-                error={errors.officeNumber}
-                disabled={ selectedOption !== "faculty" }
-                helperText={errors.address ? "Address field is required" : ""}
-              />
-            </Box>
+
+            { isFaculty ? (
+              <div>
+                <Box className={classes.input}>
+                  <TextField
+                    label="Phone number"
+                    name="phoneNumber"
+                    variant="outlined"
+                    value={fields.phoneNumber}
+                    inputProps={{ 
+                      maxLength: 11,
+                      inputMode: "numeric",
+                      pattern: "[0-9]*",
+                    }}
+                    onChange={handleNumber}
+                    required={selectedOption !== "admin"}
+                    error={errors.phoneNumber}
+                    disabled={selectedOption === "admin"}
+                    helperText={errors.phoneNumber ? "11 digit phone number is required" : ""}
+                  />
+                </Box>
+                <Box className={classes.input}>
+                  <TextField
+                    label="Office Number"
+                    name="officeNumber"
+                    variant="outlined"
+                    value={fields.officeNumber}
+                    onChange={handleRequiredFields}
+                    required={selectedOption === "faculty"}
+                    error={errors.officeNumber}
+                    disabled={ selectedOption !== "faculty" }
+                    helperText={errors.address ? "Address field is required" : ""}
+                  />
+                </Box>
+                <Box className={classes.input}>
+                  <TextField
+                    label="Office Hours"
+                    name="officeHours"
+                    variant="outlined"
+                    value={fields.officeNumber}
+                    onChange={handleRequiredFields}
+                    required={selectedOption === "faculty"}
+                    error={errors.officeNumber}
+                    disabled={ selectedOption !== "faculty" }
+                    helperText={errors.address ? "Address field is required" : ""}
+                  />
+                </Box>
+                
+                <Box className={classes.input}>
+                  <TextField
+                  select
+                  label="Assigned Department"
+                  name="assignedDepartment"
+                  value={fields.assignedDepartment}
+                  //onChange={}
+                  variant="outlined"
+                  style={{minWidth: 200 }}
+                  required={selectedOption === "faculty"}
+                  disabled={ selectedOption !== "faculty" }
+                  error={errors.assignedDepartment}
+                  >
+                    {departments.map((department) => (
+                      <MenuItem value={department}>{department}</MenuItem>
+                    ))}
+                </TextField>
+              </Box>
+            </div>
+            ) : null}
+
             
-            <Box className={classes.input}>
-              <TextField
-              select
-              label="Assigned Department"
-              name="assignedDepartment"
-              value={fields.assignedDepartment}
-              //onChange={}
-              variant="outlined"
-              style={{minWidth: 200 }}
-              required={selectedOption === "faculty"}
-              disabled={ selectedOption !== "faculty" }
-              error={errors.assignedDepartment}
-              >
-                {departments.map((department) => (
-                  <MenuItem value={department}>{department}</MenuItem>
-                ))}
 
-            </TextField>
-            </Box>
 
-            <Box className={classes.input}>
-              <TextField
-                label="Address"
-                name="address"
-                variant="outlined"
-                value={fields.address}
-                onChange={handleRequiredFields}
-                required={selectedOption !== "admin" && selectedOption !== "faculty"}
-                error={errors.address}
-                disabled={ ((selectedOption !== "student") && (selectedOption !== "gradstudent")) }
-                helperText={errors.address ? "Address field is required" : ""}
-              />
-            </Box>
-            <Box className={classes.input}>
-              <TextField
-                label="Date of Birth"
-                name="dateOfBirth"
-                variant="outlined"
-                type="date"
-                value={fields.dateOfBirth}
-                InputProps={{ className: classes.inputBox }}
-                onChange={handleDate}
-                required={selectedOption === "student"}
-                error={errors.dateOfBirth}
-                disabled={ ((selectedOption !== "student") && (selectedOption !== "gradstudent")) }
-                helperText={errors.dateOfBirth ? "Field is required" : ""}
-              />
-            </Box>
-            <Box className={classes.input}>
-              <TextField
-                label="Major"
-                name="major"
-                variant="outlined"
-                value={fields.major}
-                onChange={handleRequiredFields}
-                required={selectedOption === "student" || selectedOption === "gradstudent"}
-                error={errors.major}
-                disabled={ ((selectedOption !== "student") && (selectedOption !== "gradstudent")) }
-                helperText={errors.major ? "Field is required" : ""}
-              />
-            </Box>
-            <Box className={classes.input}>
-              <TextField
-                label="Minor"
-                name="minor"
-                variant="outlined"
-                disabled={ ((selectedOption !== "student") && (selectedOption !== "gradstudent")) }
-                onChange={handleRequiredFields}  
-              />
-            </Box>
+
+
+            { isStudent ? ( 
+              <div>
+                <Box className={classes.input}>
+                  <TextField
+                    label="Address"
+                    name="address"
+                    variant="outlined"
+                    value={fields.address}
+                    onChange={handleRequiredFields}
+                    required={selectedOption !== "admin" && selectedOption !== "faculty"}
+                    error={errors.address}
+                    disabled={ ((selectedOption !== "student") && (selectedOption !== "gradstudent")) }
+                    helperText={errors.address ? "Address field is required" : ""}
+                  />
+                </Box>
+                <Box className={classes.input}>
+                  <TextField
+                    label="Date of Birth"
+                    name="dateOfBirth"
+                    variant="outlined"
+                    type="date"
+                    value={fields.dateOfBirth}
+                    InputProps={{ className: classes.inputBox }}
+                    onChange={handleDate}
+                    required={selectedOption === "student"}
+                    error={errors.dateOfBirth}
+                    disabled={ ((selectedOption !== "student") && (selectedOption !== "gradstudent")) }
+                    helperText={errors.dateOfBirth ? "Field is required" : ""}
+                  />
+                </Box>
+                <Box className={classes.input}>
+                  <TextField
+                    label="Major"
+                    name="major"
+                    variant="outlined"
+                    value={fields.major}
+                    onChange={handleRequiredFields}
+                    required={selectedOption === "student" || selectedOption === "gradstudent"}
+                    error={errors.major}
+                    disabled={ ((selectedOption !== "student") && (selectedOption !== "gradstudent")) }
+                    helperText={errors.major ? "Field is required" : ""}
+                  />
+                </Box>
+                <Box className={classes.input}>
+                  <TextField
+                    label="Minor"
+                    name="minor"
+                    variant="outlined"
+                    disabled={ ((selectedOption !== "student") && (selectedOption !== "gradstudent")) }
+                    onChange={handleRequiredFields}  
+                  />
+                </Box>
+              </div>
+              ) : null}
+            
             <Box className={classes.submitButton}>
               <Button type="submit" variant="contained" color="primary">
                 Sign Up
