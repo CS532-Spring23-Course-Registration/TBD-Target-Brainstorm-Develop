@@ -53,7 +53,7 @@ function App() {
                 path="/"
                 element={<Navigation permission={user.permission} />}
               />
-              <Route path="/profile" element={<Profile />} />
+              <Route path="/profile" element={<Profile user={user} />} />
               <Route
                 path="/Major-Requirements"
                 element={<MajorRequirements user={user} />}
