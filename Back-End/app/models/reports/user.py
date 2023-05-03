@@ -4,7 +4,7 @@ from app.models.app import *
 
 
 def create_response_json(user_list):
-    user_list_fields = ["userId", "username", "jobTitle", "permissions"]
+    user_list_fields = ["userId", "username", "name", "jobTitle", "permissions"]
     user_list = [{key: val for key, val in zip(user_list_fields, user)} for user in user_list]
     return {"userList": user_list}
 
@@ -34,7 +34,7 @@ class User:
             user_type = requestJson["granularity"]
             user_list = []
             if user_type == "user":
-                user_list = db.session.query(Users.id, Users.name, Users.job_title, Users.permissions).all()
+                user_list = db.session.query(Users.id, Users.username, Users.name, Users.job_title, Users.permissions).all()
             else:
                 user_list = db.session.query(Users.id, Users.name, Users.job_title, Users.permissions) \
                     .filter(Users.permissions == user_type) \
