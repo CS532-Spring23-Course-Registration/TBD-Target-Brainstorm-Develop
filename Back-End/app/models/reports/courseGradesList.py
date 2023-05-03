@@ -5,7 +5,7 @@ from app.models.app import *
 
 def create_response_json(faculty_courses_list, student_list):
     course_list_fields = ["courseId", "courseTitle", "courseName", "courseSchedule", "courseUnits", "courseSemesterId"]
-    student_list_fields = ["studentId", "studentName", "major", "minor", "courseGrade"]
+    student_list_fields = ["studentId", "studentName", "major", "minor", "courseGrade", "courseNote"]
 
     # Organize students by course
     student_by_course = {}
@@ -57,7 +57,8 @@ class CourseGradesList:
             # Get students signed up for those courses
             course_sem_id_list = [course[-1] for course in faculty_courses_list]
             student_list = db.session.query(Student.id, Student.name, Student.major, Student.minor,
-                                            StudentGrades.grade, Enrollment.course_sem_id) \
+                                            StudentGrades.grade, StudentGrades.course_notes,
+                                            Enrollment.course_sem_id) \
                 .join(Enrollment, Student.id == Enrollment.student_id) \
                 .join(StudentGrades, Enrollment.student_id == StudentGrades.student_id) \
                 .filter(Enrollment.course_sem_id.in_(course_sem_id_list)) \
