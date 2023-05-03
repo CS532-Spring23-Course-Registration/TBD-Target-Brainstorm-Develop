@@ -47,6 +47,7 @@ class Student(db.Model):
     def create(cls, name, phone_number, address, dob, major, minor=None):
         s = Student(name=name, phone_number=phone_number,
                     address=address, dob=datetime.fromisoformat(dob), major=major, minor=minor)
+
         db.session.add(s)
         db.session.commit()
 
@@ -209,6 +210,7 @@ class Users(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(100), nullable=False)
+    username = db.Column(db.String(100), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     job_title = db.Column(db.String(50), nullable=False)
     permissions = db.Column(db.String(10), nullable=False)
@@ -216,10 +218,10 @@ class Users(db.Model):
     # Function to create a user within the system.
     # Ex. Users.create('name', 'passwordhash','jobtitle','admin')
     @classmethod
-    def create(cls, name, password, job_title, permissions):
+    def create(cls, username, name, password, job_title, permissions):
         # TODO - Add catch for duplicate name?
 
-        u = Users(name=name, password=password, job_title=job_title, permissions=permissions)
+        u = Users(username=username, name=name, password=password, job_title=job_title, permissions=permissions)
         db.session.add(u)
         db.session.commit()
 
