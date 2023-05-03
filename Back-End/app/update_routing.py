@@ -1,9 +1,12 @@
 from flask import Blueprint, request
 from flask import jsonify
 from jsonschema import validate, ValidationError
+from flask import current_app as app
+from app.models.app import *
 
 from app.models.update_types.dropFromCourse import DropFromCourse
 from app.models.update_types.registerForCourse import RegisterForCourse
+from app.models.update_types.changePassword import ChangePassword
 
 updates = Blueprint('updates', __name__)
 
@@ -29,3 +32,8 @@ def registerForCourse():
 @updates.route('/update/dropFromCourse', methods=['PUT'])
 def dropFromCourse():
     return getData(request.get_json(), DropFromCourse())
+
+@updates.route('/update/changePassword', methods=['PUT'])
+def changePassword():
+    return getData(request.get_json(), ChangePassword())
+

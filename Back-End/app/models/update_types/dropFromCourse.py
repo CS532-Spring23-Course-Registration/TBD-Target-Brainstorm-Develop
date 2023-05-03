@@ -18,7 +18,7 @@ class DropFromCourse:
         "title": "dropFromCourse",
         "type": "object",
         "properties": {
-            "reportName": {"type": "string", "const": "dropFromCourse"},
+            "updateType": {"type": "string", "const": "dropFromCourse"},
             "studentId": {"type": "integer"},
             "sessionId": {"type": "string"},
             "courseId": {"type": "integer"},
