@@ -316,10 +316,10 @@ function SignUp(props) {
                     label="Office Hours"
                     name="officeHours"
                     variant="outlined"
-                    value={fields.officeNumber}
+                    value={fields.officeHours}
                     onChange={handleRequiredFields}
                     required={selectedOption === "faculty"}
-                    error={errors.officeNumber}
+                    error={errors.officeHours}
                     disabled={ selectedOption !== "faculty" }
                     helperText={errors.address ? "Address field is required" : ""}
                   />
@@ -331,7 +331,7 @@ function SignUp(props) {
                   label="Assigned Department"
                   name="assignedDepartment"
                   value={fields.assignedDepartment}
-                  //onChange={}
+                  onChange={handleRequiredFields}
                   variant="outlined"
                   style={{minWidth: 200 }}
                   required={selectedOption === "faculty"}
@@ -339,7 +339,7 @@ function SignUp(props) {
                   error={errors.assignedDepartment}
                   >
                     {departments.map((department) => (
-                      <MenuItem value={department}>{department}</MenuItem>
+                      <MenuItem value={department} key={department}>{department}</MenuItem>
                     ))}
                 </TextField>
               </Box>
