@@ -35,18 +35,25 @@ function StudentOutlines(props) {
 
   return (
     <Box sx={{ maxHeight: "400px", overflowY: "scroll" }}>
-      {props.userData && props.userData.studentList.map((item) => (
-        <Card
-          key={item.departmentId}
-          sx={{ mb: 2, "&:hover": { bgcolor: "#f5f5f5" }, border: "1px solid lightgrey" }}
-          onClick={() => handleClick(item)}
-        >
-          <CardContent>
-            <Typography variant="h5">{item.studentName} (ID: {item.studentId})</Typography>
-            <Typography variant="body2">Major: {item.majorTitle}</Typography>
-          </CardContent>
-        </Card>
-      ))}
+      {props.userData &&
+        props.userData.studentList.map((item) => (
+          <Card
+            key={item.departmentId}
+            sx={{
+              mb: 2,
+              "&:hover": { bgcolor: "#f5f5f5" },
+              border: "1px solid lightgrey",
+            }}
+            onClick={() => handleClick(item)}
+          >
+            <CardContent>
+              <Typography variant="h5">
+                {item.studentName} (ID: {item.studentId})
+              </Typography>
+              <Typography variant="body2">Major: {item.majorTitle}</Typography>
+            </CardContent>
+          </Card>
+        ))}
       {selectedItem && (
         <Dialog open={open} onClose={handleClose} maxWidth="xl">
           <DialogTitle sx={{ fontWeight: "bold" }}>
@@ -121,32 +128,6 @@ function StudentOutlines(props) {
                   </Typography>
                 </Box>
               ))}
-              <Typography
-                mt={5}
-                sx={{ fontWeight: "bold" }}
-                variant="h5"
-                color={"blue"}
-              >
-                Elective Courses:
-              </Typography>
-              {/* {selectedItem.electiveCourses.map((course) => (
-                <div key={course.courseId}>
-                  <Typography variant="body1">{course.courseName}</Typography>
-                  <Typography variant="body2">
-                    Status: {course.status}
-                  </Typography>
-                  <Typography variant="body2">Major: {course.major}</Typography>
-                  <Typography variant="body2">
-                    Department: {course.department}
-                  </Typography>
-                  <Typography variant="body2">
-                    Course Completed: {course.courseCompleted.toString()}
-                  </Typography>
-                  <Typography variant="body2">
-                    Prerequisites: {course.coursePrerequisites.join(", ")}
-                  </Typography>
-                </div>
-              ))} */}
             </div>
           </DialogContent>
         </Dialog>

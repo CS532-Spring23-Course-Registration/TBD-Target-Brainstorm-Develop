@@ -92,7 +92,7 @@ const AdminPanel = () => {
   const formatData = (data) => {
     return data.userList.map((item) => {
       return {
-        label: `${item.username} (${item.jobTitle})`,
+        label: `${item.name} (${item.jobTitle})`,
         value: `Employee Number: ${item.userId} , Permission: ${item.permissions}`,
       };
     });
@@ -236,7 +236,7 @@ const AdminPanel = () => {
                         alignItems="center"
                       >
                         <Box mt={1} width="50%">
-                          <Typography variant="h5">{user.username}</Typography>
+                          <Typography variant="h5">{user.name}</Typography>
                         </Box>
                         <Box
                           mt={1}
