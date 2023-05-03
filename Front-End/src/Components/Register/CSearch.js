@@ -90,7 +90,6 @@ function CSearch() {
 
   //Parameters for the API call
   const [searchQuery, setSearchQuery] = useState("");
-
   const [departmentQuery, setDepartmentQuery] = useState("");
   const [checkBoxValue, setCheckBoxValue] = useState(false);
   const [reportFilter, setReportFilter] = useState();
@@ -100,13 +99,6 @@ function CSearch() {
 
   const sessionId = Cookies.get("session_id");
   const studentId = Cookies.get("user_id");
-
-  // const [searchResults, setSearchResults] = useState([]);
-  const Courses = [
-    { name: "Course A", description: "This is course A" },
-    { name: "Course B", description: "This is course B" },
-    { name: "Course C", description: "This is course C" },
-  ];
 
   const handleCheckBox = () => {
     var temp = checkBoxValue;
@@ -140,16 +132,14 @@ function CSearch() {
 
 
   useEffect(() => {
-    if (searchQuery === "" && departmentQuery === "" && !checkBoxValue) {
-      setReportFilter("allClassesAllDepartments");
-    } else if (searchQuery === "" && departmentQuery === "" && checkBoxValue) {
+    if (searchQuery === "" && departmentQuery === "" && checkBoxValue) {
       setReportFilter("openClassesAllDepartments");
     } else if (searchQuery === "" && departmentQuery !== "" && !checkBoxValue) {
       setReportFilter("allClassesByDepartment");
     } else if (searchQuery === "" && departmentQuery !== "" && checkBoxValue) {
       setReportFilter("openClassesByDepartment");
     } else {
-      setReportFilter("");
+      setReportFilter("allClassesAllDepartments");
     }
   }, [searchQuery, departmentQuery, checkBoxValue]);
 

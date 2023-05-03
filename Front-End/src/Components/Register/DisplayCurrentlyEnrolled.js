@@ -83,7 +83,7 @@ function DisplayCurrentlyEnrolled(props) {
           overflowY: "scroll",
         }}
       >
-        {props.returnedCourses.departments.map((item) =>
+        {props.returnedCourses.departments && props.returnedCourses.departments.map((item) =>
           item.coursesInDepartment.map((courseItem) => (
             <Card
               key={item.id}
@@ -257,6 +257,13 @@ function DisplayCurrentlyEnrolled(props) {
           </Dialog>
         )}
       </Box>
+
+
+
+
+
+
+
     </Box>
   );
 }

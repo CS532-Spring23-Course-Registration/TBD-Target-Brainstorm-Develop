@@ -47,24 +47,23 @@ const useStyles = makeStyles((theme) => ({
   },
   rightColumn: {
     flex: "1 1 80%",
-    padding: "2px"
+    padding: "2px",
   },
   card: {
     padding: "10px",
-    margin: "10px"
+    margin: "10px",
   },
 }));
 
 const AdminPanel = () => {
   const classes = useStyles();
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState(null);
   const [menuSelect, setMenuSelect] = useState("user");
   const [selectedItem, setSelectedItem] = useState(null);
   const [open, setOpen] = useState(false);
   const [newPassword, setNewPassword] = useState(null);
 
   const sessionId = Cookies.get("session_id");
-
 
   const testData = [
     {
@@ -91,10 +90,10 @@ const AdminPanel = () => {
   ];
 
   const formatData = (data) => {
-    return data.map((item) => {
+    return data.userList.map((item) => {
       return {
-        label: `${item.name} (${item.jobTitle})`,
-        value: `Employee Number: ${item.employeeNumber} , Allowed Access: ${item.allowedAccess}`,
+        label: `${item.username} (${item.jobTitle})`,
+        value: `Employee Number: ${item.userId} , Permission: ${item.permissions}`,
       };
     });
   };
@@ -102,16 +101,16 @@ const AdminPanel = () => {
   const handleClick = (user) => {
     setSelectedItem(user);
     setOpen(true);
-  }
+  };
 
   const handleClose = () => {
     setSelectedItem(null);
     setOpen(false);
-  }
+  };
 
   const handleMenuChange = (event) => {
     setMenuSelect(event.target.value);
-  }
+  };
 
   const handlePasswordChange = (selectedItem) => {
     //NEED TO CHANGE selectedItem.id to correct data once users actually get returned
@@ -124,7 +123,7 @@ const AdminPanel = () => {
         updateType: "changePassword",
         sessionId: sessionId,
         userBeingModified: selectedItem.id,
-        newPassword: newPassword
+        newPassword: newPassword,
       }),
     })
       .then((response) => response.json())
@@ -132,7 +131,7 @@ const AdminPanel = () => {
 
     console.log(selectedItem);
     handleClose();
-  }
+  };
 
   const handleSubmit = async () => {
     try {
@@ -150,13 +149,13 @@ const AdminPanel = () => {
 
       if (response.status === 401) {
       } else if (response.status === 200) {
+        const data = await response.json();
+        setUsers(data);
       }
     } catch (error) {
       console.log(error);
     }
   };
-
-
 
   return (
     <Container maxWidth="xl">
@@ -212,56 +211,97 @@ const AdminPanel = () => {
         </Grid>
         {/* Right Column */}
         <Grid item xs={12} md={9}>
-          <Paper className={classes.rightColumn} sx={{ height: "700px", overflowY: "scroll"}}>
-            {testData.map((user) => (
-              <Box m={3} key={user.id}>
-                <Card
-                  key={user.id}
-                  sx={{
-                    "&:hover": { bgcolor: "#f5f5f5"},
-                  }}
-                  onClick={() => handleClick(user)}
-                >
-                  <CardContent>
-                    <Box key={user.id} height="50px" width="100%" display="flex" flexDirection="row" justifyContent="space-around" alignItems="center">
+          <Paper
+            className={classes.rightColumn}
+            sx={{ height: "700px", overflowY: "scroll" }}
+          >
+            {users !== null &&
+              users.userList.map((user) => (
+                <Box m={3} key={user.userId}>
+                  <Card
+                    key={user.userId}
+                    sx={{
+                      "&:hover": { bgcolor: "#f5f5f5" },
+                    }}
+                    onClick={() => handleClick(user)}
+                  >
+                    <CardContent>
+                      <Box
+                        key={user.userId}
+                        height="50px"
+                        width="100%"
+                        display="flex"
+                        flexDirection="row"
+                        justifyContent="space-around"
+                        alignItems="center"
+                      >
                         <Box mt={1} width="50%">
-                          <Typography variant="h5">{user.name}</Typography>
+                          <Typography variant="h5">{user.username}</Typography>
                         </Box>
-                        <Box mt={1} width="50%" display="flex" flexDirection="column" alignItems="flex-end">
-                          <Typography variant="caption">Employee Number: {user.employeeNumber}</Typography>
-                          <Typography variant="caption">Job Title: {user.jobTitle}</Typography>
-                          <Typography variant="caption">Allowed Access: {user.allowedAccess ? "Yes" : "No"}</Typography>
+                        <Box
+                          mt={1}
+                          width="50%"
+                          display="flex"
+                          flexDirection="column"
+                          alignItems="flex-end"
+                        >
+                          <Typography variant="caption">
+                            Employee Number: {user.userId}
+                          </Typography>
+                          <Typography variant="caption">
+                            Job Title: {user.jobTitle}
+                          </Typography>
+                          <Typography variant="caption">
+                            Permission: {user.permissions}
+                          </Typography>
                         </Box>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Box>
-            ))}
+                      </Box>
+                    </CardContent>
+                  </Card>
+                </Box>
+              ))}
           </Paper>
           {selectedItem && (
-              <Dialog open={open} onClose={handleClose}>
-                <DialogContent>
-                  <Box display="flex" flexDirection="column" alignItems="center">
-                    <Box m={1}>
-                      <Typography variant="h6">Change Password For {selectedItem.name}: </Typography>
-                    </Box>
-                    <Box display="flex" flexDirection="row" justifyContent="space-around" alignItems="center">
-                      <TextField required size="small" label="New Password" onChange={(event) => setNewPassword(event.target.value)}/>
-                      <Button 
-                        size="small" 
-                        variant="contained" 
-                        color="error" 
-                        onClick={() => handlePasswordChange(selectedItem)}
-                        sx={{ height: "35px", width: "30%", textTransform: "none", lineHeight: "15px" }}
-                        >
-                          Change Password
-                      </Button>
-                    </Box>
+            <Dialog open={open} onClose={handleClose}>
+              <DialogContent>
+                <Box display="flex" flexDirection="column" alignItems="center">
+                  <Box m={1}>
+                    <Typography variant="h6">
+                      Change Password For {selectedItem.name}:{" "}
+                    </Typography>
                   </Box>
-                </DialogContent>
-              </Dialog>
-            )}
-          <PdfTable data={testData} formatData={formatData}/>
+                  <Box
+                    display="flex"
+                    flexDirection="row"
+                    justifyContent="space-around"
+                    alignItems="center"
+                  >
+                    <TextField
+                      required
+                      size="small"
+                      label="New Password"
+                      onChange={(event) => setNewPassword(event.target.value)}
+                    />
+                    <Button
+                      size="small"
+                      variant="contained"
+                      color="error"
+                      onClick={() => handlePasswordChange(selectedItem)}
+                      sx={{
+                        height: "35px",
+                        width: "30%",
+                        textTransform: "none",
+                        lineHeight: "15px",
+                      }}
+                    >
+                      Change Password
+                    </Button>
+                  </Box>
+                </Box>
+              </DialogContent>
+            </Dialog>
+          )}
+          <PdfTable data={users} formatData={formatData} />
         </Grid>
       </Grid>
     </Container>

@@ -69,7 +69,7 @@ function DisplaySearchedCourses(props) {
         <Box sx={{ margin: "15px", width:"100%", height: "600px", overflowY: 'scroll' }}>
           {props.returnedCourses.departments.map((item) => (
             item.coursesInDepartment.map (courseItem => 
-              <Card key={item.id} sx={{ mb: 2, '&:hover': { bgcolor: '#f5f5f5' }, borderRadius: "10px" }} onClick={() => handleClick(courseItem)}>
+              <Card key={item.id} sx={{ mb: 2, '&:hover': { bgcolor: '#f5f5f5' }, borderRadius: "10px", border: "1px solid lightgrey" }} onClick={() => handleClick(courseItem)}>
               <CardContent sx={{ mt: "5px" }}>
                 <Box display="flex" ml={3} flexDirection="row">
                   <Box display="flex" flexDirection="column" justifyContent="space-between" width="50%">
