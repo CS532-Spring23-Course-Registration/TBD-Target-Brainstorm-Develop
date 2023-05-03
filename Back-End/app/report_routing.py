@@ -12,7 +12,6 @@ from app.models.reports.gradeStatistics import GradeStatistics
 from app.models.reports.personalCourseReport import PersonalCourseReport
 from app.models.reports.studentInfo import StudentInfo
 from app.models.reports.studentMajorOutline import StudentMajorOutline
-from app.models.reports.departments import Department
 from app.models.reports.user import User
 
 reports = Blueprint('reports', __name__)
@@ -85,7 +84,3 @@ def advisorStudentOutlines():
 @reports.route('/query/users', methods=['POST'])
 def users():
     return getData(request.get_json(), User())
-
-@reports.route('/query/departments', methods=['POST'])
-def departments():
-    return getData(request.get_json(), Department())

@@ -26,9 +26,6 @@ import {
 } from "@mui/material";
 import Cookies from 'js-cookie';
 
-
-
-
 function StudentGrades(props) {
     const [selectedStudent, setSelectedStudent] = useState(null);
     const [selectedStudentGrade, setSelectedStudentGrade] = useState(null);
