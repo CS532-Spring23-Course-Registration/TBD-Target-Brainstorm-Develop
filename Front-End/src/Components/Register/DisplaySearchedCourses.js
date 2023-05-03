@@ -22,7 +22,13 @@ function DisplaySearchedCourses(props) {
     const userId = Cookies.get("user_id");
     const sessionId = Cookies.get("session_id");
 
-
+    const handleDrop = (event, item) => {
+      // Prevent default behavior
+      event.preventDefault();
+  
+      // Call onDrop prop and pass in selected item data
+      props.onDrop(item);
+    };
     const handleClick = item => {
       setSelectedItem(item);
       setOpen(true);
@@ -34,7 +40,6 @@ function DisplaySearchedCourses(props) {
     };
 
     const handleAddClass = (selectedItem) => {
-
       fetch("http://127.0.0.1:5000/update", {
         method: "PUT",
         headers: {
@@ -54,6 +59,8 @@ function DisplaySearchedCourses(props) {
           console.log(data);
         })
         .catch((error) => console.log(error));
+
+        setOpen(false);
     }
   
 

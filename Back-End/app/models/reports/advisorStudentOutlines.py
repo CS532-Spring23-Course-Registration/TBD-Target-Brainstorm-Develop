@@ -35,5 +35,3 @@ class AdvisorStudentOutlines:
             else:
                 return {"studentList": student_outline_list}
 
-    def create_response_json(self):
-        return

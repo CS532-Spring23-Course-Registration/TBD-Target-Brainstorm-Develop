@@ -5,7 +5,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import LibraryBooksIcon from "@mui/icons-material/LibraryBooks";
 import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
 import HelpButton from "./HelpButton";
-import { Card, Box, CardContent, List, ListItem, Divider } from "@mui/material";
+import { Card, Box, Typography, CardContent, List, ListItem, Divider } from "@mui/material";
 
 const useStyles = makeStyles({
   root: {
@@ -42,6 +42,9 @@ function MenuCard({ content }) {
 
   return (
     <Box className={classes.root}>
+      <Typography mb={2} color="grey" variant="h5" align="left">
+          Course Grades
+      </Typography>
       <Box>
         <Card>
           <CardContent>

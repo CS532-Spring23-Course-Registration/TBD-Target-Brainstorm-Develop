@@ -41,11 +41,14 @@ const content = [
 function MajorList() {
   const classes = useStyles();
   const [returnedCourses, setReturnedCourses] = useState(null);
+  const [dropFlag, setDropFlag] = useState(null);
 
   const studentId = Cookies.get("user_id");
   const sessionId = Cookies.get("session_id");
 
-
+  const handleDrop = () => {
+    setDropFlag(!dropFlag);
+  }
 
   useEffect(() => {
 
@@ -69,7 +72,7 @@ function MajorList() {
         console.log(data);
       })
       .catch((error) => console.log(error));
-  }, []);
+  }, [dropFlag]);
 
   //Need to add a function here that loops through all returned elements,
   //and creates a new array that stores classes that the student is 'Enrolled' in
@@ -82,7 +85,7 @@ function MajorList() {
       </Box>
       <Box width="80%" display="flex" justifyContent="center">
         {returnedCourses ? (
-          <DisplayCurrentlyEnrolled returnedCourses={returnedCourses}/>
+          <DisplayCurrentlyEnrolled returnedCourses={returnedCourses} onDrop={handleDrop}/>
         ) : null }
       </Box>
       <HelpButton selectedOption="Currently Enrolled Courses" />

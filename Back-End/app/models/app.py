@@ -218,14 +218,14 @@ class Users(db.Model):
         s = Student.query.filter_by(id=id).first()
         users = Users.query.filter_by(id=id).first()
         
-        if (users != None):
+        if users is not None:
             return jsonify({"message": "ID {:n} already within Users.".format(id)})
         
-        if (q == None and s == None):
+        if q is None and s is None:
             return jsonify({"message": "ID {:n} not found in Faculty and Student.".format(id)})
-        elif (q == None and s != None):
+        elif q is None and s is not None:
             u = Users(id=id, name=generate_username(s.name), password=password, job_title='student', permissions='student')
-        elif (q != None and s == None):
+        elif q is not None and s is None:
             u = Users(id=id, name=generate_username(q.name), password=password, job_title=q.position_title, permissions='faculty')
         else:
             return jsonify({"message": "ID {:n} is a duplicate in Faculty and Student".format(id)})
@@ -235,6 +235,18 @@ class Users(db.Model):
         db.session.commit()
 
         return jsonify({"message": "User {:s} created with ID {:n}".format(u.name, u.id)})
+
+    @classmethod
+    def change_password(cls, user_id, new_password):
+        user = Users.query.filter_by(id=user_id).first()
+
+        if user is None:
+            return jsonify({"message": "There is no registered user with ID {:n}".format(user_id)})
+
+        user.password = new_password
+        db.session.commit()
+
+        return jsonify({"message": "Successfully changed password for user {} with id {:n}".format(user.name, user_id)})
 
     # def get_user_by_username(name):
     #     Session = sessionmaker(bind=db.engine)
