@@ -79,16 +79,20 @@ function Navigation(props) {
   const renderOptionContent = (selectedOption) => {
     switch (selectedOption) {
       case "Profile":
-        return <AccountBoxIcon style={{ fontSize: 40 }} />;
+        return <AccountBoxIcon style={{ color: "white", fontSize: 40 }} />;
       case "Course Register":
-        return <AppRegistrationIcon style={{ fontSize: 40 }} />;
+        return <AppRegistrationIcon style={{ color: "white", fontSize: 40 }} />;
       case "Major Requirements":
-        return <DomainVerificationIcon style={{ fontSize: 40 }} />;
+        return (
+          <DomainVerificationIcon style={{ color: "white", fontSize: 40 }} />
+        );
 
       case "Faculty And Course Information":
-        return <SupervisedUserCircleIcon style={{ fontSize: 40 }} />;
+        return (
+          <SupervisedUserCircleIcon style={{ color: "white", fontSize: 40 }} />
+        );
       case "Course Grades":
-        return <GradingIcon style={{ fontSize: 40 }} />;
+        return <GradingIcon style={{ color: "white", fontSize: 40 }} />;
       default:
         return null;
     }
