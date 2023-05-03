@@ -326,6 +326,7 @@ function SignUp(props) {
 
             </TextField>
             </Box>
+
             <Box className={classes.input}>
               <TextField
                 label="Address"
