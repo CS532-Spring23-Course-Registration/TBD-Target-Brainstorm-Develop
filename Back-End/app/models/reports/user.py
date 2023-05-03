@@ -36,7 +36,7 @@ class User:
             if user_type == "user":
                 user_list = db.session.query(Users.id, Users.username, Users.name, Users.job_title, Users.permissions).all()
             else:
-                user_list = db.session.query(Users.id, Users.name, Users.job_title, Users.permissions) \
+                user_list = db.session.query(Users.id, Users.username, Users.name, Users.job_title, Users.permissions) \
                     .filter(Users.permissions == user_type) \
                     .all()
 
