@@ -6,7 +6,7 @@ from app.models.app import *
 
 def create_response_json(major_department, major_completed_units, required_courses, course_prerequisites):
     # Declare fields for object mapping
-    response_top_fields = ["majorTitle", "departmentId", "departmentName"]
+    response_top_fields = ["studentId", "studentName", "majorTitle", "departmentId", "departmentName"]
     outline_history_fields = ["courseId", "courseTitle", "changeDate", "status"]
     course_fields = ["courseId", "courseTitle", "changeDate", "status", "courseName", "is_required"]
 
@@ -68,7 +68,7 @@ class StudentMajorOutline:
         with app.app_context():
             # Get all the querying elements
             student_id = requestJson["userId"]
-            major_department = db.session.query(Student.major, Departments.id, Departments.name) \
+            major_department = db.session.query(Student.id, Student.name, Student.major, Departments.id, Departments.name) \
                 .join(ProgramOutline, Student.id == ProgramOutline.student_id) \
                 .join(Programs, ProgramOutline.program_id == Programs.id) \
                 .join(Departments, Programs.department_id == Departments.id) \

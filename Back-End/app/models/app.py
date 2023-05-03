@@ -94,6 +94,21 @@ class StudentGrades(db.Model):
                                                          q_course.id, q_course.course_semester)
                         })
 
+    @classmethod
+    def change_student_grade(cls, student_id, course_sem_id, new_grade, new_note):
+        q_enrollment = Enrollment.query.filter_by(student_id=student_id, course_sem_id=course_sem_id).first()
+        q_grade = StudentGrades.query.filter_by(student_id=student_id, course_sem_id=course_sem_id).first()
+
+        if q_enrollment is None and q_grade is None:
+            return jsonify({"error": "Student with id {:n} is not enrolled in course "
+                                     "with courseSemesterId {:n}".format(student_id, course_sem_id)})
+
+        q_grade.grade = new_grade
+        q_grade.course_notes = new_note
+
+        db.session.commit()
+
+        return jsonify({"message": "Successfully changed grade and/or notes of student with id {:n} with courseSemesterId {:n}".format(student_id, course_sem_id)})
 
 class StudentMiscNotes(db.Model):
     __tablename__ = 'studentmiscnotes'

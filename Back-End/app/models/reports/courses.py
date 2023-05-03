@@ -21,9 +21,10 @@ class Courses:
                 ]
             },
             "department": {"type": "string"},
-            "courseSemester": {"type": "string"}
+            "courseSemester": {"type": "string"},
+            "course": {"type": "string"}
         },
-        "required": ["sessionId", "reportFilters", "courseSemester"]
+        "required": ["sessionId", "reportFilters", "courseSemester", "course"]
     }
 
     def execute_query(self, requestJson):
@@ -47,11 +48,11 @@ def get_departments(report_type, requestJson):
             department_list = db.session.execute(text(base_department_query + ";")).all()
         elif "ByDepartment" in report_type:
             department = requestJson["department"]
-            single_department_query = base_department_query + " where id = "
+            single_department_query = base_department_query + " where "
             if department.isdigit():
-                single_department_query += department
+                single_department_query += "id = " + department
             else:
-                single_department_query += "'" + department + "'"
+                single_department_query += "name like '%" + department + "%'"
             department_list = db.session.execute(text(single_department_query + ";")).all()
         return department_list
 
@@ -72,11 +73,18 @@ def get_courses(department_list, report_type, requestJson):
                              " and cps.course_semester like" \
                              " '%" + requestJson["courseSemester"] + "%'"
 
-        if "allClasses" in report_type:
-            courses_by_department = db.session.execute(text(base_courses_query + ";")).all()
-        elif "openClasses" in report_type:
-            open_classes_query = base_courses_query + " and seats_available != 0;"
-            courses_by_department = db.session.execute(text(open_classes_query)).all()
+        if "openClasses" in report_type:
+            base_courses_query += " and seats_available != 0"
+
+        # Filter by course if passed in
+        course = requestJson["course"]
+        if course != "":
+            if course.isdigit():
+                base_courses_query += " and c.id = " + course
+            else:
+                base_courses_query += " and (c.name like '" + course + "%' or c.title like '" + course + "%')"
+
+        courses_by_department = db.session.execute(text(base_courses_query + ";")).all()
 
         return courses_by_department
 
