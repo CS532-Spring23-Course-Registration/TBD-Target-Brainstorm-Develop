@@ -36,7 +36,7 @@ function App() {
       <Router>
         {user.auth && <Menu setUser={setUser} permission={user.permission} />}
         <Routes>
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/signup" element={<Signup user={user}/>} />
           <Route path="/login" element={<Login setUser={setUser} />} />
           {!user.auth ? (
             <Route path="/*" element={<Navigate to="/login" />} />

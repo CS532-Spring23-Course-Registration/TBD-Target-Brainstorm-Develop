@@ -33,12 +33,14 @@ const useStyles = makeStyles((theme) => ({
   submitButton: { marginTop: "20px" },
 }));
 
-function SignUp() {
+function SignUp(props) {
   const navigate = useNavigate();
   const classes = useStyles();
 
   const [departments, setDepartments] = useState([]);
-  
+  var isFaculty = false;
+  var isStudent = false;
+
   /* Get list of departments, need to make route */
   useEffect(() => {
     fetch("http://127.0.0.1:3000/departments", {
@@ -49,8 +51,10 @@ function SignUp() {
     })
     .then(response => response.json())
     .then(data =>setDepartments(data));
-  });
+  }, []);
+
   console.log(departments)
+
 
   const initialFields = {
     name: "",
@@ -98,12 +102,20 @@ function SignUp() {
 
   const [selectedOption, setSelectedOption] = useState("");
   const handleOption = (event) => {
-    const { value } = event.target;
-    setSelectedOption(value);
+    setSelectedOption(event.target.value);
+
+    if (event.target.value === "faculty") {
+      isFaculty = true;
+    } else if (event.target.value === "student" || event.target.value === "gradstudent") {
+      isStudent = true;
+    }
+
+
     resetFields();
     resetErrors();
-    if (value === "student" || value === "gradstudent") {
-      setFields( {...fields, jobTitle: value });
+
+    if (event.target.value === "student" || event.target.value === "gradstudent") {
+      setFields( {...fields, jobTitle: event.target.value });
     }
   };
 
@@ -214,7 +226,6 @@ function SignUp() {
               <MenuItem value="gradstudent" divider>Graduate Student</MenuItem>
             </TextField>
           </Box>
-    
             <Box className={classes.input}>
               <TextField
                 label="Name"
