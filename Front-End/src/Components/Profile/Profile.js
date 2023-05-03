@@ -54,7 +54,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Profile() {
+function Profile(props) {
   const classes = useStyles();
   const [pValues, setPvalues] = useState({});
   const [cValues, setCvalues] = useState({});
@@ -175,7 +175,10 @@ function Profile() {
   }, []);
 
   // Right Column Contents
-  const options = ["Personal Information", "Academics"];
+  var options = ["Personal Information", "Academics"];
+  if (props.user.permission !== "student") {
+    options = ["Personal Information"];
+  }
 
   const renderOptionContent = () => {
     switch (selectedOption) {
@@ -211,7 +214,7 @@ function Profile() {
           </Typography>
         </Box>
         <Box className={classes.root}>
-          <Box width={"200px"} height={"200px"} mr={5}>
+          <Box width={"200px"} height={"100%"} mr={5}>
             <Card className={classes.leftColumn}>
               <CardContent>
                 <List>

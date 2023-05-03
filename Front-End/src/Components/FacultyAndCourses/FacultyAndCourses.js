@@ -118,11 +118,7 @@ const FacultyAndCourses = () => {
       }),
     });
 
-    if (searchQuery === "" && departmentQuery === "") {
-      alert(
-        "There was an error with your search. Please try with valid courses or a department name."
-      );
-    } else if (response.status === 401) {
+    if (response.status === 401) {
       console.log("Authentication Failed.");
     } else if (response.status === 200) {
       console.log("Successful query.");
@@ -134,13 +130,29 @@ const FacultyAndCourses = () => {
   //Every time a state changes, this checks if the report filter should be changed based
   //off what the user has entered in their search boxes.
   useEffect(() => {
-    if (searchQuery === "" && departmentQuery === "" && reportType === "facultyInfo") {
+    if (
+      searchQuery === "" &&
+      departmentQuery === "" &&
+      reportType === "facultyInfo"
+    ) {
       setReportFilters("allFacultyAllDepartments");
-    } else if (searchQuery === "" && departmentQuery === "" && reportType === "courseInfo") {
+    } else if (
+      searchQuery === "" &&
+      departmentQuery === "" &&
+      reportType === "courseInfo"
+    ) {
       setReportFilters("allCoursesAllDepartments");
-    } else if (searchQuery === "" && departmentQuery.length > 0 && reportType === "courseInfo") {
+    } else if (
+      searchQuery === "" &&
+      departmentQuery.length > 0 &&
+      reportType === "courseInfo"
+    ) {
       setReportFilters("allCoursesByDepartment");
-    } else if (searchQuery === "" && departmentQuery.length > 0 && reportType === "facultyInfo") {
+    } else if (
+      searchQuery === "" &&
+      departmentQuery.length > 0 &&
+      reportType === "facultyInfo"
+    ) {
       setReportFilters("allFacultyByDepartment");
     } else if (searchQuery !== "" && reportType === "facultyInfo") {
       setReportFilters("specificFaculty");

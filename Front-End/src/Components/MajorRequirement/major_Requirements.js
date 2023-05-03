@@ -25,7 +25,6 @@ function MajorRequirements(props) {
   const [majorQuery, setMajorQuery] = useState("");
   const [userData, setUserData] = useState(null);
   const [outlineData, setOutlineData] = useState(null);
-  const [displayStudentOutline, setDisplayStudentOutline] = useState(false);
   const [returnedLists, setReturnedLists] = useState(null);
 
   const userId = Cookies.get("user_id");
@@ -76,6 +75,11 @@ function MajorRequirements(props) {
         setUserData(data);
       })
       .catch((error) => console.log(error));
+
+    /////////
+    //pass user's major and set as a search query
+
+    //////
   }, []);
 
   //Handle the submit of the course outline general search button
@@ -112,7 +116,27 @@ function MajorRequirements(props) {
   //Instead of making another API call to get your information, this boolean should
   //simply decide whether your courses get displayed or not
   const handleDisplayStudentOutline = () => {
-    setDisplayStudentOutline(true);
+    const fetchData = async (event) => {
+      const response = await fetch("http://127.0.0.1:5000/query", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          reportName: "coursesByMajor",
+          major: userData.majorTitle,
+          sessionId: sessionId,
+        }),
+      });
+
+      if (response.status === 200) {
+        const data = await response.json();
+        console.log(data);
+        setReturnedLists(data);
+      }
+    };
+
+    fetchData();
   };
 
   //Different pages on right side for which button you select
@@ -195,11 +219,11 @@ function MajorRequirements(props) {
           </div>
         );
       case "Completed Courses":
-        return <CompletedCourses data={testData} userData={userData}/>;
+        return <CompletedCourses data={testData} userData={userData} />;
       case "Course Outline History":
-        return <CourseOutlineHistory data={testData} userData={userData}/>;
+        return <CourseOutlineHistory data={testData} userData={userData} />;
       case "Student Outlines":
-        return <StudentOutlines data={testData} userData={userData}/>;
+        return <StudentOutlines data={testData} userData={userData} />;
       default:
         return null;
     }
