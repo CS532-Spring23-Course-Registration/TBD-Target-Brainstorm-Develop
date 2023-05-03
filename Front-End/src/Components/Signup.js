@@ -79,14 +79,17 @@ function SignUp(props) {
   };
 
   const initialErrors = {
+    //Everyone
     name: false,
     password: false,
     jobTitle: false,
 
+    //Faculty
     officeNumber: false,
     officeHours: false,
     assignedDepartment: false,
 
+    //Students
     phoneNumber: false,
     address: false,
     dateOfBirth: false,
@@ -114,7 +117,6 @@ function SignUp(props) {
       setIsFaculty(false);
       setIsStudent(false);
     }
-
 
     resetFields();
     resetErrors();

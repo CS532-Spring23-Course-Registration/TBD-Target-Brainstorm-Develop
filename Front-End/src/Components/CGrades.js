@@ -15,6 +15,7 @@ import Cookies from "js-cookie";
 
 function CourseGrades(props) {
   const [selectedCourse, setSelectedCourse] = useState(null);
+  const [data, setData] = useState(null);
 
   const userId = Cookies.get("user_id");
   const sessionId = Cookies.get("session_id");
@@ -29,6 +30,15 @@ function CourseGrades(props) {
     {
       name: "test3",
     },
+    {
+      name: "test4",
+    },
+    {
+      name: "test5",
+    },
+    {
+      name: "test6",
+    }
   ];
 
   useEffect(() => {
@@ -47,6 +57,10 @@ function CourseGrades(props) {
         .then((response) => response.json())
         .then((data) => {
           console.log(data);
+          setData(data);
+          if (data.courseList[0]) {
+            setSelectedCourse(data.courseList[0]);
+          }
         })
         .catch((error) => console.log(error));
   }, []);
@@ -62,23 +76,27 @@ function CourseGrades(props) {
         <Box display="flex">
           <Box
             display="flex"
-            height="200px"
+            height="250px"
             width="150px"
             sx={{
               overflowY: "scroll",
               boxShadow: "2px 2px 4px rgba(0, 0, 0, 0.3)",
+              border: "1px solid lightgrey"
             }}
           >
-            <Card variant="contained" height="100%" sx={{ width: "100%" }}>
+            <Card variant="contained" sx={{ width: "100%", overflowY: "scroll" }}>
               <CardContent>
                 <List>
-                  {testData.map((item, index) => (
+                  {data && data.courseList.map((course, index) => (
                     <div key={index}>
                       <ListItem
                         button
-                        onClick={() => setSelectedCourse(item.name)}
+                        onClick={() => setSelectedCourse(course)}
+                        sx={{
+                          border: selectedCourse?.courseTitle === course.courseTitle ? "1px solid red" : "inherit"
+                        }}
                       >
-                        <ListItemText primary={item.name} />
+                        <ListItemText primary={course.courseTitle} />
                       </ListItem>
                       {index !== testData.length - 1 && <Divider />}
                     </div>
@@ -88,7 +106,7 @@ function CourseGrades(props) {
             </Card>
           </Box>
           <Box flexGrow={1} ml={4}>
-            <StudentGrades />
+            <StudentGrades course={selectedCourse}/>
           </Box>
         </Box>
       </Container>
