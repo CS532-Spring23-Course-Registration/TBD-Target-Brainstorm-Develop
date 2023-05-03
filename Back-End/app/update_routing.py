@@ -6,7 +6,7 @@ from app.models.update_types.changeOutline import ChangeOutline
 from app.models.update_types.changePassword import ChangePassword
 from app.models.update_types.dropFromCourse import DropFromCourse
 from app.models.update_types.registerForCourse import RegisterForCourse
-from app.models.update_types.registerUser import RegisterUser
+# from app.models.update_types.registerUser import RegisterUser
 from app.models.update_types.changeGrade import ChangeGrade
 
 updates = Blueprint('updates', __name__)
@@ -44,9 +44,10 @@ def changePassword():
 def changeOutline():
     return getData(request.get_json(), ChangeOutline())
 
-@updates.route('/update/registerUser', methods=['PUT'])
-def registerUser():
-    return getData(request.get_json(), RegisterUser())
+# @updates.route('/update/registerUser', methods=['PUT'])
+# def registerUser():
+#     return getData(request.get_json(), RegisterUser())
+
 @updates.route('/update/changeGrade', methods=['PUT'])
 def changeGrade():
     return getData(request.get_json(), ChangeGrade())

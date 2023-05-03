@@ -102,6 +102,11 @@ def signup():
         return jsonify({'id': s.id, \
                         'student_name' : s.name}), 200
 
+@app.route('/departments', methods=['POST'])
+def departments():
+    with app.app_context():
+        department_list = Departments.query().all()
+        return jsonify({'departments': department_list}), 200
 
 # Define the PUT endpoint that requires a valid session key
 @app.route('/update', methods=['PUT'])
@@ -167,6 +172,7 @@ def generate_test_session_key(user_id):
     session_key = generate_session_key()
     session[session_key] = user_id
     return session_key
+
 
 
 if __name__ == '__main__':

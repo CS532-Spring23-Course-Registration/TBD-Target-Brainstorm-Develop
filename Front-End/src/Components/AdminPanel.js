@@ -122,7 +122,7 @@ const AdminPanel = () => {
       body: JSON.stringify({
         updateType: "changePassword",
         sessionId: sessionId,
-        userBeingModified: selectedItem.id,
+        userBeingModified: selectedItem.userId,
         newPassword: newPassword,
       }),
     })

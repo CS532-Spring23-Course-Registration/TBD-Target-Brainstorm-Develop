@@ -125,7 +125,15 @@ function CSearch() {
     if (response.status === 200) {
       const data = await response.json();
       console.log(data);
-      setReturnedCourses(data);
+      var newArray = [];
+
+      data.departments.forEach((department) => {
+        if (department.coursesInDepartment[0] !== "None") {
+          newArray.push(department);
+        }
+      })
+
+      setReturnedCourses(newArray);
     }
   };
 
@@ -180,7 +188,7 @@ function CSearch() {
                   onChange={(event) => setSemesterQuery(event.target.value)}
                 >
                   <MenuItem value={"Fall"}>Fall</MenuItem>
-                  <MenuItem value={"Winter"}>Winter</MenuItem>
+                  <MenuItem value={"Spring"}>Spring</MenuItem>
                   <MenuItem value={"Summer"}>Summer</MenuItem>
                 </Select>
               </FormControl>
