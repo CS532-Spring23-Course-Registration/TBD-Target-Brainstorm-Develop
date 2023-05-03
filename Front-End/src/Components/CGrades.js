@@ -40,7 +40,7 @@ function CourseGrades(props) {
         body: JSON.stringify({
           reportName: "courseGradesList",
           facultyId: parseInt(userId),
-          courseSemester: "Spring 2023",
+          courseSemester: "Fall 2023",
           sessionId: sessionId,
         }),
       })
