@@ -22,6 +22,7 @@ function DisplayCurrentlyEnrolled(props) {
     const sessionId = Cookies.get("session_id");
     const userId = Cookies.get("user_id");
 
+    //test
 
     console.log(props.returnedCourses);
 
