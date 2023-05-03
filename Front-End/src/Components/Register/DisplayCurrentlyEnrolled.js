@@ -19,6 +19,13 @@ function DisplayCurrentlyEnrolled(props) {
   const [selectedItem, setSelectedItem] = useState(null);
   const [open, setOpen] = useState(false);
 
+  const sessionId = Cookies.get("session_id");
+  const userId = Cookies.get("user_id");
+
+  //test
+
+  console.log(props.returnedCourses);
+
   const handleClick = (item) => {
     setSelectedItem(item);
     setOpen(true);
@@ -26,6 +33,33 @@ function DisplayCurrentlyEnrolled(props) {
 
   const handleClose = () => {
     setSelectedItem(null);
+    setOpen(false);
+  };
+
+  const handleDropClass = (selectedItem) => {
+    console.log(selectedItem);
+
+    fetch("http://127.0.0.1:5000/update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        updateType: "dropFromCourse",
+        studentId: parseInt(userId),
+        sessionId: sessionId,
+        courseId: parseInt(selectedItem.courseId),
+        courseSemester: selectedItem.courseSemester,
+      }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        // setData(data);
+        console.log(data);
+        props.onDrop();
+      })
+      .catch((error) => console.log(error));
+
     setOpen(false);
   };
 
@@ -201,6 +235,25 @@ function DisplayCurrentlyEnrolled(props) {
                 </Box>
               </Box>
             </DialogContent>
+            <DialogActions
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                mb: "15px",
+              }}
+            >
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleDropClass(selectedItem)}
+              >
+                Drop Class
+              </Button>
+              <Button onClick={handleClose} variant="outline">
+                Close
+              </Button>
+            </DialogActions>
           </Dialog>
         )}
       </Box>
