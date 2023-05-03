@@ -257,6 +257,7 @@ function SignUp(props) {
               <TextField
                 label="Password"
                 name="password"
+                type="password"
                 variant="outlined"
                 value={fields.password}
                 onChange={handleRequiredFields}
