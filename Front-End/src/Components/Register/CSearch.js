@@ -90,6 +90,7 @@ function CSearch() {
 
   //Parameters for the API call
   const [searchQuery, setSearchQuery] = useState("");
+
   const [departmentQuery, setDepartmentQuery] = useState("");
   const [checkBoxValue, setCheckBoxValue] = useState(false);
   const [reportFilter, setReportFilter] = useState();
@@ -135,6 +136,8 @@ function CSearch() {
       setReturnedCourses(data);
     }
   };
+
+
 
   useEffect(() => {
     if (searchQuery === "" && departmentQuery === "" && !checkBoxValue) {
