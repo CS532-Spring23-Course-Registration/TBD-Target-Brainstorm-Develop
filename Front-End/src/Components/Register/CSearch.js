@@ -93,7 +93,7 @@ function CSearch() {
   const [departmentQuery, setDepartmentQuery] = useState("");
   const [checkBoxValue, setCheckBoxValue] = useState(false);
   const [reportFilter, setReportFilter] = useState();
-  const [semesterQuery, setSemesterQuery] = useState("Fall");
+  const [semesterQuery, setSemesterQuery] = useState("Spring");
   const [yearQuery, setYearQuery] = useState(2023);
   const [returnedCourses, setReturnedCourses] = useState(null);
 
