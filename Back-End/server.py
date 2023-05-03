@@ -46,7 +46,7 @@ def login():
     username = request.json.get('username')
     password = request.json.get('password')
     with app.app_context():
-        user = db.session.query(Users).filter_by(name=username, password=password).first()
+        user = db.session.query(Users).filter_by(username=username, password=password).first()
         session_key = get_user_session_key(user.id)
         response = jsonify({'sessionId': session_key,
                             'userId': user.id,

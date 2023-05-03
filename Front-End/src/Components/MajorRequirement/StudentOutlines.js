@@ -38,7 +38,7 @@ function StudentOutlines(props) {
       {props.userData && props.userData.studentList.map((item) => (
         <Card
           key={item.departmentId}
-          sx={{ mb: 2, "&:hover": { bgcolor: "#f5f5f5" } }}
+          sx={{ mb: 2, "&:hover": { bgcolor: "#f5f5f5" }, border: "1px solid lightgrey" }}
           onClick={() => handleClick(item)}
         >
           <CardContent>
