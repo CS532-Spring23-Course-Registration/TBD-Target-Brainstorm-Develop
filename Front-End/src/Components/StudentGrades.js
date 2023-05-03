@@ -8,6 +8,7 @@ import {
     TableBody,
     Table,
     TableRow,
+    DialogActions,
     FormControl,
     MenuItem,
     InputLabel,
@@ -23,123 +24,177 @@ import {
     DialogContent,
     DialogTitle
 } from "@mui/material";
+import Cookies from 'js-cookie';
 
 
 
 
 function StudentGrades(props) {
-    const [data, setData] = useState([]);
-    const [selectedItem, setSelectedItem] = useState(null);
+    const [selectedStudent, setSelectedStudent] = useState(null);
+    const [selectedStudentGrade, setSelectedStudentGrade] = useState(null);
+    const [selectedStudentNote, setSelectedStudentNote] = useState(null);
     const [open, setOpen] = useState(false);
-  
-    // useEffect(() => {
-    //   fetch('https://api.example.com/data')
-    //     .then(response => response.json())
-    //     .then(data => setData(data));
-    // }, []);
 
-      // Add more students if you want...
-    const students = [
-        { id: '001', name: 'Student 1' },
-        { id: '002', name: 'Student 2' },
-    ];
+    const sessionId = Cookies.get("session_id");
 
-    const [grades, setGrades] = useState(Array(students.length).fill(''));
+    const handleUpdateStudent = (student) => {
+      console.log(student);
+      console.log(selectedStudentGrade);
+      console.log(selectedStudentNote);
 
-    const handleGradeChange = (event, index) => {
-        const newGrades = [...grades];
-        newGrades[index] = event.target.value;
-        setGrades(newGrades);
-      };
+      fetch("http://127.0.0.1:5000/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          updateType: "changeGrade",
+          studentId: parseInt(student.studentId),
+          courseSemesterId: 123,
+          sessionId: sessionId,
+          newGrade: selectedStudentGrade,
+          newNote: selectedStudentNote
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          console.log(data);
+        })
+        .catch((error) => console.log(error));
+
+        setOpen(false);
+    }
+
+    const handleGradeChange = (event) => {
+      setSelectedStudentGrade(event.target.value);
+    };
     
-    const [notes, setNotes] = useState(Array(students.length).fill(''));
-    
-
-    const handleNoteChange = (event, index) => {
-        const newNotes = [...notes];
-        newNotes[index] = event.target.value;
-        setNotes(newNotes);
+    const handleNoteChange = (event) => {
+      setSelectedStudentNote(event.target.value)
     };
 
-    const [generalNote, setGeneralNote] = useState('');
+    const handleClick = (student) => {
+      setSelectedStudent(student);
+      setSelectedStudentGrade(student.courseGrade);
+      setOpen(true);
+    }
 
-    const handleGeneralNoteChange = (event) => {
-        setGeneralNote(event.target.value);
-    };
+    const handleClose = () => {
+      setSelectedStudent(null);
+      setSelectedStudentGrade(null);
+      setSelectedStudentNote(null);
+      setOpen(false);
+    }
   
     return (
         <Box>
-          <TableContainer component={Paper}>
+          {props.course && props.course.studentList && props.course.studentList.length > 1 ? (
+            <TableContainer component={Paper} sx={{border: "1px solid lightgrey", height: "40rem"}}>
             <Table>
               <TableHead>
-                <TableRow>
-                  <TableCell>Student ID</TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Grade</TableCell>
-                  <TableCell>Note</TableCell>
-                  <TableCell></TableCell>
+                <TableRow sx={{ backgroundColor: "#e74c3c"}}>
+                  <TableCell sx={{ color: "white", fontWeight: "bold"}}>Student ID</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold"}}>Name</TableCell>
+                  <TableCell sx={{ color: "white", fontWeight: "bold"}}>Grade</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {students.map((student, index) => (
-                  <TableRow key={student.id}>
-                    <TableCell>{student.id}</TableCell>
-                    <TableCell>{student.name}</TableCell>
+                {props.course && props.course.studentList && props.course.studentList.map((student, index) => (
+                  <TableRow key={student.studentId}
+                    sx={{"&:hover": { bgcolor: "#f5f5f5"}}}
+                    onClick={() => handleClick(student)}
+                    >
+                    <TableCell>{student.studentId}</TableCell>
+                    <TableCell>{student.studentName}</TableCell>
                     <TableCell>
-                      <FormControl fullWidth>
-                        <InputLabel id={`grade-label-${index}`}>Grade</InputLabel>
-                        <Select
-                          labelId={`grade-label-${index}`}
-                          id={`grade-select-${index}`}
-                          value={grades[index]}
-                          onChange={(event) => handleGradeChange(event, index)}
-                        >
-                          <MenuItem value="A">A</MenuItem>
-                          <MenuItem value="B">B</MenuItem>
-                          <MenuItem value="C">C</MenuItem>
-                          <MenuItem value="D">D</MenuItem>
-                          <MenuItem value="F">F</MenuItem>
-                          <MenuItem value="CR">Credit</MenuItem>
-                          <MenuItem value="NC">No Credit</MenuItem>
-                          <MenuItem value="AU">Audit</MenuItem>
-                        </Select>
-                      </FormControl>
-                    </TableCell>
-                    <TableCell>
-                      <TextField
-                        fullWidth
-                        multiline
-                        rows={3}
-                        value={notes[index]}
-                        onChange={(event) => handleNoteChange(event, index)}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <Button color="error" variant="contained">
-                        Update
-                      </Button>
+                      {student.courseGrade}
                     </TableCell>
                   </TableRow>
                 ))}
               </TableBody>
             </Table>
           </TableContainer>
-          <Box>
-            <Box mt={4}>
-              <Typography variant="h6">General Note:</Typography>
-                <TextField
-                    fullWidth
-                    multiline
-                    rows={3}
-                    value={generalNote} onChange={handleGeneralNoteChange}
-                />
-            </Box>
-            <Box mt={3} display="flex" flexDirection="column" alignItems="center">
-              <Button color="error" variant="contained">
-                Submit
+          ): (
+            <Typography>No Students Enrolled Yet</Typography>
+          )}
+          {selectedStudent && (
+          <Dialog open={open} onClose={handleClose}>
+            <DialogContent>
+              <Box
+                width="500px"
+                height="300px"
+                display="flex"
+                flexDirection="column"
+              >
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="center"
+                  alignItems="center"
+                  width="100%"
+                  height="20%"
+                >
+                  <Typography
+                    align="center"
+                    variant="h6"
+                    sx={{ overflowY: "scroll" }}
+                  >
+                    {selectedStudent.studentName}
+                  </Typography>
+                  <Typography align="center" variant="subtitle1">
+                  ID: {selectedStudent.studentId}
+                </Typography>
+                </Box>
+                <Box height="100%" mt={4} display="flex" justifyContent="center" flexDirection="column">
+                    <Box display="flex" height="20%" width="100%" justifyContent="space-evenly" alignItems="center">
+                      <Typography>New Grade: </Typography>
+                      <Select
+                          value={selectedStudentGrade}
+                          onChange={(event) => handleGradeChange(event)}
+                          sx={{ width: "25%"}}
+                        >
+                          <MenuItem value="A">A</MenuItem>
+                          <MenuItem value="B">B</MenuItem>
+                          <MenuItem value="C">C</MenuItem>
+                          <MenuItem value="D">D</MenuItem>
+                          <MenuItem value="F">F</MenuItem>
+                          <MenuItem value="IP">IP</MenuItem>
+                      </Select>
+                    </Box>
+                    <Box height="80%" mt={5} alignItems="center" justifyContent="center">
+                      <Typography align="center" mb={1}>Student Note:</Typography>
+                      <TextField
+                          fullWidth
+                          multiline
+                          rows={3}
+                          value={selectedStudentNote}
+                          onChange={(event) => handleNoteChange(event)}
+                        />
+                    </Box>
+                </Box>
+              </Box>
+            </DialogContent>
+            <DialogActions
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "space-around",
+                mb: "15px",
+              }}
+            >
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => handleUpdateStudent(selectedStudent)}
+              >
+                Update Student
               </Button>
-            </Box>
-          </Box>
+              <Button onClick={handleClose} variant="outline">
+                Close
+              </Button>
+            </DialogActions>
+          </Dialog>
+        )}
       </Box>
       );
   }
