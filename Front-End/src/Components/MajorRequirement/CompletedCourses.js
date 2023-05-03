@@ -37,15 +37,10 @@ function CompletedCourses(props) {
             })
             .catch((error) => console.log(error));
     }, []);
-
-
-
-
-
   
     return (
       <Box sx={{ maxHeight: '400px', overflowY: 'scroll' }}>
-        {props.data.map(item => (
+        {props.userData && props.userData.map(item => (
           <Card color="red" key={item.id} sx={{ mb: 2, bgcolor: '#FFCCCB' }}>
             <CardContent>
               <Typography variant="h5">{item.name}</Typography>
