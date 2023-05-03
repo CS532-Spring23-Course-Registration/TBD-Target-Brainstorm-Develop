@@ -54,10 +54,6 @@ function AcademicRecord(props) {
           )}
         </TableBody>
       </Table>
-
-      <Typography textAlign={"center"} variant="h6">
-        Current GPA: {gpa}
-      </Typography>
     </Paper>
   );
 }

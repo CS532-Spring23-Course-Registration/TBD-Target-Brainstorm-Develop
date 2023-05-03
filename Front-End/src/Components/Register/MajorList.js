@@ -61,7 +61,7 @@ function MajorList() {
       },
       body: JSON.stringify({
         reportName: "personalCourseReport",
-        courseSemester: "Fall 2023",
+        courseSemester: "Spring 2023",
         studentId: parseInt(studentId),
         sessionId: sessionId,
       }),

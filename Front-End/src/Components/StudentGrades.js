@@ -47,9 +47,9 @@ function StudentGrades(props) {
         body: JSON.stringify({
           updateType: "changeGrade",
           studentId: parseInt(student.studentId),
-          courseSemesterId: 123,
+          courseSemesterId: parseInt(props.course.courseSemesterId),
           sessionId: sessionId,
-          newGrade: selectedStudentGrade,
+          newStatus: selectedStudentGrade,
           newNote: selectedStudentNote
         }),
       })
@@ -166,6 +166,7 @@ function StudentGrades(props) {
                           rows={3}
                           value={selectedStudentNote}
                           onChange={(event) => handleNoteChange(event)}
+                          placeholder={selectedStudent.courseNote}
                         />
                     </Box>
                 </Box>
