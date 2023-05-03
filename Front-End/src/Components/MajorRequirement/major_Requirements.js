@@ -35,18 +35,6 @@ function MajorRequirements(props) {
     isStudent = true;
   }
 
-  const testData = [
-    {
-      name: "test1",
-    },
-    {
-      name: "test2",
-    },
-    {
-      name: "test3",
-    },
-  ];
-
   //Preloads the information of the user on this page.
   //If a student, gets information regarding their outline
   //If a faculty, gets information of their students
@@ -71,15 +59,9 @@ function MajorRequirements(props) {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         setUserData(data);
       })
       .catch((error) => console.log(error));
-
-    /////////
-    //pass user's major and set as a search query
-
-    //////
   }, []);
 
   //Handle the submit of the course outline general search button
@@ -138,6 +120,8 @@ function MajorRequirements(props) {
 
     fetchData();
   };
+
+  // console.log(userData.studentList[0].majorTitle);
 
   //Different pages on right side for which button you select
   //Pages should probably be transfered into their own components
@@ -219,11 +203,11 @@ function MajorRequirements(props) {
           </div>
         );
       case "Completed Courses":
-        return <CompletedCourses data={testData} userData={userData} />;
+        return <CompletedCourses userData={userData} />;
       case "Course Outline History":
-        return <CourseOutlineHistory data={testData} userData={userData} />;
+        return <CourseOutlineHistory userData={userData} />;
       case "Student Outlines":
-        return <StudentOutlines data={testData} userData={userData} />;
+        return userData !== null && <StudentOutlines userData={userData} />;
       default:
         return null;
     }
@@ -243,7 +227,7 @@ function MajorRequirements(props) {
 
   return (
     <div>
-      <Container maxWidth="lg" m={0}>
+      <Container maxWidth="xl" m={0}>
         <Box sx={{ ml: 1, mt: 3, mb: 3 }}>
           <Typography color="grey" variant="h5" align="left">
             Major Requirements
