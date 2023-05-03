@@ -8,7 +8,7 @@ class RegisterForCourse:
         "title": "registerForCourse",
         "type": "object",
         "properties": {
-            "reportName": {"type": "string", "const": "registerForCourse"},
+            "updateType": {"type": "string", "const": "registerForCourse"},
             "studentId": {"type": "integer"},
             "sessionId": {"type": "string"},
             "courseId": {"type": "integer"},
