@@ -51,7 +51,7 @@ class Student(db.Model):
         db.session.add(s)
         db.session.commit()
 
-        return s
+        return Student.query.filter_by(name=name, phone_number=phone_number, address=address, major=major, minor=minor).first()
 
 
 class StudentGrades(db.Model):
@@ -228,7 +228,7 @@ class Users(db.Model):
         return jsonify({"message": "User {:s} created with ID {:n}".format(name, u.id)})
     
     @classmethod
-    def create_from_id(cls, id, password):
+    def create_from_id(cls, id, username, password):
         # TODO - Add catch for duplicate name?
 
         q = Faculty.query.filter_by(id=id).first()
@@ -241,7 +241,7 @@ class Users(db.Model):
         if q is None and s is None:
             return jsonify({"message": "ID {:n} not found in Faculty and Student.".format(id)})
         elif q is None and s is not None:
-            u = Users(id=id, name=generate_username(s.name), password=password, job_title='student', permissions='student')
+            u = Users(id=id, username=username, name=s.name, password=password, job_title='student', permissions='student')
         elif q is not None and s is None:
             u = Users(id=id, name=generate_username(q.name), password=password, job_title=q.position_title, permissions='faculty')
         else:
