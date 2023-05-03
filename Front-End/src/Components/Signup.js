@@ -10,6 +10,8 @@ import {
   Card,
 } from "@mui/material";
 import MenuItem from '@mui/material/MenuItem';
+import Cookies from 'js-cookie';
+
 
 const useStyles = makeStyles((theme) => ({
   box_container: {
@@ -34,6 +36,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function SignUp(props) {
+  const sessionId = Cookies.get('session_id');
+
   const navigate = useNavigate();
   const classes = useStyles();
 
@@ -43,18 +47,23 @@ function SignUp(props) {
 
   /* Get list of departments, need to make route */
   useEffect(() => {
-    fetch("http://127.0.0.1:3000/departments", {
-      method: "GET",
+    fetch("http://127.0.0.1:5000/query", {
+      method: "POST",
         headers: {
           "Content-Type": "application/json",
-        }
+        },
+        body: JSON.stringify({
+          reportName: "departments",
+          sessionId: sessionId
+        }),
     })
     .then(response => response.json())
-    .then(data =>setDepartments(data));
+    .then(data => {
+      console.log(data);
+      setDepartments(data)
+    })
+    .catch((error) => console.log(error));
   }, []);
-
-  console.log(departments)
-
 
   const initialFields = {
     name: "",
@@ -109,8 +118,6 @@ function SignUp(props) {
     } else if (event.target.value === "student" || event.target.value === "gradstudent") {
       isStudent = true;
     }
-
-
     resetFields();
     resetErrors();
 
@@ -118,6 +125,7 @@ function SignUp(props) {
       setFields( {...fields, jobTitle: event.target.value });
     }
   };
+
 
   /* Limit input length of date */
   const handleDate = (event) => {
@@ -154,15 +162,17 @@ function SignUp(props) {
     }));
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
 
     const formData = {
-      reportName: "student_info",
+      updateType: "registerUser",
+      sessionId: sessionId,
+
       name: fields.name,
       password: fields.password,
       jobTitle: fields.jobTitle,
-      permissions: fields.permissions,
+      permissions: selectedOption,
 
       officeNumber: fields.officeNumber,
       officeHours: fields.officeHours,
@@ -175,26 +185,22 @@ function SignUp(props) {
       minor: fields.minor,
     };
 
+    console.log(formData);
+
     /* Send formData, maybe PUT routing */
-    try {
-      const response = await fetch("http://127.0.0.1:3000/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
 
-      if (response.status === 200) {
-        const data  = await response.json();
-        console.log(data);
+    fetch("http://127.0.0.1:5000/update", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(formData),
+    })
+    .then((response) => response.json())
+    .catch((error) => console.log(error));
 
-        navigate('/');
-      }
-      } catch (error) {
-        console.log(error);
-      }
-  };
+  }
+
 
   return (
     <Box className={useStyles.box_container} mt={10}>
@@ -298,7 +304,7 @@ function SignUp(props) {
                 label="Office Hours"
                 name="officeHours"
                 variant="outlined"
-                value={fields.officeNumber}
+                value={fields.officeHours}
                 onChange={handleRequiredFields}
                 required={selectedOption === "faculty"}
                 error={errors.officeNumber}
@@ -313,7 +319,7 @@ function SignUp(props) {
               label="Assigned Department"
               name="assignedDepartment"
               value={fields.assignedDepartment}
-              //onChange={}
+              onChange={handleRequiredFields}
               variant="outlined"
               style={{minWidth: 200 }}
               required={selectedOption === "faculty"}
@@ -321,7 +327,7 @@ function SignUp(props) {
               error={errors.assignedDepartment}
               >
                 {departments.map((department) => (
-                  <MenuItem value={department}>{department}</MenuItem>
+                  <MenuItem value={department} key={department}>{department}</MenuItem>
                 ))}
 
             </TextField>

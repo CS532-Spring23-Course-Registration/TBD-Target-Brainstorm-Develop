@@ -150,7 +150,7 @@ class Faculty(db.Model):
             db.session.add(f)
             db.session.commit()
 
-            return jsonify({"message": "Faculty member {:s} created with ID {:n}".format(name, f.id)})
+            return f
         else:
             return jsonify({"error": "Department ID {:s} not found.".format(assigned_department)})
 
