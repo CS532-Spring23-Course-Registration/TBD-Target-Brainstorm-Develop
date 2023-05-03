@@ -17,7 +17,6 @@ function DispaySearchedMajorList(props) {
   const handleClick = (item) => {
     setSelectedItem(item);
     setOpen(true);
-    console.log(props);
   };
 
   const handleClose = () => {
@@ -50,7 +49,7 @@ function DispaySearchedMajorList(props) {
             overflowY: "scroll",
           }}
         >
-          {props.returnedLists.majorList.map((item) =>
+          {props.returnedLists && props.returnedLists.majorList.map((item) =>
             item.requiredCourses.map((courseItem) => (
               <Card
                 key={`${item.majorId}-${courseItem.courseId}`}

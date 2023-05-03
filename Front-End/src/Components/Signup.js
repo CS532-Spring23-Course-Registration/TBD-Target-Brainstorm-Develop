@@ -179,6 +179,7 @@ function SignUp(props) {
       sessionId: sessionId,
 
       name: fields.name,
+      username: fields.username,
       password: fields.password,
       jobTitle: fields.jobTitle,
       permissions: selectedOption,
@@ -251,6 +252,18 @@ function SignUp(props) {
                 required
                 error={errors.name}
                 helperText={errors.name ? "Name field is required" : ""}
+              />
+              </Box>
+              <Box className={classes.input}>
+              <TextField
+                label="Username"
+                name="username"
+                variant="outlined"
+                value={fields.username}
+                onChange={handleRequiredFields}
+                required
+                error={errors.username}
+                helperText={errors.username ? "Username field is required" : ""}
               />
               </Box>
               <Box className={classes.input}>
@@ -346,12 +359,6 @@ function SignUp(props) {
               </Box>
             </div>
             ) : null}
-
-            
-
-
-
-
             { isStudent ? ( 
               <div>
                 <Box className={classes.input}>
@@ -408,7 +415,7 @@ function SignUp(props) {
               ) : null}
             
             <Box className={classes.submitButton}>
-              <Button type="submit" variant="contained" color="primary">
+              <Button type="submit" variant="contained" color="primary" onClick={(event) => handleSubmit(event)}>
                 Sign Up
               </Button>
             </Box>

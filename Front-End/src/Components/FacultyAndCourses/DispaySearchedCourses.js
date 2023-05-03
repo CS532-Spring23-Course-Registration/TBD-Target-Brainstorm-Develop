@@ -37,7 +37,6 @@ function DispaySearchedCourses(props) {
         display="flex"
         mt={1}
         justifyContent="center"
-        border="1px solid red"
         sx={{
           padding: "10px",
           width: "80%",
@@ -61,6 +60,7 @@ function DispaySearchedCourses(props) {
                   mb: 2,
                   "&:hover": { bgcolor: "#f5f5f5" },
                   borderRadius: "10px",
+                  border: "1px solid lightgrey"
                 }}
                 onClick={() => handleClick(courseItem)}
               >

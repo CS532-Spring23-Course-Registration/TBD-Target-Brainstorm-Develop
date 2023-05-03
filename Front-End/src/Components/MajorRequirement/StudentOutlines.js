@@ -35,22 +35,22 @@ function StudentOutlines(props) {
 
   return (
     <Box sx={{ maxHeight: "400px", overflowY: "scroll" }}>
-      {props.userData.studentList.map((item) => (
+      {props.userData && props.userData.studentList.map((item) => (
         <Card
           key={item.departmentId}
           sx={{ mb: 2, "&:hover": { bgcolor: "#f5f5f5" } }}
           onClick={() => handleClick(item)}
         >
           <CardContent>
-            <Typography variant="h5">{item.departmentName}</Typography>
-            <Typography variant="body2">{item.majorTitle}</Typography>
+            <Typography variant="h5">{item.studentName} (ID: {item.studentId})</Typography>
+            <Typography variant="body2">Major: {item.majorTitle}</Typography>
           </CardContent>
         </Card>
       ))}
       {selectedItem && (
         <Dialog open={open} onClose={handleClose} maxWidth="xl">
           <DialogTitle sx={{ fontWeight: "bold" }}>
-            Student Name: {selectedItem.departmentName}
+            Student Name: {selectedItem.studentName}
           </DialogTitle>
           <DialogContent sx={{ width: 600, height: 600, overflowY: "scroll" }}>
             <div>
@@ -86,6 +86,7 @@ function StudentOutlines(props) {
                     border: "2px solid #ccc",
                     borderRadius: "4px",
                     padding: "16px",
+                    margin: "10px",
                     boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
                   }}
                 >

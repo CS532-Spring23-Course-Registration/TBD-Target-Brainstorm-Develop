@@ -34,7 +34,6 @@ function DispaySearchedFaculty(props) {
         display="flex"
         mt={1}
         justifyContent="center"
-        border="1px solid red"
         sx={{
           padding: "10px",
           width: "80%",
@@ -50,14 +49,14 @@ function DispaySearchedFaculty(props) {
             overflowY: "scroll",
           }}
         >
-          {props.returnedLists.departmentList.map((item) =>
+          {props.returnedLists.map((item) =>
             item.facultyList.map((facItem) => (
               <Card
-                key={`${item.departmentId}-${facItem.facultyId}`}
                 sx={{
                   mb: 2,
                   "&:hover": { bgcolor: "#f5f5f5" },
                   borderRadius: "10px",
+                  border: "1px solid lightgrey"
                 }}
                 onClick={() => handleClick(facItem)}
               >
@@ -67,17 +66,17 @@ function DispaySearchedFaculty(props) {
                       display="flex"
                       flexDirection="column"
                       justifyContent="space-between"
-                      width="50%"
+                      width="100%"
                     >
                       <Typography
                         variant="h6"
                         sx={{
-                          whiteSpace: "nowrap",
+                          
                         }}
                       >
-                        {facItem.facultyTitle}
-                        {":"} {facItem.facultyName}
+                      {facItem.facultyName}
                       </Typography>
+                      <Typography>{facItem.facultyTitle}</Typography>
                     </Box>
                     <Box
                       display="flex"

@@ -33,7 +33,7 @@ function CourseOutlineHistory(props) {
   
     return (
       <Box sx={{ maxHeight: '400px', overflowY: 'scroll' }}>
-        {props.data.map(item => (
+        {props.data && props.data.map(item => (
           <Card key={item.id} sx={{ mb: 2, '&:hover': { bgcolor: '#f5f5f5' } }} onClick={() => handleClick(item)}>
             <CardContent>
               <Typography variant="h5">{item.name}</Typography>

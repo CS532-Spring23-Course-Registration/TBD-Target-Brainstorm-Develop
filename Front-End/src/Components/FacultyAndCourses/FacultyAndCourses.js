@@ -121,9 +121,23 @@ const FacultyAndCourses = () => {
     if (response.status === 401) {
       console.log("Authentication Failed.");
     } else if (response.status === 200) {
-      console.log("Successful query.");
       const data = await response.json();
-      setReturnedLists(data);
+      var newArray = [];
+
+      if (reportType === "facultyInfo") {
+        data.departmentList.forEach((department) => {
+          if (department.facultyList[0] !== "None") {
+            newArray.push(department);
+          }
+        });
+
+        setReturnedLists(newArray);
+
+      } else {
+        setReturnedLists(data);
+      }
+
+      
     }
   };
 
