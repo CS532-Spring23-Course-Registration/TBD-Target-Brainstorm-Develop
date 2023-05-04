@@ -22,7 +22,7 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const gpa = "N/A";
+const gpa = "3.65";
 
 function AcademicRecord(props) {
   const classes = useStyles();
