@@ -48,7 +48,7 @@ function AcademicRecord(props) {
                 <TableCell>{course.title}</TableCell>
                 <TableCell>{course.name}</TableCell>
                 <TableCell>{course.grade}</TableCell>
-                <TableCell>{course.id}</TableCell>
+                <TableCell>4</TableCell>
               </TableRow>
             ))
           )}
